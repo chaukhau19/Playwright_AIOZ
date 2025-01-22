@@ -1,0 +1,39 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "jest",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "//": "Metamask locks chainIDs on port 8545 https://hardhat.org/hardhat-network/docs/metamask-issue",
+    "chain": "hardhat node --port 8546",
+    "test:connectMetaMask": "yarn build && playwright test -c tests/Dapps/connectMetaMask/playwright.config.js tests/Dapps/connectMetaMask",
+    "test:connectCoinBase": "yarn build && playwright test -c tests/Dapps/connectCoinBase/playwright.config.js tests/Dapps/connectCoinBase",
+    "test:disconnectMetaMask": "yarn build && playwright test -c tests/Dapps/disconnectMetaMask/playwright.config.js tests/Dapps/disconnectMetaMask",
+    "test:disconnectCoinBase": "yarn build && playwright test -c tests/Dapps/disconnectCoinBase/playwright.config.js tests/Dapps/disconnectCoinBase",
+    "test:SwitchNetworkCoinBase": "yarn build && playwright test -c tests/Dapps/SwitchNetworkCoinBase/playwright.config.js tests/Dapps/SwitchNetworkCoinBase",
+    "test:SwitchNetworkMetaMask": "yarn build && playwright test -c tests/Dapps/SwitchNetworkMetaMask/playwright.config.js tests/Dapps/SwitchNetworkMetaMask",
+    "test:Dapps": "yarn test:connectMetaMask && yarn test:disconnectMetaMask && yarn test:SwitchNetworkMetaMask && yarn test:connectCoinBase && yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
+    
+    
+    "test:multiple-files": "yarn build && playwright test -c tests/multiple-files/playwright.config.js tests/multiple-files",
+    "test:multiple-wallets": "yarn build && playwright test -c tests/multiple-wallets/playwright.config.ts tests/multiple-wallets",
+    "test:all": "yarn test:single-test && yarn test:multiple-files && yarn test:multiple-wallets"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ethers": "^6.0.8",
+    "playwright": "^1.49.1",
+    "playwright-core": "^1.47.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@tenkeylabs/dappwright": "^2.9.1",
+    "hardhat": "^2.13.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.5.5"
+  }
+}

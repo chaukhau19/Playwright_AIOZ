@@ -15,7 +15,6 @@ export const test = baseTest.extend<{
 
     // Coinbase Wallet already this network set.
     if (wallet instanceof MetaMaskWallet) {
-      // Add Hardhat as a custom network.
       await wallet.addNetwork({
         networkName: "AIOZ Network Testnet",
         rpc: "https://eth-ds.testnet.aioz.network",

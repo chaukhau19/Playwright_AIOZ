@@ -33,6 +33,19 @@ Or you can specify an example configuration with...
 
   yarn test:connectMetaMask
   yarn test:disconnectMetaMask
+  yarn test:SwitchNetworkMetaMask
+  yarn test:ChangeWalletFromCoinbasetoMetamask
+  yarn test:connectCoinBase
+  yarn test:disconnectCoinBase
+  yarn test:SwitchNetworkCoinBase
+  yarn test:ChangeWalletFromMetamasktoCoinbase
+
+
+
+
+  yarn test:Dapps
+  
+  yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
 ```
 
 ## Running the dApp

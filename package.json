@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "//": "Metamask locks chainIDs on port 8545 https://hardhat.org/hardhat-network/docs/metamask-issue",
     "chain": "hardhat node --port 8546",
+<<<<<<< HEAD
     "test:connectMetaMask": "yarn build && playwright test -c tests/Dapps/AIOZtoUSDT/playwright.config.js tests/Swap/AIOZtoUSDT",
     "test:connectCoinBase": "yarn build && playwright test -c tests/Dapps/connectCoinBase/playwright.config.js tests/Dapps/connectCoinBase",
     "test:disconnectMetaMask": "yarn build && playwright test -c tests/Dapps/disconnectMetaMask/playwright.config.js tests/Dapps/disconnectMetaMask",
@@ -17,6 +18,20 @@
     "test:SwitchNetworkCoinBase": "yarn build && playwright test -c tests/Dapps/SwitchNetworkCoinBase/playwright.config.js tests/Dapps/SwitchNetworkCoinBase",
     "test:SwitchNetworkMetaMask": "yarn build && playwright test -c tests/Dapps/SwitchNetworkMetaMask/playwright.config.js tests/Dapps/SwitchNetworkMetaMask",
     "test:Dapps": "yarn test:connectMetaMask && yarn test:disconnectMetaMask && yarn test:SwitchNetworkMetaMask && yarn test:connectCoinBase && yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
+=======
+
+    "test:connectMetaMask": "yarn build && playwright test -c tests/Dapps/MetaMask/connectMetaMask/playwright.config.js tests/Dapps/MetaMask/connectMetaMask",
+    "test:connectCoinBase": "yarn build && playwright test -c tests/Dapps/CoinBase/connectCoinBase/playwright.config.js tests/Dapps/CoinBase/connectCoinBase",
+    "test:disconnectMetaMask": "yarn build && playwright test -c tests/Dapps/MetaMask/disconnectMetaMask/playwright.config.js tests/Dapps/MetaMask/disconnectMetaMask",
+    "test:disconnectCoinBase": "yarn build && playwright test -c tests/Dapps/CoinBase/disconnectCoinBase/playwright.config.js tests/Dapps/CoinBase/disconnectCoinBase",
+    "test:SwitchNetworkCoinBase": "yarn build && playwright test -c tests/Dapps/CoinBase/SwitchNetworkCoinBase/playwright.config.js tests/Dapps/CoinBase/SwitchNetworkCoinBase",
+    "test:SwitchNetworkMetaMask": "yarn build && playwright test -c tests/Dapps/MetaMask/SwitchNetworkMetaMask/playwright.config.js tests/Dapps/MetaMask/SwitchNetworkMetaMask",
+    "test:ChangeWalletFromCoinbasetoMetamask": "yarn build && playwright test -c tests/Dapps/MetaMask/ChangeWalletFromCoinbasetoMetamask/playwright.config.js tests/Dapps/MetaMask/ChangeWalletFromCoinbasetoMetamask",
+    "test:ChangeWalletFromMetamasktoCoinbase": "yarn build && playwright test -c tests/Dapps/CoinBase/ChangeWalletFromMetamasktoCoinbase/playwright.config.js tests/Dapps/CoinBase/ChangeWalletFromMetamasktoCoinbase",
+
+    "test:Dapps": "yarn test:connectMetaMask && yarn test:disconnectMetaMask && yarn test:SwitchNetworkMetaMask && yarn test:connectCoinBase && yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
+    
+>>>>>>> ed9d7e7d6f2b646a86520b157d3a8d5683e2837c
     "test:multiple-files": "yarn build && playwright test -c tests/multiple-files/playwright.config.js tests/multiple-files",
     "test:multiple-wallets": "yarn build && playwright test -c tests/multiple-wallets/playwright.config.ts tests/multiple-wallets",
     "test:all": "yarn test:single-test && yarn test:multiple-files && yarn test:multiple-wallets",

@@ -937,7 +937,7 @@ create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-debug@^4.1.1, debug@^4.3.3, debug@4, debug@4.3.4:
+debug@^4.1.1, debug@^4.3.3, debug@^4.3.4, debug@4, debug@4.3.4:
   version "4.3.4"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -1201,6 +1201,11 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
+
+fsevents@~2.3.2, fsevents@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -1828,12 +1833,24 @@ picomatch@^2.0.4, picomatch@^2.2.1:
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
-playwright-core@^1.47.2, playwright-core@>1.0, playwright-core@1.49.1:
+playwright-core@*, playwright-core@^1.47.2, playwright-core@>1.0, playwright-core@1.49.1:
   version "1.49.1"
   resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.49.1.tgz"
   integrity sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==
 
-playwright@^1.49.1, playwright@1.49.1:
+playwright-extra-plugin-stealth@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.npmjs.org/playwright-extra-plugin-stealth/-/playwright-extra-plugin-stealth-0.0.1.tgz"
+  integrity sha512-eI0Ujf4MXbcupzlVEXaaOnb+Exjt1sFi7t/3KxIA5pVww+WRAXRWdhqTz0glX62jJq2YM8fLu+GyvULpjTpZrw==
+
+playwright-extra@^4.3.6:
+  version "4.3.6"
+  resolved "https://registry.npmjs.org/playwright-extra/-/playwright-extra-4.3.6.tgz"
+  integrity sha512-q2rVtcE8V8K3vPVF1zny4pvwZveHLH8KBuVU2MoE3Jw4OKVoBWsHI9CH9zPydovHHOCDxjGN2Vg+2m644q3ijA==
+  dependencies:
+    debug "^4.3.4"
+
+playwright@*, playwright@^1.49.1, playwright@1.49.1:
   version "1.49.1"
   resolved "https://registry.npmjs.org/playwright/-/playwright-1.49.1.tgz"
   integrity sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==
@@ -2213,6 +2230,18 @@ uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
+"vite-project@file:":
+  version "0.0.0"
+  resolved "file:"
+  dependencies:
+    dotenv "^16.4.7"
+    ethers "^6.0.8"
+    playwright "^1.49.1"
+    playwright-core "^1.47.2"
+    playwright-extra "^4.3.6"
+    playwright-extra-plugin-stealth "^0.0.1"
+    vite-project "file:"
 
 vite@^4.5.5:
   version "4.5.5"

@@ -10,24 +10,29 @@
     "preview": "vite preview",
     "//": "Metamask locks chainIDs on port 8545 https://hardhat.org/hardhat-network/docs/metamask-issue",
     "chain": "hardhat node --port 8546",
-    "test:connectMetaMask": "yarn build && playwright test -c tests/Dapps/connectMetaMask/playwright.config.js tests/Dapps/connectMetaMask",
+    "test:connectMetaMask": "yarn build && playwright test -c tests/Dapps/AIOZtoUSDT/playwright.config.js tests/Swap/AIOZtoUSDT",
     "test:connectCoinBase": "yarn build && playwright test -c tests/Dapps/connectCoinBase/playwright.config.js tests/Dapps/connectCoinBase",
     "test:disconnectMetaMask": "yarn build && playwright test -c tests/Dapps/disconnectMetaMask/playwright.config.js tests/Dapps/disconnectMetaMask",
     "test:disconnectCoinBase": "yarn build && playwright test -c tests/Dapps/disconnectCoinBase/playwright.config.js tests/Dapps/disconnectCoinBase",
     "test:SwitchNetworkCoinBase": "yarn build && playwright test -c tests/Dapps/SwitchNetworkCoinBase/playwright.config.js tests/Dapps/SwitchNetworkCoinBase",
     "test:SwitchNetworkMetaMask": "yarn build && playwright test -c tests/Dapps/SwitchNetworkMetaMask/playwright.config.js tests/Dapps/SwitchNetworkMetaMask",
     "test:Dapps": "yarn test:connectMetaMask && yarn test:disconnectMetaMask && yarn test:SwitchNetworkMetaMask && yarn test:connectCoinBase && yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
-    
-    
     "test:multiple-files": "yarn build && playwright test -c tests/multiple-files/playwright.config.js tests/multiple-files",
     "test:multiple-wallets": "yarn build && playwright test -c tests/multiple-wallets/playwright.config.ts tests/multiple-wallets",
-    "test:all": "yarn test:single-test && yarn test:multiple-files && yarn test:multiple-wallets"
+    "test:all": "yarn test:single-test && yarn test:multiple-files && yarn test:multiple-wallets",
+    "test:AIOZtoUSDT": "yarn build && playwright test -c tests/Swap/AIOZtoUSDT/playwright.config.js tests/Swap/AIOZtoUSDT",
+    "test:AIOZtoSTRK": "yarn build && playwright test -c tests/Swap/AIOZtoSTRK/playwright.config.js tests/Swap/AIOZtoSTRK",
+    "test:AIOZ_USDT": "yarn build && playwright test -c tests/Position/AIOZ_USDT/playwright.config.js tests/Position/AIOZ_USDT",
+    "test:AIOZ_STRK": "yarn build && playwright test -c tests/Position/AIOZ_STRK/playwright.config.js tests/Position/AIOZ_STRK"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
     "ethers": "^6.0.8",
     "playwright": "^1.49.1",
-    "playwright-core": "^1.47.2"
+    "playwright-core": "^1.47.2",
+    "playwright-extra": "^4.3.6",
+    "playwright-extra-plugin-stealth": "^0.0.1",
+    "vite-project": "file:"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1",

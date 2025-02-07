@@ -2,24 +2,25 @@ import { defineConfig } from "@playwright/test";
 import { CoinbaseWallet, MetaMaskWallet } from "@tenkeylabs/dappwright";
 
 export default defineConfig({
-  workers: 1, // Run serially to avoid browser session collisions
-  // webServer: [
-  //   {
-  //     command: "yarn preview --port 8080",
-  //     url: "http://localhost:8080",
-  //     // timeout: 5000,
-  //     reuseExistingServer: true,
-  //   },
-  //   {
-  //     command: "yarn chain",
-  //     url: "http://localhost:8546",
-  //     // timeout: 5000,
-  //     reuseExistingServer: true,
-  //   },
-  // ],
+  workers: 1,
+  timeout: 0, 
   use: {
+    actionTimeout: 0, 
+    navigationTimeout: 0, 
     headless: false,
   },
+  slowMo: 500,
+  args: [
+    "--disable-web-security",
+    "--disable-features=IsolateOrigins,site-per-process",
+    "--ignore-certificate-errors",
+    "--disable-gpu",
+    "--disable-extensions", 
+    "--no-sandbox", 
+    '--proxy-server=https://aiozswap-web.vercel.app/',
+    '--disable-setuid-sandbox'
+  ],
+
   projects: [
     {
       name: "MetaMask",

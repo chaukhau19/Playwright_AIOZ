@@ -10,29 +10,19 @@
     "preview": "vite preview",
     "//": "Metamask locks chainIDs on port 8545 https://hardhat.org/hardhat-network/docs/metamask-issue",
     "chain": "hardhat node --port 8546",
+    "test:ConnectMetaMask": "yarn build && playwright test tests/Dapps/MetaMask/connect.spec.js",
+    "test:DisconnectMetaMask": "yarn build && playwright test tests/Dapps/MetaMask/disconnect.spec.js",
+    "test:SwitchNetworkMetaMask": "yarn build && playwright test tests/Dapps/MetaMask/switchnetwork.spec.js",
 
-    "test:connectMetaMask": "yarn build && playwright test -c tests/Dapps/MetaMask/connectMetaMask/playwright.config.js tests/Dapps/MetaMask/connectMetaMask",
-    "test:connectCoinBase": "yarn build && playwright test -c tests/Dapps/CoinBase/connectCoinBase/playwright.config.js tests/Dapps/CoinBase/connectCoinBase",
-    "test:disconnectMetaMask": "yarn build && playwright test -c tests/Dapps/MetaMask/disconnectMetaMask/playwright.config.js tests/Dapps/MetaMask/disconnectMetaMask",
-    "test:disconnectCoinBase": "yarn build && playwright test -c tests/Dapps/CoinBase/disconnectCoinBase/playwright.config.js tests/Dapps/CoinBase/disconnectCoinBase",
-    "test:SwitchNetworkMetaMask": "yarn build && playwright test -c tests/Dapps/MetaMask/SwitchNetworkMetaMask/playwright.config.js tests/Dapps/MetaMask/SwitchNetworkMetaMask",
-    "test:SwitchNetworkCoinBase": "yarn build && playwright test -c tests/Dapps/CoinBase/SwitchNetworkCoinBase/playwright.config.js tests/Dapps/CoinBase/SwitchNetworkCoinBase",
-    "test:ChangeWalletFromCoinbasetoMetamask": "yarn build && playwright test -c tests/Dapps/MetaMask/ChangeWalletFromCoinbasetoMetamask/playwright.config.js tests/Dapps/MetaMask/ChangeWalletFromCoinbasetoMetamask",
-    "test:ChangeWalletFromMetamasktoCoinbase": "yarn build && playwright test -c tests/Dapps/CoinBase/ChangeWalletFromMetamasktoCoinbase/playwright.config.js tests/Dapps/CoinBase/ChangeWalletFromMetamasktoCoinbase",
+    "test:ConnectCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/connect.spec.js",
+    "test:DisconnectCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/disconnect.spec.js",
+    "test:SwitchNetworkCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/switchnetwork.spec.js",
 
-    "test:AIOZtoUSDT": "yarn build && playwright test -c tests/Swap/AIOZtoUSDT/playwright.config.js tests/Swap/AIOZtoUSDT",
-    "test:AIOZtoSTRK": "yarn build && playwright test -c tests/Swap/AIOZtoSTRK/playwright.config.js tests/Swap/AIOZtoSTRK",
-    "test:AIOZ_USDT": "yarn build && playwright test -c tests/Position/AIOZ_USDT/playwright.config.js tests/Position/AIOZ_USDT",
-    "test:AIOZ_STRK": "yarn build && playwright test -c tests/Position/AIOZ_STRK/playwright.config.js tests/Position/AIOZ_STRK", 
-
-    "test:Dapps": "yarn test:connectMetaMask && yarn test:disconnectMetaMask && yarn test:SwitchNetworkMetaMask && yarn test:connectCoinBase && yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
-    "test:multiple-files": "yarn build && playwright test -c tests/multiple-files/playwright.config.js tests/multiple-files",
-    "test:multiple-wallets": "yarn build && playwright test -c tests/multiple-wallets/playwright.config.ts tests/multiple-wallets",
-    "test:all": "yarn test:single-test && yarn test:multiple-files && yarn test:multiple-wallets"
+    "test:AIOZtoUSDT": "yarn build && playwright test tests/Swap/AIOZtoUSDT/Valid_Swap_Token.spec.js",
+    "test:AIOZtoSTRK": "yarn build && playwright test tests/Swap/AIOZtoSTRK/Valid_Swap_Token.spec.js",
+    "test:STRKtoAIOZ": "yarn build && playwright test tests/Swap/STRKtoAIOZ/Valid_Swap_Token.spec.js"
     
   },
-
-  
   "dependencies": {
     "dotenv": "^16.4.7",
     "ethers": "^6.0.8",

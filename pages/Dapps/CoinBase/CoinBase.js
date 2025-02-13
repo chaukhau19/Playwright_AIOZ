@@ -1,6 +1,6 @@
 import { FunctionPage } from "../../../pages/Swap/function.js";
 
-export class ConnectWalletPage {
+export class ConnectWalletCoinBasePage {
     constructor(page) {
         this.page = page;
         this.functionPage = new FunctionPage(page);

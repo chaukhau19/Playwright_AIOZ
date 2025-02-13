@@ -15,7 +15,7 @@ export class ValidSwapPage {
             await this.functionPage.gotoURL();
             await this.functionPage.Connect_Wallet_MetaMask();
             await wallet.approve(); 
-            // await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Verify_Account_MetaMask_Connected();
             // await this.Select_Token();
             // await this.functionPage.Total_Token_Before();
             // await this.functionPage.Fill_Amount_A(config.InputValue_A);
@@ -40,7 +40,7 @@ export class ValidSwapPage {
             await this.functionPage.gotoURL();
             await this.functionPage.Connect_Wallet_MetaMask();
             await wallet.approve(); 
-            // await this.functionPage.Verify_Account_Connected();
+            await this.functionPage.Verify_Account_Connected();
             // await this.validSwapPage.Select_Token();
             // await this.functionPage.Total_Token_Before();
             // await functionPage.Fill_Amount_Half_A();

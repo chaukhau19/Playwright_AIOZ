@@ -1,7 +1,7 @@
 import { test } from "./../../../pages/Dapps/SetupCoinBase.js";
-import { ConnectWalletPage } from "../../../pages/Dapps/CoinBase/CoinBase.js";
+import { ConnectWalletCoinBasePage } from "../../../pages/Dapps/CoinBase/CoinBase.js";
 
 test("Connect AIOZ with CoinBase", async ({ wallet, page }) => {
-  const connectWalletPage = new ConnectWalletPage(page);
-  await connectWalletPage.Connect_CoinBase(wallet);
+  const connectWalletCoinBasePage = new ConnectWalletCoinBasePage(page);
+  await connectWalletCoinBasePage.Connect_CoinBase(wallet);
 });

@@ -18,6 +18,8 @@
     "test:DisconnectCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/disconnect.spec.js",
     "test:SwitchNetworkCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/switchnetwork.spec.js",
 
+    "test:cookies": "yarn build && playwright test tests/Dapps/SessionMetaMask/cookies.spec.js",
+
     "test:AIOZtoUSDT_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js",
     "test:AIOZtoSTRK_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js",
     "test:STRKtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js",

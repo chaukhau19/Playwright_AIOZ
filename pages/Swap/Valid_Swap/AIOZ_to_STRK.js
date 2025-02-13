@@ -59,7 +59,30 @@ export class ValidSwapPage {
             throw error; 
         }
     }
-
+    async Swapwithvaluemax(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.Select_Token();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_Max_A();
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.confirmTransaction(); 
+            await this.Close_Confirmation();
+            await this.functionPage.Total_Token_After();
+            await this.functionPage.Compare_Token_Before_And_After_Swap();
+            await this.functionPage.Get_Token_All_Web();
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
+    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

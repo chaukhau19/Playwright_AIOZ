@@ -1,17 +1,18 @@
-import { test } from "./../../../pages/Dapps/SetupMetaMask.js";
-import { ConnectWalletPage } from "../../../pages/Dapps/MetaMask/MetaMask.js";
+import { test } from "../../../pages/Dapps/SetupMetaMask.js";
+import { ValidSwapPage} from "../../../pages/Swap/Valid_Swap/USDT_to_AIOZ.js";
 
-test("Switch Network Ethereum and AIOZ Testnet with MetaMask", async ({ wallet, page }) => {
-  const connectWalletPage = new ConnectWalletPage(page);
-  await connectWalletPage.Switch_Network(wallet);
-});
-
-
-
+test("Swap AIOZ to STRK with value 1", async ({ page, wallet }) => {
+  const validSwapPage = new ValidSwapPage(page);
+  await validSwapPage.Swapwithvalue1(wallet);
+  });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 

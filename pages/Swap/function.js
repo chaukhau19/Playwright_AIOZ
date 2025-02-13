@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test";
+import { config } from "./../../data/AIOZ_config.js";
 
 export class FunctionPage {
     constructor(page) {
@@ -21,7 +22,7 @@ export class FunctionPage {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async gotoURL() {
         await this.page.waitForTimeout(5000);
-        await this.page.goto("https://aiozswap-web.vercel.app/#/swap", { waitUntil: "domcontentloaded", timeout: 90000 });
+        await this.page.goto(config.URL, { waitUntil: "domcontentloaded", timeout: 90000 });
     }
 
     async waitForTimeout(ms) {
@@ -33,19 +34,102 @@ export class FunctionPage {
     }
 
     async Connect_Wallet_MetaMask() {
+        await this.page.waitForTimeout(500);
         await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click();
         await this.page.waitForTimeout(1000);
         await this.page.locator("//div[contains(text(), 'MetaMask')]").click();
     }
 
-    
-    async Verify_Account_Connected() {
+    async Connect_Wallet_CoinBase() {
+        await this.page.waitForTimeout(500);
+        await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click();
         await this.page.locator("//img[@alt='Close' or @title='Close']").click();
-        await this.page.waitForTimeout(1000);
-        await expect(this.page.locator("//button[.//p[text()='0xd793...0e85']]")).toBeVisible();
-        await this.page.waitForTimeout(1000);
+        await this.page.reload();
+        await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click();
+        await this.page.waitForTimeout(500);
+        await this.page.locator("//div[contains(text(), 'Coinbase Wallet')]").click();
     }
 
+    async Disconnect_Wallet_MetaMask() {
+        await this.page.locator("//button[@data-testid='web3-status-connected']").click();
+        await this.page.waitForTimeout(500);
+        await this.page.locator("//button[.//img[@title='Disconnect']]").click();
+        await this.page.waitForTimeout(500);
+    }
+    
+    async Disconnect_Wallet_CoinBase() {
+        await this.page.locator("//button[@data-testid='web3-status-connected']").click();
+        await this.page.waitForTimeout(500);
+        await this.page.locator("//button[.//img[@title='Disconnect']]").click();
+        await this.page.waitForTimeout(500);
+    }
+    async Verify_Account_MetaMask_Connected() {
+        await this.page.locator("//img[@alt='Close' or @title='Close']").click();
+        await this.page.waitForTimeout(500);
+        await expect(this.page.locator(config.Expected_Account_MetaMask_Connected)).toBeVisible();
+        await this.page.waitForTimeout(500);
+    }
+
+    async Verify_Account_MetaMask_Disconnected() {
+        await this.page.waitForTimeout(500);
+        await expect(this.page.locator("//button[@data-testid='navbar-connect-wallet']")).toBeVisible();
+        await this.page.waitForTimeout(500);
+    }
+    
+    async Verify_Account_CoinBase_Connected() {
+        await this.page.locator("//img[@alt='Close' or @title='Close']").click();
+        await this.page.waitForTimeout(500);
+        await expect(this.page.locator(config.Expected_Account_CoinBase_Connected)).toBeVisible();
+        await this.page.waitForTimeout(500);
+    }
+
+    async Verify_Account_CoinBase_Disconnected() {
+        await this.page.waitForTimeout(500);
+        await expect(this.page.locator("//button[@data-testid='navbar-connect-wallet']")).toBeVisible();
+        await this.page.waitForTimeout(500);
+    }
+
+    async Fill_Amount_A(amount) {
+        await this.page.getByPlaceholder('0.0').first().fill(amount);
+        await this.page.waitForTimeout(20000);
+    }
+
+    async Fill_Amount_B(amount) {
+        await this.page.getByPlaceholder('0.0').eth(1).fill(amount);
+        await this.page.waitForTimeout(20000);
+    }
+    
+    async Fill_Amount_Half_A() {
+        await this.page.locator("(//button[contains(text(), 'Half')])[1]").click();
+        await this.page.waitForTimeout(20000);
+    }
+
+    async Fill_Amount_Half_B() {
+        await this.page.locator("(//button[contains(text(), 'Half')])[2]").click();
+        await this.page.waitForTimeout(20000);
+    }
+
+    async Fill_Amount_Max_A() {
+        await this.page.locator("(//button[contains(text(), 'Max')])[1]").click();
+        await this.page.waitForTimeout(20000);
+    }
+
+    async Fill_Amount_Max_B() {
+        await this.page.locator("(//button[contains(text(), 'Max')])[2]").click();
+        await this.page.waitForTimeout(20000);
+    }
+
+    async Token_Redemption() {
+        await this.page.waitForTimeout(500);
+        await this.page.locator("//div[@data-testid='swap-currency-button']").click();
+        await this.page.waitForTimeout(500);
+    }
+    
+    async Swap_Tokens() {
+        await this.page.locator("//div[@data-testid='swap-li-label' and contains(text(), 'Price impact')]")
+            .waitFor({ state: 'attached' })
+            .then(() => this.page.locator('[data-testid="swap-button"]').click());
+    }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

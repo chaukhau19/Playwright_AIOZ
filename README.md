@@ -27,25 +27,9 @@ You can run all of the examples with any of these commands
 Or you can specify an example configuration with...
 
 ```bash
-  yarn test:single-test
-  yarn test:multiple-files
-  yarn test:multiple-wallets
-
   yarn test:connectMetaMask
-  yarn test:disconnectMetaMask
-  yarn test:SwitchNetworkMetaMask
-  yarn test:ChangeWalletFromCoinbasetoMetamask
-  yarn test:connectCoinBase
-  yarn test:disconnectCoinBase
-  yarn test:SwitchNetworkCoinBase
-  yarn test:ChangeWalletFromMetamasktoCoinbase
-
-
-
-
-  yarn test:Dapps
-  
-  yarn test:disconnectCoinBase  && yarn test:SwitchNetworkCoinBase",
+  yarn test:connectCoinBase  
+  yarn test:connectMetaMask  && yarn test:connectCoinBase",
 ```
 
 ## Running the dApp

@@ -7,11 +7,11 @@ export const test = baseTest.extend({
   context: async ({}, use) => {
     if (!sharedContext) {
       const [wallet, _, context] = await dappwright.bootstrap("", {
-        wallet: "metamask",
-        version: "12.10.1",
-        seed: "boring raccoon elevator sustain long jar phrase ring mask region elder primary",
+        wallet: "coinbase",
+        version: "3.99.0",
+        seed:"gown pill disagree boring craft valve rival airport wrestle long vacuum auction", 
         headless: false,
-        slowMo: 500,
+        slowMo: 250,
         args: [
           "--disable-web-security",
           "--disable-features=IsolateOrigins,site-per-process",
@@ -21,7 +21,7 @@ export const test = baseTest.extend({
           "--no-sandbox" 
       ],
       });
-      await wallet.page.waitForTimeout(1000); 
+      await wallet.page.waitForTimeout(500); 
 
       await wallet.addNetwork({
         networkName: "AIOZ Network Testnet",
@@ -38,9 +38,9 @@ export const test = baseTest.extend({
   },
 
   wallet: async ({ context }, use) => {
-    const metamask = await dappwright.getWallet("metamask", context);
+    const coinbase = await dappwright.getWallet("coinbase", context);
 
-    await use(metamask);
+    await use(coinbase);
   },
 });
 

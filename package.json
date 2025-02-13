@@ -18,9 +18,10 @@
     "test:DisconnectCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/disconnect.spec.js",
     "test:SwitchNetworkCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/switchnetwork.spec.js",
 
-    "test:AIOZtoUSDT": "yarn build && playwright test tests/Swap/AIOZtoUSDT/Valid_Swap_Token.spec.js",
-    "test:AIOZtoSTRK": "yarn build && playwright test tests/Swap/AIOZtoSTRK/Valid_Swap_Token.spec.js",
-    "test:STRKtoAIOZ": "yarn build && playwright test tests/Swap/STRKtoAIOZ/Valid_Swap_Token.spec.js"
+    "test:AIOZtoUSDT_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js",
+    "test:AIOZtoSTRK_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js",
+    "test:STRKtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js",
+    "test:USDTtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js"
     
   },
   "dependencies": {

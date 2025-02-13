@@ -1,38 +1,48 @@
-import { expect } from "@playwright/test";
+import { FunctionPage } from "../../../pages/Swap/function.js";
 
 export class ConnectWalletPage {
     constructor(page) {
         this.page = page;
+        this.functionPage = new FunctionPage(page);
     }
-    async gotoURL() {
-        await this.page.waitForTimeout(5000);
-        await this.page.reload();
-        await this.page.goto("https://aiozswap-web.vercel.app/#/swap", {
-        waitUntil: "domcontentloaded",
-        timeout: 90000,
-        });
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async Connect_CoinBase(wallet) {
+        await this.functionPage.gotoURL();
+        await this.functionPage.Connect_Wallet_CoinBase();
+        await wallet.approve(); 
+        await this.functionPage.Verify_Account_CoinBase_Connected();
     }
 
-    async Connect_Wallet() {
-        await this.page.reload();
-        await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click();
-        await this.page.waitForTimeout(1000);
-        await this.page.locator('//button[@data-testid="wallet-option-COINBASE_WALLET"]').click();
-        await this.page.reload();
+    async Disconnect_CoinBase(wallet) {
+        await this.functionPage.gotoURL();
+        await this.functionPage.Connect_Wallet_CoinBase();
+        await wallet.approve(); 
+        await this.functionPage.Verify_Account_CoinBase_Connected();
+        await this.functionPage.Disconnect_Wallet_CoinBase();
+        await this.functionPage.Verify_Account_CoinBase_Disconnected();
     }
 
-    async Verify_Account_Connected() {
-        await this.page.waitForTimeout(1000);
-        await expect(this.page.locator("//button[.//p[text()='0x0D3f...9E3b']]")).toBeVisible();
-        await this.page.waitForTimeout(1000);
+    async Switch_Network(wallet) {
+        await this.functionPage.gotoURL();
+        await this.functionPage.Connect_Wallet_CoinBase();
+        await wallet.approve(); 
+        await this.functionPage.Verify_Account_CoinBase_Connected();
+        await this.Switch_Network_To_AIOZ();
+        await wallet.approve();
+        await this.Switch_Network_To_Ethereum();
     }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     async Switch_Network_To_Ethereum() {
         await this.page.waitForTimeout(1000);
         await this.page.getByTestId('chain-selector').click();
         await this.page.waitForTimeout(500);
         await this.page.getByTestId('Ethereum-selector').click();
-        await this.page.waitForTimeout(500);
     }
 
     async Switch_Network_To_AIOZ() {
@@ -40,52 +50,14 @@ export class ConnectWalletPage {
         await this.page.getByTestId('chain-selector').click();
         await this.page.waitForTimeout(500);
         await this.page.getByTestId('AIOZ Testnet-selector').click();
-        await this.page.waitForTimeout(500);
-    }
-
-    async Disconnect_Wallet() {
-        await this.page.locator("//button[@data-testid='web3-status-connected']").click();
-        await this.page.waitForTimeout(1000);
-        await this.page.locator("//button[text()='Change wallet']").click();
-        await this.page.waitForTimeout(1000);
-        await this.page.locator("//button[@data-testid='wallet-option-COINBASE_WALLET']").click();
-        await this.page.waitForTimeout(1000);
-        await this.page.reload();
-        await this.page.waitForTimeout(1000);
-    }
-
-    async Verify_Account_Disconnected() {
-        await this.page.waitForTimeout(1000);
-        await expect(this.page.locator("//button[@data-testid='navbar-connect-wallet']")).toBeVisible();
-        await this.page.waitForTimeout(1000);
     }
 
 
-    async Select_Token() {
-        await this.page.getByRole('button', { name: 'Select token' }).click();
-        await this.page.getByText('Starknet').click();
-        await this.page.getByRole('button', { name: 'I understand' }).click();
-    }
 
-    async Fill_Amount(amount) {
-        await this.page.getByPlaceholder('0.0').first().fill(amount);
-        await this.page.waitForTimeout(30000);
-    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    async Swap_Tokens() {
-        await this.page.locator("//div[@data-testid='swap-li-label' and contains(text(), 'Price impact')]")
-            .waitFor({ state: 'attached' })
-            .then(() => this.page.locator('[data-testid="swap-button"]').click());
-    }
 
-    async Confirm_Swap() {
-        await this.page.getByTestId('confirm-swap-button').click();
-    }
-
-    async Close_Confirmation() {
-        await this.page.waitForTimeout(5000);
-        await this.page.getByTestId('confirmation-close-icon').click();
-        await this.page.waitForTimeout(5000);
-    }
 }
     

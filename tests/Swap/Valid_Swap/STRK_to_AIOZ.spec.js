@@ -1,9 +1,9 @@
 import { test } from "../../../pages/Dapps/SetupMetaMask.js";
 import { ValidSwapPage} from "../../../pages/Swap/Valid_Swap/STRK_to_AIOZ.js";
 
-test("Swap AIOZ to STRK with value 1", async ({ page, wallet }) => {
+test("Swap AIOZ to STRK with one value", async ({ page, wallet }) => {
   const validSwapPage = new ValidSwapPage(page);
-  await validSwapPage.Swapwithvalue1(wallet);
+  await validSwapPage.SwapWithValue1(wallet);
   });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

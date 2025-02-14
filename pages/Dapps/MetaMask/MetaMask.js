@@ -11,6 +11,7 @@ export class ConnectWalletMetaMaskPage {
     constructor(page) {
         this.page = page;
         this.functionPage = new FunctionPage(page);
+        this.dir = path.join(__dirname, './../../../cookies');
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,31 +44,58 @@ export class ConnectWalletMetaMaskPage {
 
     async saveCookies() {
         try {
-            const dir = path.join(__dirname, './../../../cookies');
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
+            if (!fs.existsSync(this.dir)) {
+                fs.mkdirSync(this.dir, { recursive: true });
             }
             const cookies = await this.page.context().cookies();
-            const filePath = path.join(dir, 'cookies_aioz.json');
-            fs.writeFileSync(filePath, JSON.stringify(cookies, null, 2));
-            console.log(`Cookies saved to ${filePath}`);
+            fs.writeFileSync(
+                path.join(this.dir, 'cookies_aioz.json'),
+                JSON.stringify(cookies, null, 2)
+            );
+            const storageData = await this.page.evaluate(() => {
+                return {
+                    localStorage: JSON.stringify(localStorage),
+                    sessionStorage: JSON.stringify(sessionStorage),
+                    ethereum: window.ethereum ? window.ethereum.selectedAddress : null
+                };
+            });
+            fs.writeFileSync(
+                path.join(this.dir, 'storage_aioz.json'),
+                JSON.stringify(storageData, null, 2)
+            );
+            console.log(`✅ Cookies & Storage saved successfully!`);
         } catch (error) {
-            console.error("Error saving cookies:", error);
+            console.error("❌ Error saving cookies & storage:", error);
         }
     }
     
     async useCookies() {
         try {
-            const cookiesPath = path.resolve(__dirname, './../../../cookies/cookies_aioz.json');
-            console.log(`Attempting to read cookies from ${cookiesPath}`);
-            const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf-8'));
-            await this.page.context().addCookies(cookies);
-            await this.page.goto(config.URL);
-            await this.page.waitForLoadState('networkidle');
+            const cookieFile = path.join(this.dir, 'cookies_aioz.json');
+            if (fs.existsSync(cookieFile)) {
+                const cookies = JSON.parse(fs.readFileSync(cookieFile, 'utf-8'));
+                await this.page.context().addCookies(cookies);
+            }
+            const storageFile = path.join(this.dir, 'storage_aioz.json');
+            if (fs.existsSync(storageFile)) {
+                const storageData = JSON.parse(fs.readFileSync(storageFile, 'utf-8'));
+                await this.page.evaluate((data) => {
+                    Object.entries(JSON.parse(data.localStorage)).forEach(([key, value]) =>
+                        localStorage.setItem(key, value)
+                    );
+                    Object.entries(JSON.parse(data.sessionStorage)).forEach(([key, value]) =>
+                        sessionStorage.setItem(key, value)
+                    );
+                }, storageData);
+            }
+            await this.page.goto('https://aiozswap-web.vercel.app/#/swap', { waitUntil: 'networkidle' });
+            console.log("✅ Cookies & Storage loaded successfully!");
         } catch (error) {
-            console.error("Error using cookies:", error);
+            console.error("❌ Error loading cookies & storage:", error);
         }
     }
+    
+    
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

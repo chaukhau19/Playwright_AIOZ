@@ -23,7 +23,8 @@
     "test:AIOZtoUSDT_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js",
     "test:AIOZtoSTRK_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js",
     "test:STRKtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js",
-    "test:USDTtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js"
+    "test:USDTtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js",
+    "test:AIOZtoWAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_WAIOZ.spec.js"
     
   },
   "dependencies": {

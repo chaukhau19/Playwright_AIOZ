@@ -1,0 +1,5 @@
+{
+  "localStorage": "{\"wagmi.recentConnectorId\":\"\\\"io.metamask\\\"\",\"WCM_VERSION\":\"2.7.0\",\"wagmi.store\":\"{\\\"state\\\":{\\\"connections\\\":{\\\"__type\\\":\\\"Map\\\",\\\"value\\\":[[\\\"1899083dc3e\\\",{\\\"accounts\\\":[\\\"0xd793527386a316f31184f37FbB89A91effCC0e85\\\"],\\\"chainId\\\":4102,\\\"connector\\\":{\\\"id\\\":\\\"io.metamask\\\",\\\"name\\\":\\\"MetaMask\\\",\\\"type\\\":\\\"injected\\\",\\\"uid\\\":\\\"1899083dc3e\\\"}}]]},\\\"chainId\\\":4102,\\\"current\\\":\\\"1899083dc3e\\\"},\\\"version\\\":2}\",\"recentConnectorId\":\"\\\"io.metamask\\\"\"}",
+  "sessionStorage": "{}",
+  "ethereum": "0xd793527386a316f31184f37fbb89a91effcc0e85"
+}

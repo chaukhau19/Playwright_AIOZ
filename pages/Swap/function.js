@@ -33,6 +33,14 @@ export class FunctionPage {
         await this.page.getByTestId('confirm-swap-button').click();
     }
 
+    async Close_Confirmation() {
+        await this.page.waitForTimeout(5000);
+        await this.page.getByTestId('confirmation-close-icon').click();
+        await this.page.waitForTimeout(5000);
+    }
+
+    
+    
     async Connect_Wallet_MetaMask() {
         await this.page.waitForTimeout(500);
         await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click();
@@ -118,7 +126,10 @@ export class FunctionPage {
         await this.page.locator("(//button[contains(text(), 'Max')])[2]").click();
         await this.page.waitForTimeout(20000);
     }
-
+    
+    async Expect_Value_Invalid() {
+        await expect(this.page.locator("//button[div[text()='Enter an amount']]")).toBeVisible();
+    }
     async Token_Redemption() {
         await this.page.waitForTimeout(500);
         await this.page.locator("//div[@data-testid='swap-currency-button']").click();
@@ -129,6 +140,86 @@ export class FunctionPage {
         await this.page.locator("//div[@data-testid='swap-li-label' and contains(text(), 'Price impact')]")
             .waitFor({ state: 'attached' })
             .then(() => this.page.locator('[data-testid="swap-button"]').click());
+    }
+
+    async Choose_Wallet_To_Connect_Page() {
+        await this.page.waitForTimeout(2000); 
+        if (await this.page.locator("//h2[text()='Select wallet to connect']").isVisible()) {
+            console.log("Pop-up detected. Proceeding...");
+            await expect(this.page.locator("//h2[text()='Select wallet to connect']")).toBeVisible();
+        } else {
+            console.error("Pop-up 'Select wallet to connect' did not appear!");
+            throw new Error("Wallet connection pop-up not found");
+        }
+    }
+    
+
+    async Wrap_Tokens() {
+        await this.page.waitForSelector("//button[text()='Wrap']", { timeout: 10000 });
+        await this.page.locator("//button[text()='Wrap']").click();
+    }
+    
+    async Unwrap_Tokens() {
+        await this.page.waitForSelector("//button[text()='Unwrap']", { timeout: 10000 });
+        await this.page.locator("//button[text()='Unwrap']").click();
+    }
+    async Off_Network() {
+        await this.page.route('**/*', route => route.abort());
+        console.log("Simulating network down...");
+    }
+    
+    async On_Network() {
+        await this.page.unroute('**/*'); 
+        console.log("Restoring network...");
+    }
+    
+    async Select_Token_USDT_B() {
+        await this.page.getByRole('button', { name: 'Select token' }).click();
+        await this.page.getByText(config.Select_USDT_Token).click();
+        await this.page.getByRole('button', { name: 'I understand' }).click();
+    }
+    async Select_Token_STRK_B() {
+        await this.page.getByRole('button', { name: 'Select token' }).click();
+        await this.page.getByText(config.Select_STRK_Token).click();
+        await this.page.getByRole('button', { name: 'I understand' }).click();
+    }
+    
+    async Select_Token_WAIOZ_B() {
+        await this.page.getByRole('button', { name: 'Select token' }).click();
+        await this.page.getByText(config.Select_WAIOZ_Token).click();
+        await this.page.getByRole('button', { name: 'I understand' }).click();
+    }
+    async Transaction_Deadline_0Percent() {
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+        await this.page.locator("(//div[text()='Auto'])[1]").click();
+        await this.page.locator("//input[@data-testid='slippage-input']").fill("0");
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+    }
+
+    async Transaction_Deadline_100Percent() {
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+        await this.page.locator("(//div[text()='Auto'])[1]").click();
+        await this.page.locator("//input[@data-testid='slippage-input']").fill("100");
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+    }
+
+    async Transaction_Deadline_0M() {
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+        await this.page.locator('//div[@data-testid="transaction-deadline-settings"]').click();
+        await this.page.locator('//input[@data-testid="deadline-input"]').fill("0");
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+    }
+    async Transaction_Deadline_1M() {
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+        await this.page.locator('//div[@data-testid="transaction-deadline-settings"]').click();
+        await this.page.locator('//input[@data-testid="deadline-input"]').fill("1");
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+    }
+    async Transaction_Deadline_100M() {
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
+        await this.page.locator('//div[@data-testid="transaction-deadline-settings"]').click();
+        await this.page.locator('//input[@data-testid="deadline-input"]').fill("100");
+        await this.page.locator("//button[@aria-label='Transaction Settings']").click();
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,7 +396,7 @@ export class FunctionPage {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async Compare_Token_Before_And_After_Swap(priceImpact = 0.0005, slippageTolerance = 0.005, networkCostA = 0.01) {
+async Compare_Token_Before_And_After_Valid_Swap(priceImpact = 0.0005, slippageTolerance = 0.005, networkCostA = 0.01) {
     await this.waitForTimeout(5000);
 
     const { pointA: Total_Token_Before_A, pointB: Total_Token_Before_B } = this.totalTokenBefore;
@@ -314,8 +405,8 @@ async Compare_Token_Before_And_After_Swap(priceImpact = 0.0005, slippageToleranc
 
     await this.waitForTimeout(5000);
 
-    console.log(`🔹 Total_Token_Before_A: ${Total_Token_Before_A}, 🔹 Total_Token_After_A: ${actual_Total_Token_After_A}`);
-    console.log(`🔹 Total_Token_Before_B: ${Total_Token_Before_B}, 🔹 Total_Token_After_B: ${actual_Total_Token_After_B}`);
+    // console.log(`🔹 Total_Token_Before_A: ${Total_Token_Before_A}, 🔹 Total_Token_After_A: ${actual_Total_Token_After_A}`);
+    // console.log(`🔹 Total_Token_Before_B: ${Total_Token_Before_B}, 🔹 Total_Token_After_B: ${actual_Total_Token_After_B}`);
 
     const Token_After_Swap_A = parseFloat(Token_Before_Swap_A).toFixed(5);
     const Token_After_Swap_A_Number = parseFloat(Token_After_Swap_A);
@@ -391,6 +482,111 @@ async Compare_Token_Before_And_After_Swap(priceImpact = 0.0005, slippageToleranc
 
     return validateSuccessfulSwap();
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async Compare_Token_Before_And_After_Invalid_Swap(priceImpact = 0.0005, slippageTolerance = 0.005, networkCostA = 0.01) {
+    await this.waitForTimeout(5000);
+
+    const { pointA: Total_Token_Before_A, pointB: Total_Token_Before_B } = this.totalTokenBefore;
+    const { pointA: actual_Total_Token_After_A, pointB: actual_Total_Token_After_B } = this.totalTokenAfter;
+    const { newFromValue: Token_Before_Swap_A, newToValue: Token_Before_Swap_B } = this.tokenSwapPage;
+
+    await this.waitForTimeout(5000);
+
+    const invalidateRejectedSwap = () => {
+        const actual_A_Number = parseFloat(actual_Total_Token_After_A);
+        const actual_B_Number = parseFloat(actual_Total_Token_After_B);
+        const before_A_Number = parseFloat(Total_Token_Before_A);
+        const before_B_Number = parseFloat(Total_Token_Before_B);
+
+        if (actual_A_Number === before_A_Number && actual_B_Number === before_B_Number) {
+            console.log("✅ Swap Rejected as expected! Tokens remain unchanged.", {
+                Total_Token_Before_A: Total_Token_Before_A,
+                Total_Token_After_A: actual_Total_Token_After_A,
+                Total_Token_Before_B: Total_Token_Before_B,
+                Total_Token_After_B: actual_Total_Token_After_B
+            });
+            return true;
+        } else {
+            throw new Error("❌ ERROR! Tokens changed despite swap rejection", {
+                Total_Token_Before_A: Total_Token_Before_A,
+                Total_Token_After_A: actual_Total_Token_After_A,
+                Total_Token_Before_B: Total_Token_Before_B,
+                Total_Token_After_B: actual_Total_Token_After_B
+            });
+        }
+    };
+
+    return invalidateRejectedSwap();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async Compare_Token_Before_And_After_Wrap() {
+    await this.waitForTimeout(5000);
+
+    const { pointA: Total_Token_Before_A, pointB: Total_Token_Before_B } = this.totalTokenBefore;
+    const { pointA: actual_Total_Token_After_A, pointB: actual_Total_Token_After_B } = this.totalTokenAfter;
+    const { newFromValue: Token_Before_Swap_A, newToValue: Token_Before_Swap_B } = this.tokenSwapPage;
+
+    await this.waitForTimeout(5000);
+
+    console.log(`🔹 Total_Token_Before_A: ${Total_Token_Before_A}, 🔹 Total_Token_After_A: ${actual_Total_Token_After_A}`);
+    console.log(`🔹 Total_Token_Before_B: ${Total_Token_Before_B}, 🔹 Total_Token_After_B: ${actual_Total_Token_After_B}`);
+
+    const Token_After_Swap_A = parseFloat(Token_Before_Swap_A).toFixed(5);
+    const Token_After_Swap_A_Number = parseFloat(Token_After_Swap_A);
+
+    const Token_After_Swap_B = parseFloat(Token_Before_Swap_B).toFixed(5);
+    const Token_After_Swap_B_Number = parseFloat(Token_After_Swap_B);
+
+    const validateInput = (value, name) => {
+        if (isNaN(value) || value < 0) {
+            throw new Error(`❌ ERROR! Invalid input for ${name}. Value: ${value}`);
+        }
+        return true;
+    };
+
+    validateInput(Total_Token_Before_A, "Total_Token_Before_A");
+    validateInput(Token_After_Swap_A_Number, "Token_After_Swap_A_Number");
+    validateInput(Total_Token_Before_B, "Total_Token_Before_B");
+    validateInput(Token_After_Swap_B_Number, "Token_After_Swap_B_Number");
+
+    const expected_Total_Token_After_A = parseFloat((Total_Token_Before_A - Token_After_Swap_A_Number).toFixed(5));
+    const expected_Total_Token_After_B = parseFloat((Total_Token_Before_B + Token_After_Swap_B_Number).toFixed(5));
+
+    if (expected_Total_Token_After_A < 0) {
+        throw new Error("❌ ERROR! Expected Token A after wrap is negative.");
+    }
+
+    const actual_A_Number = parseFloat(actual_Total_Token_After_A);
+    const actual_B_Number = parseFloat(actual_Total_Token_After_B);
+
+    const isMatchA = actual_A_Number === expected_Total_Token_After_A;
+    const isMatchB = actual_B_Number === expected_Total_Token_After_B;
+
+    if (isMatchA && isMatchB) {
+        console.log("✅ Wrap Successful!", {
+            Total_Token_After_A: actual_Total_Token_After_A,
+            expected_Total_Token_After_A: expected_Total_Token_After_A,
+            Total_Token_After_B: actual_Total_Token_After_B,
+            expected_Total_Token_After_B: expected_Total_Token_After_B
+        });
+        return true;
+    } else {
+        throw new Error("❌ ERROR! Wrap validation failed", {
+            Total_Token_After_A: actual_Total_Token_After_A,
+            expected_Total_Token_After_A: expected_Total_Token_After_A,
+            Difference_A: Math.abs(actual_A_Number - expected_Total_Token_After_A),
+            Total_Token_After_B: actual_Total_Token_After_B,
+            expected_Total_Token_After_B: expected_Total_Token_After_B,
+            Difference_B: Math.abs(actual_B_Number - expected_Total_Token_After_B)
+        });
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

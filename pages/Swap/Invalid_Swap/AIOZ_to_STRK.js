@@ -1,63 +1,262 @@
-import { expect } from "@playwright/test";
+import { config } from "./../../../data/AIOZ_config.js";
+import { FunctionPage } from "../../../pages/Swap/function.js";
 
-export class ValidSwapPage {
+export class InvalidSwapPage {
     constructor(page) {
         this.page = page;
+        this.functionPage = new FunctionPage(page);
     }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    convertToPoints(text) {
-        if (text.includes('.')) {
-            return parseFloat(text.replace(/,/g, ""));
-        } else if (text.includes(',')) {
-            return parseFloat(text.replace(",", "."));
-        } else {
-            return parseFloat(text);
+    async SwapWithValue0(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_0);
+            await this.functionPage.Expect_Value_Invalid();
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
         }
     }
-    async gotoURL() {
-        await this.page.waitForTimeout(5000);
-        await this.page.goto("https://aiozswap-web.vercel.app/#/swap", { waitUntil: "domcontentloaded", timeout: 90000 });
+
+    async SwapWithCancelSwap(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.reject();
+            await this.functionPage.Close_Confirmation();
+            await this.functionPage.Total_Token_After();
+            await this.functionPage.Compare_Token_Before_And_After_Invalid_Swap();
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Connect_Wallet() {
-        await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click();
-        await this.page.waitForTimeout(1000);
-        await this.page.locator('//div[contains(@class, "Option__HeaderText") and text()="MetaMask"]').click();
+    async SwapWithInsufficient(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_Insufficient);
+            await this.functionPage.Expect_Value_Invalid();
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
+    }
+    async SwapWithExpiredTransaction(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Transaction_Deadline_1M();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await this.functionPage.waitForTimeout(65000);
+            await wallet.confirmTransaction();           
+            await this.functionPage.Close_Confirmation();
+            await this.functionPage.Total_Token_After();
+            await this.functionPage.Compare_Token_Before_And_After_Invalid_Swap();
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Verify_Account() {
-        await this.page.waitForTimeout(1000);
-        await expect(this.page.locator("//button[.//p[text()='0xd793...0e85']]")).toBeVisible();
-        await this.page.waitForTimeout(1000);
+    
+
+    async SwapWithDisconnectedWallet(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Disconnect_Wallet_MetaMask();
+            await this.functionPage.Verify_Account_MetaMask_Disconnected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Choose_Wallet_To_Connect_Page();   
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Select_Token() {
-        await this.page.getByRole('button', { name: 'Select token' }).click();
-        await this.page.getByText('Starknet').click();
-        await this.page.getByRole('button', { name: 'I understand' }).click();
+    async SwapWithLowSlippage(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Transaction_Deadline_0Percent();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.confirmTransaction(); 
+            await this.functionPage.Close_Confirmation();
+            await this.functionPage.Total_Token_After();
+            await this.functionPage.Compare_Token_Before_And_After_Invalid_Swap();
+            await this.functionPage.Get_Token_All_Web();  
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Fill_Amount(amount) {
-        await this.page.getByPlaceholder('0.0').first().fill(amount);
-        await this.page.waitForTimeout(30000);
+    async SwapWithHighSlippage(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Transaction_Deadline_100Percent();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.confirmTransaction(); 
+            await this.functionPage.Close_Confirmation();
+            await this.functionPage.Total_Token_After();
+            await this.functionPage.Compare_Token_Before_And_After_Invalid_Swap();
+            await this.functionPage.Get_Token_All_Web();  
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Swap_Tokens() {
-        await this.page.locator("//div[@data-testid='swap-li-label' and contains(text(), 'Price impact')]")
-            .waitFor({ state: 'attached' })
-            .then(() => this.page.locator('[data-testid="swap-button"]').click());
+    async SwapWithoutEnoughGasFee(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.confirmTransaction();    
+    
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Confirm_Swap() {
-        await this.page.getByTestId('confirm-swap-button').click();
+    async SwapWithSlippageToleranceExceeded(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.confirmTransaction();    
+    
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
 
-    async Close_Confirmation() {
-        await this.page.waitForTimeout(5000);
-        await this.page.getByTestId('confirmation-close-icon').click();
-        await this.page.waitForTimeout(5000);
+    async SwapWithPriceImpactExceeded(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();
+            await wallet.confirmTransaction();    
+    
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+    async SwapWithoutApproval(wallet) {
+        try {
+            await this.functionPage.gotoURL();
+            await this.functionPage.Connect_Wallet_MetaMask();
+            await wallet.approve(); 
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Token_Swap_Page();  
+            await this.functionPage.Swap_Tokens();
+            await this.functionPage.Token_Confirm_Swap_Page();
+            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap();           
+            await this.functionPage.Close_Confirmation();
+            await this.functionPage.waitForTimeout(20000);
+            await this.functionPage.Total_Token_After();
+            await this.functionPage.Compare_Token_Before_And_After_Invalid_Swap();
+        } catch (error) {
+            console.error("Swap failed:", error);
+            throw error; 
+        }
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

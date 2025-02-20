@@ -1,5 +1,4 @@
-import { FunctionPage } from "../../../pages/Swap/function.js";
-import { config } from "./../../../data/AIOZ_config.js";
+import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -22,6 +21,7 @@ export class ConnectWalletMetaMaskPage {
         await this.functionPage.Connect_Wallet_MetaMask();
         await wallet.approve();
         await this.functionPage.Verify_Account_MetaMask_Connected();
+        // await this.page.close();
     }
 
     async Disconnect_MetaMask(wallet) {
@@ -31,6 +31,7 @@ export class ConnectWalletMetaMaskPage {
         await this.functionPage.Verify_Account_MetaMask_Connected();
         await this.functionPage.Disconnect_Wallet_MetaMask();
         await this.functionPage.Verify_Account_MetaMask_Disconnected();
+        // await this.page.close();
     }
 
     async Switch_Network(wallet) {
@@ -38,9 +39,14 @@ export class ConnectWalletMetaMaskPage {
         await this.functionPage.Connect_Wallet_MetaMask();
         await wallet.approve(); 
         await this.functionPage.Verify_Account_MetaMask_Connected();
-        await this.Switch_Network_To_Ethereum();
-        await this.Switch_Network_To_AIOZ();
+        await this.functionPage.Switch_Network_To_Ethereum();
+        await this.functionPage.Switch_Network_To_AIOZ();
+        // await this.page.close();
     }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async saveCookies() {
         try {
@@ -95,25 +101,6 @@ export class ConnectWalletMetaMaskPage {
         }
     }
     
-    
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    async Switch_Network_To_Ethereum() {
-        await this.page.getByTestId('chain-selector').click();
-        await this.page.waitForTimeout(1000);
-        await this.page.getByTestId('Ethereum-selector').click();
-        await this.page.waitForTimeout(1000);
-    }
-
-    async Switch_Network_To_AIOZ() {
-        await this.page.getByTestId('chain-selector').click();
-        await this.page.waitForTimeout(1000);
-        await this.page.getByTestId('AIOZ Testnet-selector').click();
-        await this.page.waitForTimeout(1000);
-    }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

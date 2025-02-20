@@ -1,38 +1,64 @@
-import { config } from "./../../../data/AIOZ_config.js";
-import { FunctionPage } from "../../../pages/Swap/function.js";
+import { config } from "./../../../data/Swap_Config.js";
+import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
+import { ConnectWalletMetaMaskPage } from "../../../pages/Dapps/MetaMask/MetaMask.js";
 
 export class ValidSwapPage {
     constructor(page) {
         this.page = page;
         this.functionPage = new FunctionPage(page);
+        this.connectWalletMetaMaskPage = new ConnectWalletMetaMaskPage(page);
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async SwapWithInputValue(wallet, inputValue) {
+        try {
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
+            await this.functionPage.Select_Token_USDT_B();
+            await this.functionPage.Token_Redemption_Button();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_A(inputValue);  
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap_Button();
+            await wallet.confirmTransaction(); 
+            await this.Add_to_MetaMask();
+            await this.functionPage.Close_Confirmation_Button();
+            await this.functionPage.Total_Token_After();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+            
+        } catch (error) {
+            console.error("Test failed:", error.message);
+            throw error;
+        }
+    }
 
     async SwapWithValue1(wallet) {
         try {
-            await this.functionPage.gotoURL();
-            await this.functionPage.Connect_Wallet_MetaMask();
-            await wallet.approve(); 
-            await this.functionPage.Verify_Account_MetaMask_Connected();
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
             await this.functionPage.Select_Token_USDT_B();
-            await this.functionPage.Token_Redemption();
+            await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
-            await this.functionPage.Token_Swap_Page();  
-            await this.functionPage.Swap_Tokens();
-            await this.functionPage.Token_Confirm_Swap_Page();
-            await this.functionPage.Compare_On_Swap_And_Confirm_Swap_Page();
-            await this.functionPage.Confirm_Swap();
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction(); 
             await this.Add_to_MetaMask();
-            await this.functionPage.Close_Confirmation();
+            await this.functionPage.Close_Confirmation_Button();
             await this.functionPage.Total_Token_After();
-            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap();
-            await this.functionPage.Get_Token_All_Web();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+
         } catch (error) {
-            console.error("Swap failed:", error);
+            console.error("Test failed:", error.message);
             throw error; 
         }
     }

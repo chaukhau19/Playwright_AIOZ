@@ -1,4 +1,4 @@
-import { FunctionPage } from "../../../pages/Swap/function.js";
+import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
 
 export class ConnectWalletCoinBasePage {
     constructor(page) {
@@ -14,6 +14,7 @@ export class ConnectWalletCoinBasePage {
         await this.functionPage.Connect_Wallet_CoinBase();
         await wallet.approve(); 
         await this.functionPage.Verify_Account_CoinBase_Connected();
+        await this.page.close();
     }
 
     async Disconnect_CoinBase(wallet) {
@@ -23,6 +24,7 @@ export class ConnectWalletCoinBasePage {
         await this.functionPage.Verify_Account_CoinBase_Connected();
         await this.functionPage.Disconnect_Wallet_CoinBase();
         await this.functionPage.Verify_Account_CoinBase_Disconnected();
+        await this.page.close();
     }
 
     async Switch_Network(wallet) {
@@ -30,29 +32,11 @@ export class ConnectWalletCoinBasePage {
         await this.functionPage.Connect_Wallet_CoinBase();
         await wallet.approve(); 
         await this.functionPage.Verify_Account_CoinBase_Connected();
-        await this.Switch_Network_To_AIOZ();
+        await this.functionPage.Switch_Network_To_AIOZ();
         await wallet.approve();
-        await this.Switch_Network_To_Ethereum();
+        await this.functionPage.Switch_Network_To_Ethereum();
+        await this.page.close();
     }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    async Switch_Network_To_Ethereum() {
-        await this.page.waitForTimeout(1000);
-        await this.page.getByTestId('chain-selector').click();
-        await this.page.waitForTimeout(500);
-        await this.page.getByTestId('Ethereum-selector').click();
-    }
-
-    async Switch_Network_To_AIOZ() {
-        await this.page.waitForTimeout(1000);
-        await this.page.getByTestId('chain-selector').click();
-        await this.page.waitForTimeout(500);
-        await this.page.getByTestId('AIOZ Testnet-selector').click();
-    }
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -23,10 +23,10 @@ export const test = baseTest.extend({
                 "--no-sandbox" 
               ],
             }),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Bootstrap Metamask Timeout!")), 120000))
+            // new Promise((_, reject) => setTimeout(() => reject(new Error("Bootstrap Metamask Timeout!")), 120000))
           ]);
   
-          await wallet.page.waitForTimeout(500);
+          await wallet.page.waitForTimeout(500); 
   
           await wallet.addNetwork({
             networkName: "AIOZ Network Testnet",

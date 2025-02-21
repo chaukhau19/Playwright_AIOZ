@@ -15,7 +15,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_0);
@@ -31,7 +31,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_Insufficient);
@@ -47,7 +47,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
@@ -71,7 +71,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
@@ -98,7 +98,7 @@ export class InvalidSwapPage {
             await this.functionPage.Disconnect_Wallet_MetaMask();
             await this.functionPage.Verify_Account_MetaMask_Disconnected();
             await this.functionPage.Close_Choose_Wallet_Button();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
             await this.functionPage.Connect_Wallet_Button();
@@ -114,7 +114,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
@@ -141,7 +141,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
@@ -167,7 +167,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_high);
@@ -243,7 +243,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Transaction_Deadline_1M();
@@ -270,7 +270,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Transaction_Deadline_0Percent();
@@ -296,7 +296,7 @@ export class InvalidSwapPage {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
-            await this.functionPage.Select_Token_STRK_B();
+            await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Transaction_Deadline_100Percent();

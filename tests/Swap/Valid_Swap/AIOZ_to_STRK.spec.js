@@ -42,66 +42,34 @@ test("Swap with different input values", { timeout: 180000 }, async ({ page, wal
       await validSwapPage.SwapWithInputValue(wallet, inputValue);
       await page.waitForTimeout(3000);
       await page.reload();
-      // console.log(`✅ Completed test for input: ${inputValue}`);
     } catch (error) {
       throw error;
-      // console.error(`❌ Test failed with input value ${inputValue}:`, error);
     }
   }
 });
 
-test("Swap with half value", { timeout: 180000 }, async ({ wallet }) => { 
+test("Swap with half value", async ({ wallet }) => { 
   console.log("Swap with half value");
-  const swapPromise = validSwapPage.SwapWithValueHalf(wallet);
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Test case timed out!")), 180000)
-  );
-  try {
-    await Promise.race([swapPromise, timeoutPromise]);
-  } catch (error) {
-    throw error; 
-  }
+  await functionPage.TimeoutTest(validSwapPage.SwapWithValueHalf.bind(validSwapPage), wallet);
 });
 
-test("Swap while network is down", { timeout: 180000 }, async ({ wallet }) => { 
+test("Swap while network is down", async ({ wallet }) => { 
   console.log("Swap while network is down");
-  const swapPromise = validSwapPage.SwapWithNetworkIssue(wallet);
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Test case timed out!")), 180000)
-  );
-  try {
-    await Promise.race([swapPromise, timeoutPromise]);
-  } catch (error) {
-    throw error; 
-  }
+  await functionPage.TimeoutTest(validSwapPage.SwapWithNetworkIssue.bind(validSwapPage), wallet);
 });
 
-test("Swap with long pending time", { timeout: 180000 }, async ({ wallet }) => { 
+test("Swap with long pending time", async ({ wallet }) => { 
   console.log("Swap with long pending time");
-  const swapPromise = validSwapPage.SwapWithLongPendingTime(wallet);
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Test case timed out!")), 180000)
-  );
-  try {
-    await Promise.race([swapPromise, timeoutPromise]);
-  } catch (error) {
-    throw error; 
-  }
+  await functionPage.TimeoutTest(validSwapPage.SwapWithLongPendingTime.bind(validSwapPage), wallet);
 });
 
-//ĐỢI FIX LỖI
-// test("Swap with max value", { timeout: 180000 }, async ({ wallet }) => { 
-//   console.log("Swap with max value");
-//   const swapPromise = validSwapPage.SwapWithValueMax(wallet);
-//   const timeoutPromise = new Promise((_, reject) =>
-//     setTimeout(() => reject(new Error("Test case timed out!")), 180000)
-//   );
-//   try {
-//     await Promise.race([swapPromise, timeoutPromise]);
-//   } catch (error) {
-//     throw error; 
-//   }
-// });
+// WAITING FOR FIX Compare_Token_Before_And_After_Valid_Swap
+test("Swap with max value", async ({ wallet }) => { 
+  console.log("Swap with max value");
+  await functionPage.TimeoutTest(validSwapPage.SwapWithValueMax.bind(validSwapPage), wallet);
+  console.log("Swap with back half value");
+  await functionPage.TimeoutTest(validSwapPage.BackToken.bind(validSwapPage), wallet);
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

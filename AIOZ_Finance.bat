@@ -15,6 +15,9 @@ call yarn test:USDTtoAIOZ_Valid --workers=1
 call yarn test:AIOZtoWAIOZ_Valid --workers=1
 
 call yarn test:AIOZtoSTRK_Invalid --workers=1
+call yarn test:AIOZtoUSDT_Invalid --workers=1
+call yarn test:STRKtoAIOZ_Invalid --workers=1
+call yarn test:USDTtoAIOZ_Invalid --workers=1
 
 @REM call yarn test:AllFixed1 --workers=1
 @REM call yarn test:AllFixed2 --workers=1

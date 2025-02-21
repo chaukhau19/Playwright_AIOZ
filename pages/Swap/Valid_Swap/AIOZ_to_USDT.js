@@ -35,13 +35,63 @@ export class ValidSwapPage {
         }
     }
 
-    async SwapWithValue1(wallet) {
+    async SwapWithValueHalf(wallet) {
+        try {
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
+            await this.functionPage.Select_Token_USDT_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_Half_A();
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap_Button();
+            await wallet.confirmTransaction(); 
+            await this.functionPage.Close_Confirmation_Button();
+            await this.functionPage.Total_Token_After();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+        
+        } catch (error) {
+            console.error("Test failed:", error.message);
+            throw error; 
+        }
+    }
+
+    async SwapWithNetworkIssue(wallet) {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap_Button();
+            await this.functionPage.Off_Network();  
+            await wallet.confirmTransaction();    
+            await this.functionPage.On_Network();  
+            await this.functionPage.Close_Confirmation_Button();
+            await this.functionPage.Total_Token_After();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+
+        } catch (error) {
+            console.error("Test failed:", error.message);
+            throw error; 
+        }
+    }
+
+    async SwapWithValueMax(wallet) {
+        try {
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
+            await this.functionPage.Select_Token_USDT_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_Max_A();
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
             await this.functionPage.Confirm_Swap_Page();
@@ -59,6 +109,57 @@ export class ValidSwapPage {
         }
     }
 
+    async SwapWithLongPendingTime(wallet) {
+        try {
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
+            await this.functionPage.Select_Token_USDT_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Transaction_Deadline_1M();
+            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.waitForTimeout(60000);
+            await this.functionPage.Confirm_Swap_Button();
+            await wallet.confirmTransaction();           
+            await this.functionPage.Close_Confirmation_Button();
+            await this.functionPage.Total_Token_After();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+
+        } catch (error) {
+            console.error("Test failed:", error.message);
+            throw error; 
+        }
+    }
+
+    async BackToken(wallet) {
+        try {
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
+            await this.functionPage.Select_Token_USDT_B();
+            await this.functionPage.Token_Redemption_Button();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_Half_A();
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap_Button();
+            await wallet.confirmTransaction(); 
+            await this.functionPage.Add_WAIOZ_to_MetaMask();       
+            await this.functionPage.Close_Confirmation_Button();
+            await this.functionPage.Total_Token_After();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+
+        } catch (error) {
+            console.error("Test failed:", error.message);
+            throw error; 
+        }
+    }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

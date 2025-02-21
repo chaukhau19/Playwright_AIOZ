@@ -5,9 +5,11 @@ export class FunctionPage {
     constructor(page) {
         this.page = page;
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     convertToPoints(text) {
         if (text.includes('.')) {
             return parseFloat(text.replace(/,/g, ""));
@@ -39,12 +41,7 @@ export class FunctionPage {
             throw error;
         }
     }
-    
-    
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+     
     async gotoURL() {
         await this.page.waitForTimeout(5000);
         try {
@@ -53,7 +50,10 @@ export class FunctionPage {
         } catch (error) {
             console.error(`❌ Failed to load URL: ${error.message}`);
         }
-    }   
+    }  
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////          BUTTON       //////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Add_WAIOZ_to_MetaMask() {
         await this.page.waitForTimeout(10000);
@@ -107,63 +107,59 @@ export class FunctionPage {
             console.error(`❌ Close wallet button error: ${error.message}`);
         }
     }    
-    
-    async Connect_Wallet_MetaMask() {
-        try {
-            await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
-            await this.page.locator("//div[contains(text(), 'MetaMask')]").click({ timeout: 30000 });
-        } catch (error) {
-            console.error(`❌ MetaMask connection error: ${error.message}`);
-        }
-    }    
 
-    async Connect_Wallet_CoinBase() {
+    async Swap_Button() {
         try {
-            await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
-            await this.page.locator("//img[@alt='Close' or @title='Close']").click({ timeout: 30000 });
-            await this.page.reload();
-            await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
-            await this.page.locator("//div[contains(text(), 'Coinbase Wallet')]").click({ timeout: 30000 });
+            await this.page.waitForSelector("(//div[contains(text(), '<$0.01')])[1]", { timeout: 30000 });
+            await this.page.locator("(//div[contains(text(), '<$0.01')])[1]")
+                .waitFor({ state: 'attached' })
+                .then(() => this.page.locator("//button[@id='swap-button']").click());
         } catch (error) {
-            console.error(`❌ Coinbase connection error: ${error.message}`);
+            console.error(`❌ Swap button error: ${error.message}`);
         }
-    }    
+    }
 
-    async Switch_Network_To_Ethereum() {
+    async Connect_Wallet_Button() {
         try {
-            await this.page.getByTestId('chain-selector').click({ timeout: 30000 });
-            await this.page.getByTestId('Ethereum-selector').click({ timeout: 30000 });
+            await this.page.waitForSelector("//button[contains(text(), 'Connect wallet')]//div", { timeout: 50000 });
+            await this.page.locator("//button[contains(text(), 'Connect wallet')]//div")
+            .waitFor({ state: 'attached' })
+            .then(() => this.page.locator("//button[contains(text(), 'Connect wallet')]//div").click());
         } catch (error) {
-            console.error(`❌ Switch to Ethereum error: ${error.message}`);
+            console.error(`❌ Connect wallet button error: ${error.message}`);
+        }
+    }
+
+    async Wrap_Button() {
+        try {
+            await this.page.waitForSelector("//button[text()='Wrap']", { timeout: 10000 });
+            await this.page.locator("//button[text()='Wrap']").click();
+        } catch (error) {
+            console.error(`❌ Wrap button error: ${error.message}`);
         }
     }
     
-    async Switch_Network_To_AIOZ() {
+    async Unwrap_Button() {
         try {
-            await this.page.getByTestId('chain-selector').click({ timeout: 30000 });
-            await this.page.getByTestId('AIOZ Testnet-selector').click({ timeout: 30000 });
+            await this.page.waitForSelector("//button[text()='Unwrap']", { timeout: 10000 });
+            await this.page.locator("//button[text()='Unwrap']").click();
         } catch (error) {
-            console.error(`❌ Switch to AIOZ error: ${error.message}`);
+            console.error(`❌ Unwrap button error: ${error.message}`);
         }
-    }    
+    }
+
+    async Token_Redemption_Button() {
+        try {
+            await this.page.waitForTimeout(500);
+            await this.page.locator("//div[@data-testid='swap-currency-button']").click();
+            await this.page.waitForTimeout(500);
+        } catch (error) {
+            console.error(`❌ Error in Token_Redemption_Button: ${error.message}`);
+        }
+    }
     
-    async Disconnect_Wallet_MetaMask() {
-        try {
-            await this.page.locator("//button[@data-testid='web3-status-connected']").click({ timeout: 30000 });
-            await this.page.locator("//button[.//img[@title='Disconnect']]").click({ timeout: 30000 });
-        } catch (error) {
-            console.error(`❌ MetaMask disconnect error: ${error.message}`);
-        }
-    }    
-    
-    async Disconnect_Wallet_CoinBase() {
-        try {
-            await this.page.locator("//button[@data-testid='web3-status-connected']").click({ timeout: 30000 });
-            await this.page.locator("//button[.//img[@title='Disconnect']]").click({ timeout: 30000 });
-        } catch (error) {
-            console.error(`❌ Coinbase disconnect error: ${error.message}`);
-        }
-    }    
+///////////////////////////////////////////////////////////  EXPECT RESULT ///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Verify_Account_MetaMask_Connected() {
         try {
@@ -200,7 +196,6 @@ export class FunctionPage {
             console.error(`❌ Coinbase disconnect verification error: ${error.message}`);
         }
     }
-    
     async Select_Wallet_To_Connect() {
         try {
             await this.page.waitForSelector("//div[@width='100%']//h2[text()='Select wallet to connect']", { timeout: 30000 });
@@ -209,6 +204,7 @@ export class FunctionPage {
             console.error(`❌ Wallet selection error: ${error.message}`);
         }
     }
+
     async Price_Impact_Warning() {
         try {
             await this.page.waitForSelector("(//div[contains(., 'Price impact warning')])[14]", { timeout: 30000 });
@@ -270,10 +266,70 @@ export class FunctionPage {
             console.error(`❌ No results found error: ${error.message}`);
         }
     }
+
+///////////////////////////////////////////////////      STEP TEST CASE     ///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    async Connect_Wallet_MetaMask() {
+        try {
+            await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
+            await this.page.locator("//div[contains(text(), 'MetaMask')]").click({ timeout: 30000 });
+        } catch (error) {
+            console.error(`❌ MetaMask connection error: ${error.message}`);
+        }
+    }    
+
+    async Connect_Wallet_CoinBase() {
+        try {
+            await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
+            await this.page.locator("//img[@alt='Close' or @title='Close']").click({ timeout: 30000 });
+            await this.page.reload();
+            await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
+            await this.page.locator("//div[contains(text(), 'Coinbase Wallet')]").click({ timeout: 30000 });
+        } catch (error) {
+            console.error(`❌ Coinbase connection error: ${error.message}`);
+        }
+    }    
+
+    async Switch_Network_To_Ethereum() {
+        try {
+            await this.page.getByTestId('chain-selector').click({ timeout: 30000 });
+            await this.page.getByTestId('Ethereum-selector').click({ timeout: 30000 });
+        } catch (error) {
+            console.error(`❌ Switch to Ethereum error: ${error.message}`);
+        }
+    }
+    
+    async Switch_Network_To_AIOZ() {
+        try {
+            await this.page.getByTestId('chain-selector').click({ timeout: 30000 });
+            await this.page.getByTestId('AIOZ Testnet-selector').click({ timeout: 30000 });
+        } catch (error) {
+            console.error(`❌ Switch to AIOZ error: ${error.message}`);
+        }
+    }    
+    
+    async Disconnect_Wallet_MetaMask() {
+        try {
+            await this.page.locator("//button[@data-testid='web3-status-connected']").click({ timeout: 30000 });
+            await this.page.locator("//button[.//img[@title='Disconnect']]").click({ timeout: 30000 });
+        } catch (error) {
+            console.error(`❌ MetaMask disconnect error: ${error.message}`);
+        }
+    }    
+    
+    async Disconnect_Wallet_CoinBase() {
+        try {
+            await this.page.locator("//button[@data-testid='web3-status-connected']").click({ timeout: 30000 });
+            await this.page.locator("//button[.//img[@title='Disconnect']]").click({ timeout: 30000 });
+        } catch (error) {
+            console.error(`❌ Coinbase disconnect error: ${error.message}`);
+        }
+    }    
+
     async Fill_Amount_A(amount) {
         try {
             await this.page.getByPlaceholder('0.0').first().fill(amount);
-            // await this.page.waitForTimeout(10000);
         } catch (error) {
             console.error(`❌ Error in Fill_Amount_A: ${error.message}`);
         }
@@ -282,7 +338,6 @@ export class FunctionPage {
     async Fill_Amount_B(amount) {
         try {
             await this.page.getByPlaceholder('0.0').nth(1).fill(amount);
-            // await this.page.waitForTimeout(10000);
         } catch (error) {
             console.error(`❌ Error in Fill_Amount_B: ${error.message}`);
         }
@@ -291,7 +346,6 @@ export class FunctionPage {
     async Fill_Amount_Half_A() {
         try {
             await this.page.locator("(//button[contains(text(), 'Half')])[1]").click();
-            // await this.page.waitForTimeout(10000);
         } catch (error) {
             console.error(`❌ Error in Fill_Amount_Half_A: ${error.message}`);
         }
@@ -300,7 +354,6 @@ export class FunctionPage {
     async Fill_Amount_Half_B() {
         try {
             await this.page.locator("(//button[contains(text(), 'Half')])[2]").click();
-            // await this.page.waitForTimeout(10000);
         } catch (error) {
             console.error(`❌ Error in Fill_Amount_Half_B: ${error.message}`);
         }
@@ -309,7 +362,6 @@ export class FunctionPage {
     async Fill_Amount_Max_A() {
         try {
             await this.page.locator("(//button[contains(text(), 'Max')])[1]").click();
-            // await this.page.waitForTimeout(10000);
         } catch (error) {
             console.error(`❌ Error in Fill_Amount_Max_A: ${error.message}`);
         }
@@ -318,59 +370,8 @@ export class FunctionPage {
     async Fill_Amount_Max_B() {
         try {
             await this.page.locator("(//button[contains(text(), 'Max')])[2]").click();
-            // await this.page.waitForTimeout(10000);
         } catch (error) {
             console.error(`❌ Error in Fill_Amount_Max_B: ${error.message}`);
-        }
-    }
-
-    async Token_Redemption_Button() {
-        try {
-            await this.page.waitForTimeout(500);
-            await this.page.locator("//div[@data-testid='swap-currency-button']").click();
-            await this.page.waitForTimeout(500);
-        } catch (error) {
-            console.error(`❌ Error in Token_Redemption_Button: ${error.message}`);
-        }
-    }
-    
-    async Swap_Button() {
-        try {
-            await this.page.waitForSelector("(//div[contains(text(), '<$0.01')])[1]", { timeout: 30000 });
-            await this.page.locator("(//div[contains(text(), '<$0.01')])[1]")
-                .waitFor({ state: 'attached' })
-                .then(() => this.page.locator("//button[@id='swap-button']").click());
-        } catch (error) {
-            console.error(`❌ Swap button error: ${error.message}`);
-        }
-    }
-
-    async Connect_Wallet_Button() {
-        try {
-            await this.page.waitForSelector("//button[contains(text(), 'Connect wallet')]//div", { timeout: 50000 });
-            await this.page.locator("//button[contains(text(), 'Connect wallet')]//div")
-            .waitFor({ state: 'attached' })
-            .then(() => this.page.locator("//button[contains(text(), 'Connect wallet')]//div").click());
-        } catch (error) {
-            console.error(`❌ Connect wallet button error: ${error.message}`);
-        }
-    }
-
-    async Wrap_Button() {
-        try {
-            await this.page.waitForSelector("//button[text()='Wrap']", { timeout: 10000 });
-            await this.page.locator("//button[text()='Wrap']").click();
-        } catch (error) {
-            console.error(`❌ Wrap button error: ${error.message}`);
-        }
-    }
-    
-    async Unwrap_Button() {
-        try {
-            await this.page.waitForSelector("//button[text()='Unwrap']", { timeout: 10000 });
-            await this.page.locator("//button[text()='Unwrap']").click();
-        } catch (error) {
-            console.error(`❌ Unwrap button error: ${error.message}`);
         }
     }
 
@@ -669,10 +670,10 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////                 FUNCTION            ///////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     async Total_Token_Before() {
         await this.page.waitForTimeout(5000);
         try {
@@ -731,78 +732,81 @@ export class FunctionPage {
         }
     }
     
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async Swap_Page() {
-    try {
-        await this.page.waitForSelector("(//div[contains(text(), '<$0.01')])[1]", { timeout: 30000 });
-        await this.page.waitForSelector('input.token-amount-input', { timeout: 20000 });
+    async Swap_Page() {
+        try {
+            await this.page.waitForSelector("(//div[contains(text(), '<$0.01')])[1]", { timeout: 30000 });
+            await this.page.waitForSelector('input.token-amount-input', { timeout: 20000 });
 
-        const inputs = await this.page.locator('input.token-amount-input').all();
+            const inputs = await this.page.locator('input.token-amount-input').all();
 
-        if (inputs.length < 2) {
-            throw new Error("Không tìm thấy đủ input cho token amount.");
-        }
+            if (inputs.length < 2) {
+                throw new Error("Không tìm thấy đủ input cho token amount.");
+            }
 
-        const [inputFrom, inputTo] = inputs;
+            const [inputFrom, inputTo] = inputs;
 
-        let [initialFromValue, initialToValue] = await Promise.all([
-            inputFrom.getAttribute('value') || "",
-            inputTo.getAttribute('value') || ""
-        ]);
-
-        let [Token_Before_Swap_A, Token_Before_Swap_B] = [initialFromValue, initialToValue];
-        for (let i = 0; i < 20; i++) {
-            [Token_Before_Swap_A, Token_Before_Swap_B] = await Promise.all([
-                inputFrom.getAttribute('value'),
-                inputTo.getAttribute('value')
+            let [initialFromValue, initialToValue] = await Promise.all([
+                inputFrom.getAttribute('value') || "",
+                inputTo.getAttribute('value') || ""
             ]);
 
-            if (Token_Before_Swap_A !== initialFromValue && Token_Before_Swap_B !== initialToValue) break;
-            await this.page.waitForTimeout(500);
-        }
+            let [Token_Before_Swap_A, Token_Before_Swap_B] = [initialFromValue, initialToValue];
+            for (let i = 0; i < 20; i++) {
+                [Token_Before_Swap_A, Token_Before_Swap_B] = await Promise.all([
+                    inputFrom.getAttribute('value'),
+                    inputTo.getAttribute('value')
+                ]);
 
-        const [fiatFromInput, fiatToInput] = inputs;
-        const [Value_Before_Swap_A, Value_Before_Swap_B] = await Promise.all([
-            fiatFromInput.getAttribute('value'),
-            fiatToInput.getAttribute('value')
-        ]);
+                if (Token_Before_Swap_A !== initialFromValue && Token_Before_Swap_B !== initialToValue) break;
+                await this.page.waitForTimeout(500);
+            }
 
-        let priceImpactValue = '';
-        let slippageToleranceValue = '';
+            const [fiatFromInput, fiatToInput] = inputs;
+            const [Value_Before_Swap_A, Value_Before_Swap_B] = await Promise.all([
+                fiatFromInput.getAttribute('value'),
+                fiatToInput.getAttribute('value')
+            ]);
 
-        try {
-            const priceImpactLocator = this.page.locator("(//div[contains(text(), '<$0.01')])[1]");
-            await priceImpactLocator.waitFor({ state: 'visible', timeout: 20000 });
-            await priceImpactLocator.click();
+            let priceImpactValue = '';
+            let slippageToleranceValue = '';
 
-            const priceImpactElement = await this.page.locator("(//span[contains(text(), '%')])[1]").first();
-            const slippageToleranceElement = await this.page.locator("(//div[@data-testid='swap-li-label' and text()='Slippage tolerance']/following-sibling::div//*[contains(., '%')])[3]").first();
+            try {
+                const priceImpactLocator = this.page.locator("(//div[contains(text(), '<$0.01')])[1]");
+                await priceImpactLocator.waitFor({ state: 'visible', timeout: 20000 });
+                await priceImpactLocator.click();
 
-            priceImpactValue = await priceImpactElement.textContent();
-            slippageToleranceValue = await slippageToleranceElement.textContent();
+                const priceImpactElement = await this.page.locator("(//span[contains(text(), '%')])[1]").first();
+                const slippageToleranceElement = await this.page.locator("(//div[@data-testid='swap-li-label' and text()='Slippage tolerance']/following-sibling::div//*[contains(., '%')])[3]").first();
+
+                priceImpactValue = await priceImpactElement.textContent();
+                slippageToleranceValue = await slippageToleranceElement.textContent();
+            } catch (error) {
+                console.error(`❌ Lỗi khi lấy Price Impact hoặc Slippage Tolerance: ${error.message}`);
+            }
+
+            this.tokenSwapPage = {
+                Token_Before_Swap_A: Token_Before_Swap_A,
+                Token_Before_Swap_B: Token_Before_Swap_B,
+                fiatFromValue: Value_Before_Swap_A,
+                fiatToValue: Value_Before_Swap_B,
+                priceImpact: priceImpactValue,
+                slippageTolerance: slippageToleranceValue
+            };
+
+            console.log("🚀 Swap Page Data:", this.tokenSwapPage);
+
+            return this.tokenSwapPage;
         } catch (error) {
-            console.error(`❌ Lỗi khi lấy Price Impact hoặc Slippage Tolerance: ${error.message}`);
+            console.error(`❌ Lỗi trong Swap_Page: ${error.message}`);
+            throw error;
         }
-
-        this.tokenSwapPage = {
-            Token_Before_Swap_A: Token_Before_Swap_A,
-            Token_Before_Swap_B: Token_Before_Swap_B,
-            fiatFromValue: Value_Before_Swap_A,
-            fiatToValue: Value_Before_Swap_B,
-            priceImpact: priceImpactValue,
-            slippageTolerance: slippageToleranceValue
-        };
-
-        console.log("🚀 Swap Page Data:", this.tokenSwapPage);
-
-        return this.tokenSwapPage;
-    } catch (error) {
-        console.error(`❌ Lỗi trong Swap_Page: ${error.message}`);
-        throw error;
     }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Confirm token values after swap
     async Confirm_Swap_Page() {
@@ -846,7 +850,8 @@ async Swap_Page() {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Compare token values on swap page and confirm swap page
     async Compare_Swap_And_Confirm_Swap_Page() {
@@ -906,7 +911,8 @@ async Swap_Page() {
         return this.compareSwapAndConfirmSwapPage;
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Compare_Token_Before_And_After_Valid_Swap(networkCostA) {
         await this.page.waitForTimeout(5000);
@@ -1040,7 +1046,74 @@ async Swap_Page() {
         return validateSuccessfulSwap();
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async Compare_Token_Before_And_After_Valid_Swap(networkCostA) {
+        await this.page.waitForTimeout(5000);
+
+        // Destructure token values safely with correct keys
+        const {
+            Point_A: Actual_Total_Token_Before_A = 0,
+            Point_B: Actual_Total_Token_Before_B = 0
+        } = this.totalTokenBefore || {};
+
+        const {
+            Point_A: Actual_Total_Token_After_A = 0,
+            Point_B: Actual_Total_Token_After_B = 0
+        } = this.totalTokenAfter || {};
+
+        const {
+            Token_Before_Swap_A = "0",
+            Token_Before_Swap_B = "0"
+        } = this.tokenSwapPage || {};
+
+        // Parse values safely
+        const Token_After_Swap_A = Number(parseFloat(Token_Before_Swap_A).toFixed(5));
+        const Token_After_Swap_B = Number(parseFloat(Token_Before_Swap_B).toFixed(5));
+
+        // Calculate expected token values after swap
+        const expected_Total_Token_After_A = Number(
+            (Actual_Total_Token_Before_A - Token_After_Swap_A - networkCostA).toFixed(5)
+        );
+        const expected_Total_Token_After_B = Number(
+            (Actual_Total_Token_Before_B + Token_After_Swap_B).toFixed(5)
+        );
+
+        // Check if actual value is within acceptable range
+        const isWithinRange = (actual, expected, tolerance, isMaxSwap = false) => {
+            if (isMaxSwap) {
+                return actual <= 0.0001; // Cho phép giá trị còn lại cực nhỏ
+            }
+            if (tolerance) {
+                return Math.abs(actual - expected) <= tolerance;
+            }
+            return Math.abs(actual - expected) <= 0.1;
+        };
+
+        // Kiểm tra xem có phải đang swap max hay không
+        const isMaxSwap = Token_After_Swap_A >= (Actual_Total_Token_Before_A - networkCostA - 0.0001);
+
+        const passA = isWithinRange(Actual_Total_Token_After_A, expected_Total_Token_After_A, networkCostA, isMaxSwap);
+        const passB = isWithinRange(Actual_Total_Token_After_B, expected_Total_Token_After_B, null);
+
+        if (passA && passB) {
+            console.log("✅ Swap Successful!", {
+                Actual_Total_Token_After_A,
+                expected_Total_Token_After_A,
+                Actual_Total_Token_After_B,
+                expected_Total_Token_After_B,
+            });
+            return true;
+        } else {
+            console.error(
+                `❌ ERROR! Swap validation failed.\nExpected A: ${expected_Total_Token_After_A}, Actual A: ${Actual_Total_Token_After_A}\nExpected B: ${expected_Total_Token_After_B}, Actual B: ${Actual_Total_Token_After_B}`
+            );
+        }
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Compare_Token_Before_And_After_Invalid_Swap() {
         await this.page.waitForTimeout(10000);  
@@ -1090,8 +1163,8 @@ async Swap_Page() {
         return invalidateRejectedSwap();
     }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Compare_Token_Before_And_After_Wrap() {
         await this.waitForTimeout(10000);
@@ -1159,8 +1232,8 @@ async Swap_Page() {
         }
     }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Get_Token_All_Web() {
         try {
@@ -1190,8 +1263,7 @@ async Swap_Page() {
             // throw error;
         }
     }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

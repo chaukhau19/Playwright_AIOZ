@@ -32,7 +32,7 @@
     "test:AllFixed2": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js tests/Swap/Valid_Swap/AIOZ_to_WAIOZ.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js",
     "test:AllFixed3": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js",
     
-    "test:All": "yarn build && playwright test tests/Dapps/MetaMask/connect.spec.js tests/Dapps/MetaMask/disconnect.spec.js tests/Dapps/MetaMask/switchnetwork.spec.js tests/Dapps/CoinBase/connect.spec.js tests/Dapps/CoinBase/disconnect.spec.js tests/Dapps/CoinBase/switchnetwork.spec.js tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js tests/Swap/Valid_Swap/AIOZ_to_WAIOZ.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js"
+    "test:All": "yarn build && playwright test tests/Dapps/MetaMask/connect.spec.js tests/Dapps/MetaMask/disconnect.spec.js tests/Dapps/MetaMask/switchnetwork.spec.js tests/Dapps/CoinBase/connect.spec.js tests/Dapps/CoinBase/disconnect.spec.js tests/Dapps/CoinBase/switchnetwork.spec.js tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Invalid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Invalid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Invalid_Swap/USDT_to_AIOZ.spec.js"
  
   },
   "dependencies": {

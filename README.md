@@ -49,3 +49,8 @@ yarn chain # second terminal
 C:\Worker KhauNTC\Github\Playwright_AIOZ\playwright-report
 C:\Users\aioz\AppData\Local\Temp\dappwright
 ```
+```bash
+Tất cả các cặp giao dịch đều tuân theo quy trình hoán đổi token tuần hoàn.
+Bắt đầu với số dư 500 mỗi loại, thực hiện các giao dịch để đạt đến một trạng thái giới hạn (1000/0 hoặc 0/1000), sau đó quay về trạng thái ban đầu.
+Xác minh rằng hệ thống xử lý đúng logic giao dịch và số dư phản ánh chính xác sau mỗi bước
+```

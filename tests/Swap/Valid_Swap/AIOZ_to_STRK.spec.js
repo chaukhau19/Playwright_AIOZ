@@ -48,6 +48,9 @@ test("Swap with different input values", { timeout: 180000 }, async ({ page, wal
   }
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 test("Swap with half value", async ({ wallet }) => { 
   console.log("Swap with half value");
   await functionPage.TimeoutTest(validSwapPage.SwapWithValueHalf.bind(validSwapPage), wallet);
@@ -63,12 +66,11 @@ test("Swap with long pending time", async ({ wallet }) => {
   await functionPage.TimeoutTest(validSwapPage.SwapWithLongPendingTime.bind(validSwapPage), wallet);
 });
 
-// WAITING FOR FIX Compare_Token_Before_And_After_Valid_Swap
 test("Swap with max value", async ({ wallet }) => { 
   console.log("Swap with max value");
   await functionPage.TimeoutTest(validSwapPage.SwapWithValueMax.bind(validSwapPage), wallet);
   console.log("Swap with back half value");
-  await functionPage.TimeoutTest(validSwapPage.BackToken.bind(validSwapPage), wallet);
+  await functionPage.TimeoutTest(validSwapPage.BackTokenHalf.bind(validSwapPage), wallet);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

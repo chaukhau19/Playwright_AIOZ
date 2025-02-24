@@ -109,7 +109,7 @@ export class ValidSwapPage {
             await this.functionPage.Close_Confirmation_Button();
             await this.functionPage.Total_Token_After();
             await this.page.reload();
-            await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+            await this.functionPage.Compare_Token_Before_And_After_Max_Swap(0.01);
 
         } catch (error) {
             console.error("Test failed:", error.message);
@@ -145,7 +145,7 @@ export class ValidSwapPage {
         }
     }
     
-    async BackToken(wallet) {
+    async BackTokenHalf(wallet) {
         try {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
@@ -162,6 +162,30 @@ export class ValidSwapPage {
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
+
+        } catch (error) {
+            console.error("Test failed:", error.message);
+            throw error; 
+        }
+    }
+
+    async BackTokenMax(wallet) {
+        try {
+            await this.functionPage.Pools_Page();
+            await this.functionPage.Swaps_Page();
+            await this.functionPage.Select_Token_USDT_B();
+            await this.functionPage.Total_Token_Before();
+            await this.functionPage.Fill_Amount_Max_A();
+            await this.functionPage.Swap_Page();  
+            await this.functionPage.Swap_Button();
+            await this.functionPage.Confirm_Swap_Page();
+            await this.functionPage.Compare_Swap_And_Confirm_Swap_Page();
+            await this.functionPage.Confirm_Swap_Button();
+            await wallet.confirmTransaction();      
+            await this.functionPage.Close_Confirmation_Button();
+            await this.functionPage.Total_Token_After();
+            await this.page.reload();
+            await this.functionPage.Compare_Token_Before_And_After_Max_Swap(0.01);
 
         } catch (error) {
             console.error("Test failed:", error.message);

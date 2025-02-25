@@ -7,9 +7,7 @@ pipeline {
         SERVER_PATH = "${REPO_NAME}"
         BRANCH_NAME = 'main'
     }
-    tools {
-        nodejs 'NodeJS-18'
-    }
+
     triggers {
         cron('0 1 * * *')
     }
@@ -46,15 +44,6 @@ pipeline {
                         sh """
                             cd ${env.REPO_PATH}
 
-                            if ! command -v node &> /dev/null; then
-                                echo "Installing Node.js..."
-                                curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
-                                sudo yum install -y nodejs npm
-                            else
-                                echo "Node.js is already installed."
-                                node -v
-                            fi
-
                             if ! command -v yarn &> /dev/null; then
                                 echo "Installing Yarn..."
                                 npm install -g yarn
@@ -63,7 +52,7 @@ pipeline {
                                 yarn -v
                             fi
 
-                            if [ -d "node_modules" ]; then
+                           if [ -d "node_modules" ]; then
                                 echo "node_modules exists. Checking Playwright..."
                                 chmod +x node_modules/.bin/playwright
                                 if npx playwright --version; then

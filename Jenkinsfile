@@ -56,6 +56,11 @@ pipeline {
                         sh """
                             cd ${env.REPO_PATH}
 
+                            if ! command -v yarn &> /dev/null; then
+                                echo "Yarn not found. Installing yarn..."
+                                npm install -g yarn
+                            fi
+
                             if [ -d "node_modules" ]; then
                                 echo "node_modules already exists. Checking Playwright version..."
                                 chmod +x node_modules/.bin/playwright
@@ -70,7 +75,7 @@ pipeline {
                                     ls -la                                
                                     yarn --version
                                     which yarn                                   
-                                    yarn install
+                                    npm install
                                     npx playwright install
                                     yarn add @playwright/test@latest
                                     yarn add @tenkeylabs/dappwright
@@ -82,7 +87,7 @@ pipeline {
                                     ls -la                                
                                     yarn --version
                                     which yarn                                   
-                                    yarn install
+                                    npm install
                                     npx playwright install
                                     yarn add @playwright/test@latest
                                     yarn add @tenkeylabs/dappwright

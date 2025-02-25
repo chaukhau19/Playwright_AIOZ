@@ -39,40 +39,51 @@ pipeline {
 
         stage('Setup Dependencies') {
             steps {
-                script {
-                    try {
-                        sh """
-                            cd ${env.REPO_PATH}
+            script {
+                try {
+                sh """
+                    cd ${env.REPO_PATH}
 
-                           if [ -d "node_modules" ]; then
-                                echo "node_modules exists. Checking Playwright..."
-                                chmod +x node_modules/.bin/playwright
-                                if npx playwright --version; then
-                                    echo "Playwright is already installed."
-                                else
-                                    echo "Installing Playwright..."
-                                    rm -rf node_modules yarn.lock
-                                    yarn install
-                                    npx playwright install
-                                    yarn add @playwright/test@latest
-                                    yarn add @tenkeylabs/dappwright
-                                fi
-                            else
-                                echo "Installing dependencies..."
-                                npm install
-                                npx playwright install
-                                yarn add @playwright/test@latest
-                                yarn add @tenkeylabs/dappwright
-                            fi
-                        """
-                    } catch (Exception e) {
-                        echo "Error in Setup Dependencies: ${e.getMessage()}"
-                        currentBuild.result = 'FAILURE'
-                        throw e
-                    }
+                    # Check Node.js
+                    if ! command -v node &> /dev/null; then
+                    echo "Node.js is not installed. Please install it first."
+                    exit 1
+                    fi
+
+                    # Check Yarn
+                    if ! command -v yarn &> /dev/null; then
+                    echo "Yarn not found. Installing..."
+                    npm install -g yarn
+                    fi
+
+                    if [ -d "node_modules" ]; then
+                    echo "node_modules exists. Checking Playwright..."
+                    chmod +x node_modules/.bin/playwright
+                    if npx playwright --version; then
+                        echo "Playwright is already installed."
+                    else
+                        echo "Installing Playwright..."
+                        rm -rf node_modules yarn.lock
+                        yarn install
+                        npx playwright install
+                        yarn add @playwright/test@latest @tenkeylabs/dappwright
+                    fi
+                    else
+                    echo "Installing dependencies..."
+                    yarn install
+                    npx playwright install
+                    yarn add @playwright/test@latest @tenkeylabs/dappwright
+                    fi
+                """
+                } catch (Exception e) {
+                echo "Error in Setup Dependencies: ${e.getMessage()}"
+                currentBuild.result = 'FAILURE'
+                throw e
                 }
             }
+            }
         }
+
 
         stage('CD: Run Tests') {
             steps {

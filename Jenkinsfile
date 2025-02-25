@@ -44,14 +44,6 @@ pipeline {
                         sh """
                             cd ${env.REPO_PATH}
 
-                            if ! command -v yarn &> /dev/null; then
-                                echo "Installing Yarn..."
-                                npm install -g yarn
-                            else
-                                echo "Yarn is already installed."
-                                yarn -v
-                            fi
-
                            if [ -d "node_modules" ]; then
                                 echo "node_modules exists. Checking Playwright..."
                                 chmod +x node_modules/.bin/playwright
@@ -60,7 +52,7 @@ pipeline {
                                 else
                                     echo "Installing Playwright..."
                                     rm -rf node_modules yarn.lock
-                                    npm install
+                                    yarn install
                                     npx playwright install
                                     yarn add @playwright/test@latest
                                     yarn add @tenkeylabs/dappwright

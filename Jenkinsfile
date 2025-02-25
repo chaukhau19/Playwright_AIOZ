@@ -50,42 +50,40 @@ pipeline {
 
         stage('Setup Dependencies') {
             steps {
-                echo 'Setting up dependencies'
-                script {
-                    try {
-                        sh """
-                            cd ${env.REPO_PATH}
+            echo 'Setting up dependencies'
+            script {
+                try {
+                sh """
+                    cd ${env.REPO_PATH}
 
-                            if [ -d "node_modules" ]; then
-                                echo "node_modules already exists. Checking Playwright version..."
-                                chmod +x node_modules/.bin/playwright
+                    if [ -d "node_modules" ]; then
+                    echo "node_modules already exists. Checking Playwright version..."
+                    chmod +x node_modules/.bin/playwright
 
-                                if npx playwright --version; then
-                                    echo "Playwright is already installed. Skipping installation."
-                                else
-                                    echo "Playwright is not installed. Installing..."
-                                    rm -rf node_modules package-lock.json
-                                    npm install || exit 1
-                                    yarn install || exit 1
-                                    npx playwright install || exit 1
-                                    npm install @playwright/test@latest || exit 1
-                                    yarn add @tenkeylabs/dappwright || exit 1
-                                fi
-                            else
-                                echo "node_modules does not exist. Installing dependencies..."
-                                npm install || exit 1
-                                yarn install || exit 1
-                                npx playwright install || exit 1
-                                npm install @playwright/test@latest || exit 1
-                                yarn add @tenkeylabs/dappwright || exit 1
-                            fi
-                        """
-                    } catch (Exception e) {
-                        echo "Error setting up dependencies: ${e.getMessage()}"
-                        currentBuild.result = 'FAILURE'
-                        throw e
-                    }
+                    if npx playwright --version; then
+                        echo "Playwright is already installed. Skipping installation."
+                    else
+                        echo "Playwright is not installed. Installing..."
+                        rm -rf node_modules yarn.lock
+                        yarn install || exit 1
+                        npx playwright install || exit 1
+                        yarn add @playwright/test@latest || exit 1
+                        yarn add @tenkeylabs/dappwright || exit 1
+                    fi
+                    else
+                    echo "node_modules does not exist. Installing dependencies..."
+                    yarn install || exit 1
+                    npx playwright install || exit 1
+                    yarn add @playwright/test@latest || exit 1
+                    yarn add @tenkeylabs/dappwright || exit 1
+                    fi
+                """
+                } catch (Exception e) {
+                echo "Error setting up dependencies: ${e.getMessage()}"
+                currentBuild.result = 'FAILURE'
+                throw e
                 }
+            }
             }
         }
 

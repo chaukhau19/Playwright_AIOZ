@@ -65,11 +65,11 @@ pipeline {
                                 else
                                     echo "Playwright is not installed. Installing..."
                                     rm -rf node_modules yarn.lock
-                                    which yarn
-                                    yarn --version
-                                    whoami
                                     pwd
-                                    ls -la
+                                    whoami
+                                    ls -la                                
+                                    yarn --version
+                                    which yarn                                   
                                     yarn install
                                     npx playwright install
                                     yarn add @playwright/test@latest
@@ -77,11 +77,11 @@ pipeline {
                                 fi
                             else
                                 echo "node_modules does not exist. Installing dependencies..."
-                                    which yarn
-                                    yarn --version
-                                    whoami
                                     pwd
-                                    ls -la
+                                    whoami
+                                    ls -la                                
+                                    yarn --version
+                                    which yarn                                   
                                     yarn install
                                     npx playwright install
                                     yarn add @playwright/test@latest

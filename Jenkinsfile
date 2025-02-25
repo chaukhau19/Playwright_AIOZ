@@ -65,6 +65,10 @@ pipeline {
                     else
                         echo "Playwright is not installed. Installing..."
                         rm -rf node_modules yarn.lock
+                        if ! command -v yarn &> /dev/null; then
+                            echo "Yarn is not installed. Installing yarn..."
+                            npm install -g yarn || exit 1
+                        fi
                         yarn install || exit 1
                         npx playwright install || exit 1
                         yarn add @playwright/test@latest || exit 1

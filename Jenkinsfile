@@ -7,6 +7,9 @@ pipeline {
         SERVER_PATH = "${REPO_NAME}"
         BRANCH_NAME = 'main'
     }
+    tools {
+        nodejs 'NodeJS-18'
+    }
     triggers {
         cron('0 1 * * *')
     }
@@ -15,24 +18,16 @@ pipeline {
             steps {
                 script {
                     try {
-                        // Checkout main branch
-                        sh 'git checkout main'
-                        sh 'git remote set-head origin main'
-                        sh 'git status'
-                        sh 'git remote -v'
-                        sh 'git branch -r'
-
+                        sh 'git fetch origin ${BRANCH_NAME}'
                         def changes = sh(script: "git diff --name-only origin/${BRANCH_NAME}..HEAD", returnStdout: true).trim()
                         if (changes) {
                             echo "Changes detected. Checking out code..."
                             git branch: "${BRANCH_NAME}",
                                 url: "https://github.com/chaukhau19/Playwright_AIOZ.git"
-                            echo "Code checked out from ${BRANCH_NAME}"
                         } else {
                             echo "No changes detected. Skipping checkout."
                         }
-
-                        env.REPO_PATH = pwd()
+                        env.REPO_PATH = sh(script: "pwd", returnStdout: true).trim()
                         echo "Using workspace directory: ${env.REPO_PATH}"
                     } catch (Exception e) {
                         echo "Error during checkout: ${e.getMessage()}"
@@ -40,59 +35,57 @@ pipeline {
                         throw e
                     }
                 }
-                sh """
-                    cd ${env.REPO_PATH}
-                    pwd
-                    ls -la
-                """
+                sh "cd ${env.REPO_PATH} && pwd && ls -la"
             }
         }
 
         stage('Setup Dependencies') {
             steps {
-                echo 'Setting up dependencies'
                 script {
                     try {
                         sh """
                             cd ${env.REPO_PATH}
 
+                            if ! command -v node &> /dev/null; then
+                                echo "Installing Node.js..."
+                                curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+                                sudo yum install -y nodejs npm
+                            else
+                                echo "Node.js is already installed."
+                                node -v
+                            fi
+
                             if ! command -v yarn &> /dev/null; then
-                                echo "Yarn not found. Installing yarn..."
-                                    pwd
-                                    whoami
-                                    ls -la      
-                                    node -v
-                                    npm -v   
-                                    which npm                       
-                                    which yarn 
-                                    curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
-                                    sudo yum install nodejs npm -y                                  
+                                echo "Installing Yarn..."
+                                npm install -g yarn
+                            else
+                                echo "Yarn is already installed."
+                                yarn -v
                             fi
 
                             if [ -d "node_modules" ]; then
-                                echo "node_modules already exists. Checking Playwright version..."
+                                echo "node_modules exists. Checking Playwright..."
                                 chmod +x node_modules/.bin/playwright
-
                                 if npx playwright --version; then
-                                    echo "Playwright is already installed. Skipping installation."
+                                    echo "Playwright is already installed."
                                 else
-                                    echo "Playwright is not installed. Installing..."
-                                    rm -rf node_modules yarn.lock                              
+                                    echo "Installing Playwright..."
+                                    rm -rf node_modules yarn.lock
                                     npm install
                                     npx playwright install
                                     yarn add @playwright/test@latest
                                     yarn add @tenkeylabs/dappwright
                                 fi
                             else
-                                echo "node_modules does not exist. Installing dependencies..."                         
-                                    npm install
-                                    npx playwright install
-                                    yarn add @playwright/test@latest
-                                    yarn add @tenkeylabs/dappwright
+                                echo "Installing dependencies..."
+                                npm install
+                                npx playwright install
+                                yarn add @playwright/test@latest
+                                yarn add @tenkeylabs/dappwright
                             fi
                         """
                     } catch (Exception e) {
-                        echo "Error setting up dependencies: ${e.getMessage()}"
+                        echo "Error in Setup Dependencies: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
                         throw e
                     }
@@ -102,7 +95,6 @@ pipeline {
 
         stage('CD: Run Tests') {
             steps {
-                echo 'Starting Tests'
                 script {
                     try {
                         if (isUnix()) {
@@ -123,7 +115,6 @@ pipeline {
                         throw e
                     }
                 }
-                echo "Tests executed"
             }
         }
 
@@ -136,14 +127,10 @@ pipeline {
     }
 
     post {
-        always { //Run this block whether the stage is successful or not.
+        always {
             script {
-                cleanTemporaryFolder()
-                if (currentBuild.result == 'SUCCESS') {
-                    sendBuildStatusMessage("✅ Status: ${currentBuild.currentResult}")
-                } else {
-                    sendBuildStatusMessage("❌ Status: ${currentBuild.currentResult}")
-                }
+                cleanWs()
+                echo "Build finished with status: ${currentBuild.result}"
             }
         }
     }

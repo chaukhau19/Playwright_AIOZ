@@ -15,6 +15,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        // Checkout main branch
                         sh 'git checkout main'
                         sh 'git remote set-head origin main'
                         sh 'git status'
@@ -31,16 +32,12 @@ pipeline {
                             echo "No changes detected. Skipping checkout."
                         }
 
-                        env.REPO_PATH = sh(script: "find . -type d -name '${REPO_NAME}'", returnStdout: true).trim()
-                        if (env.REPO_PATH) {
-                            echo "Found ${REPO_NAME} at: ${env.REPO_PATH}"
-                        } else {
-                            error "Repository directory ${REPO_NAME} not found."
-                        }
+                        env.REPO_PATH = pwd()
+                        echo "Using workspace directory: ${env.REPO_PATH}"
                     } catch (Exception e) {
                         echo "Error during checkout: ${e.getMessage()}"
-                        currentBuild.result = 'FAILURE'  
-                        throw e 
+                        currentBuild.result = 'FAILURE'
+                        throw e
                     }
                 }
                 sh """

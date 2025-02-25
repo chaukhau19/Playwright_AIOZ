@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    options {
-        docker.image 'mcr.microsoft.com/playwright:v1.47.2-jammy'
-    }
     environment {
         REPO_NAME = 'Playwright_AIOZ'
         FILE_SH = 'AIOZ_Finance.sh'
@@ -13,7 +10,6 @@ pipeline {
     triggers {
         cron('0 1 * * *')
     }
-
     stages {
         stage('CI: Checkout Code') {
             steps {

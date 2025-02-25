@@ -11,12 +11,13 @@ export class FunctionPage {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     convertToPoints(text) {
-        if (text.includes('.')) {
-            return parseFloat(text.replace(/,/g, ""));
-        } else if (text.includes(',')) {
-            return parseFloat(text.replace(",", "."));
+        const str = String(text);
+        if (str.includes('.')) {
+            return parseFloat(str.replace(/,/g, ""));
+        } else if (str.includes(',')) {
+            return parseFloat(str.replace(",", "."));
         } else {
-            return parseFloat(text);
+            return parseFloat(str);
         }
     }
 
@@ -707,6 +708,9 @@ export class FunctionPage {
         }
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     async Total_Token_After() {
         await this.page.waitForTimeout(35000);
         try {
@@ -782,7 +786,7 @@ export class FunctionPage {
                 await priceImpactLocator.waitFor({ state: 'visible', timeout: 20000 });
                 await priceImpactLocator.click();
 
-                const priceImpactElement = await this.page.locator("(//span[contains(text(), '%')])[2]").first();
+                const priceImpactElement = await this.page.locator("(//div[contains(text(), 'Price impact')]/following-sibling::div//span)[1]").first();
                 const slippageToleranceElement = await this.page.locator("(//div[@data-testid='swap-li-label' and text()='Slippage tolerance']/following-sibling::div//*[contains(., '%')])[3]").first();
 
                 priceImpactValue = await priceImpactElement.textContent();
@@ -814,6 +818,53 @@ export class FunctionPage {
             // throw error;
         }
     }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async Wrap_Page() {
+        try {
+            await this.page.waitForSelector('input.token-amount-input', { timeout: 20000 });
+
+            const inputs = await this.page.locator('input.token-amount-input').all();
+            if (inputs.length < 2) throw new Error("Not enough input fields for token amount.");
+
+            const [inputFrom, inputTo] = inputs;
+            let [initialFromValue, initialToValue] = await Promise.all([
+                inputFrom.getAttribute('value') ?? "",
+                inputTo.getAttribute('value') ?? ""
+            ]);
+
+            let Token_Before_Swap_A = initialFromValue;
+            let Token_Before_Swap_B = initialToValue;
+
+            for (let i = 0; i < 20; i++) {
+                const [newFromValue, newToValue] = await Promise.all([
+                    inputFrom.getAttribute('value'),
+                    inputTo.getAttribute('value')
+                ]);
+
+                if (newFromValue !== initialFromValue || newToValue !== initialToValue) {
+                    Token_Before_Swap_A = newFromValue;
+                    Token_Before_Swap_B = newToValue;
+                    break;
+                }
+                await this.page.waitForTimeout(500);
+            }
+
+            this.tokenWrapPage = {
+                Token_Before_Swap_A: this.convertToPointsWithCommas(this.convertToPoints(Token_Before_Swap_A)),
+                Token_Before_Swap_B: this.convertToPointsWithCommas(this.convertToPoints(Token_Before_Swap_B)),
+            };
+
+            console.log("🚀 Wrap Page Data:", this.tokenWrapPage);
+            return this.tokenWrapPage;
+        } catch (error) {
+            console.error(`❌ Error in Wrap Page: ${error.message}`);
+            return { Token_Before_Swap_A: "N/A", Token_Before_Swap_B: "N/A" };
+        }
+    }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -922,6 +973,7 @@ export class FunctionPage {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     async Compare_Token_Before_And_After_Max_Swap(networkCostA) {
         await this.page.waitForTimeout(5000);
 
@@ -966,16 +1018,8 @@ export class FunctionPage {
                 (Actual_Total_Token_Before_B + Token_After_Swap_B).toFixed(8)
             );
 
-            // Ensure expected values are not negative
             expected_Total_Token_After_A = Math.max(expected_Total_Token_After_A, 0);
             expected_Total_Token_After_B = Math.max(expected_Total_Token_After_B, 0);
-
-            if (expected_Total_Token_After_A < 0) {
-                throw new Error(`❌ ERROR! Expected Token A after swap is negative. Expected: ${expected_Total_Token_After_A}`);
-            }
-            if (expected_Total_Token_After_B < 0) {
-                throw new Error(`❌ ERROR! Expected Token B after swap is negative. Expected: ${expected_Total_Token_After_B}`);
-            }
 
             return { expected_Total_Token_After_A, expected_Total_Token_After_B };
         };
@@ -1037,7 +1081,6 @@ export class FunctionPage {
     async Compare_Token_Before_And_After_Valid_Swap(networkCostA) {
         await this.page.waitForTimeout(5000);
 
-        // Destructure token values safely with correct keys
         const {
             Point_A: Actual_Total_Token_Before_A = 0,
             Point_B: Actual_Total_Token_Before_B = 0
@@ -1053,11 +1096,9 @@ export class FunctionPage {
             Token_Before_Swap_B = "0"
         } = this.tokenSwapPage || {};
 
-        // Parse values safely
         const Token_After_Swap_A = this.convertToPoints(Token_Before_Swap_A);
         const Token_After_Swap_B = this.convertToPoints(Token_Before_Swap_B);
 
-        // Validate input values
         const validateInput = (value, name) => {
             if (value === undefined || isNaN(value) || value < 0) {
                 console.error(`❌ ERROR! Invalid input for ${name}. Value: ${value}`);
@@ -1066,7 +1107,6 @@ export class FunctionPage {
             return true;
         };
 
-        // Calculate expected token values after swap
         const calculateExpectedValues = () => {
             [Actual_Total_Token_Before_A, Token_After_Swap_A, Actual_Total_Token_Before_B, Token_After_Swap_B].forEach(
                 (val, index) => validateInput(val, `Parameter ${index + 1}`)
@@ -1079,7 +1119,6 @@ export class FunctionPage {
                 (Actual_Total_Token_Before_B + Token_After_Swap_B).toFixed(2)
             );
 
-            // Check if expected values are negative
             if (expected_Total_Token_After_A < 0) {
                 throw new Error(`❌ ERROR! Expected Token A after swap is negative. Expected: ${expected_Total_Token_After_A}`);
             }
@@ -1090,21 +1129,16 @@ export class FunctionPage {
             return { expected_Total_Token_After_A, expected_Total_Token_After_B };
         };
 
-        // Check if actual value is within acceptable range
         const isWithinRange = (actual, expected, tolerance, fixedSlippage = 0.1) => {
-            // If tolerance is provided (e.g., for network cost), use it
             if (tolerance) {
                 return Math.abs(actual - expected) <= tolerance;
             }
 
-            // Apply fixed slippage directly to the expected value
             const acceptableLow = expected - fixedSlippage;
             const acceptableHigh = expected + fixedSlippage;
 
             return actual >= acceptableLow && actual <= acceptableHigh;
         };
-
-        // Validate swap success
         const validateSuccessfulSwap = () => {
             const { expected_Total_Token_After_A, expected_Total_Token_After_B } = calculateExpectedValues();
 
@@ -1144,7 +1178,6 @@ export class FunctionPage {
             //     acceptableHigh_B: expected_Total_Token_After_B + 0.1,
             //     passB
             // });
-
             if (passA && passB) {
                 console.log("✅ Swap Successful!", {
                     Actual_Total_Token_After_A,
@@ -1159,7 +1192,6 @@ export class FunctionPage {
                 console.error(
                     `❌ ERROR! Swap validation failed.\nExpected A: ${expected_Total_Token_After_A}, Actual A: ${Actual_Total_Token_After_A}\nExpected B: ${expected_Total_Token_After_B}, Actual B: ${Actual_Total_Token_After_B}`
                 );
-                // throw new Error(`Swap validation failed. Error: ${error.message}`);
             }
         };
 
@@ -1234,162 +1266,152 @@ export class FunctionPage {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-async Compare_Token_Before_And_After_Invalid_Swap() {
-    await this.page.waitForTimeout(10000);  
+    async Compare_Token_Before_And_After_Invalid_Swap() {
+        await this.page.waitForTimeout(10000);  
 
-    if (!this.totalTokenBefore || !this.totalTokenAfter) {
-        throw new Error("❌ ERROR! Missing token data before or after swap.");
+        if (!this.totalTokenBefore || !this.totalTokenAfter) {
+            throw new Error("❌ ERROR! Missing token data before or after swap.");
+        }
+        const {
+            Point_A: Actual_Total_Token_Before_A = 0,
+            Point_B: Actual_Total_Token_Before_B = 0
+        } = this.totalTokenBefore || {};
+
+        const {
+            Point_A: Actual_Total_Token_After_A = 0,
+            Point_B: Actual_Total_Token_After_B = 0
+        } = this.totalTokenAfter || {};
+
+        await this.page.waitForTimeout(5000);  
+
+        const invalidateRejectedSwap = () => {
+            const before_A_Token = this.convertToPoints(Actual_Total_Token_Before_A);
+            const before_B_Token = this.convertToPoints(Actual_Total_Token_Before_B);
+            const after_A_Token = this.convertToPoints(Actual_Total_Token_After_A);
+            const after_B_Token = this.convertToPoints(Actual_Total_Token_After_B);
+
+            if (![before_A_Token, before_B_Token, after_A_Token, after_B_Token].every(Number.isFinite)) {
+                throw new Error("❌ ERROR! One or more token values are invalid or not numeric.");
+            }
+
+            console.log("🔹 Token Balance Before Swap:  A =", before_A_Token, "| B =", before_B_Token);
+            console.log("🔹 Token Balance After Swap:   A =", after_A_Token, "| B =", after_B_Token);
+
+            if (after_A_Token === before_A_Token && after_B_Token === before_B_Token) {
+                console.log("✅ Tokens remain unchanged!", {
+                    before_A_Token,
+                    before_B_Token,
+                    after_A_Token,
+                    after_B_Token
+                });
+                return true;
+            } else {
+                console.error(`❌ ERROR! Tokens changed despite swap rejection Before { A: ${before_A_Token}, B: ${before_B_Token} } | After { A: ${after_A_Token}, B: ${after_B_Token} }`);
+                return false;
+            }
+        };
+
+        return invalidateRejectedSwap();
     }
-    const {
-        Point_A: Actual_Total_Token_Before_A = 0,
-        Point_B: Actual_Total_Token_Before_B = 0
-    } = this.totalTokenBefore || {};
 
-    const {
-        Point_A: Actual_Total_Token_After_A = 0,
-        Point_B: Actual_Total_Token_After_B = 0
-    } = this.totalTokenAfter || {};
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    await this.page.waitForTimeout(5000);  
+    async Compare_Token_Before_And_After_Wrap() {
+        await this.waitForTimeout(10000);
 
-    const invalidateRejectedSwap = () => {
-        const before_A_Token = this.convertToPoints(Actual_Total_Token_Before_A);
-        const before_B_Token = this.convertToPoints(Actual_Total_Token_Before_B);
-        const after_A_Token = this.convertToPoints(Actual_Total_Token_After_A);
-        const after_B_Token = this.convertToPoints(Actual_Total_Token_After_B);
-
-        if (![before_A_Token, before_B_Token, after_A_Token, after_B_Token].every(Number.isFinite)) {
-            throw new Error("❌ ERROR! One or more token values are invalid or not numeric.");
+        if (!this.totalTokenBefore || !this.totalTokenAfter || !this.tokenWrapPage) {
+            throw new Error("❌ ERROR! Missing token data before or after wrap.");
         }
 
-        console.log("🔹 Token Balance Before Swap:  A =", before_A_Token, "| B =", before_B_Token);
-        console.log("🔹 Token Balance After Swap:   A =", after_A_Token, "| B =", after_B_Token);
+        const { Point_A: beforeA = 0, Point_B: beforeB = 0 } = this.totalTokenBefore;
+        const { Point_A: afterA = 0, Point_B: afterB = 0 } = this.totalTokenAfter;
+        const { Token_Before_Swap_A: wrapA = "0", Token_Before_Swap_B: wrapB = "0" } = this.tokenWrapPage;
 
-        if (after_A_Token === before_A_Token && after_B_Token === before_B_Token) {
-            console.log("✅ Tokens remain unchanged!", {
-                before_A_Token,
-                before_B_Token,
-                after_A_Token,
-                after_B_Token
+        const parseAndValidate = (value, name) => {
+            const num = this.convertToPoints(value);
+            if (isNaN(num) || num < 0) {
+                throw new Error(`❌ ERROR! Invalid value for ${name}: ${value}`);
+            }
+            return parseFloat(num.toFixed(5));
+        };
+
+        const tokenAfterWrapA = parseAndValidate(wrapA, "Token_After_Wrap_A");
+        const tokenAfterWrapB = parseAndValidate(wrapB, "Token_After_Wrap_B");
+
+        const expectedAfterA = parseFloat((beforeA - tokenAfterWrapA).toFixed(5));
+        const expectedAfterB = parseFloat((beforeB + tokenAfterWrapB).toFixed(5));
+
+        if (expectedAfterA < 0) {
+            throw new Error("❌ ERROR! Expected Token A after wrap is negative.");
+        }
+
+        const isMatchA = parseFloat(afterA) === expectedAfterA;
+        const isMatchB = parseFloat(afterB) === expectedAfterB;
+
+        if (isMatchA && isMatchB) {
+            console.log("✅ Wrap Successful!", {
+                Actual_Total_Token_After_A: afterA,
+                expected_Total_Token_After_A: expectedAfterA,
+                Actual_Total_Token_After_B: afterB,
+                expected_Total_Token_After_B: expectedAfterB
             });
             return true;
         } else {
-            console.error(`❌ ERROR! Tokens changed despite swap rejection Before { A: ${before_A_Token}, B: ${before_B_Token} } | After { A: ${after_A_Token}, B: ${after_B_Token} }`);
-            return false;
+            console.error("❌ ERROR! Wrap validation failed", {
+                Actual_Total_Token_After_A: afterA,
+                expected_Total_Token_After_A: expectedAfterA,
+                Difference_A: Math.abs(afterA - expectedAfterA),
+                Actual_Total_Token_After_B: afterB,
+                expected_Total_Token_After_B: expectedAfterB,
+                Difference_B: Math.abs(afterB - expectedAfterB)
+            });
         }
-    };
-
-    return invalidateRejectedSwap();
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async Compare_Token_Before_And_After_Wrap() {
-    await this.waitForTimeout(10000);
-
-    if (!this.totalTokenBefore || !this.totalTokenAfter || !this.tokenSwapPage) {
-        throw new Error("❌ ERROR! Missing token data before or after wrap.");
-    }
-    const {
-        Point_A: Actual_Total_Token_Before_A = 0,
-        Point_B: Actual_Total_Token_Before_B = 0
-    } = this.totalTokenBefore || {};
-
-    const {
-        Point_A: Actual_Total_Token_After_A = 0,
-        Point_B: Actual_Total_Token_After_B = 0
-    } = this.totalTokenAfter || {};
-
-    const {
-        Token_Before_Swap_A = "0",
-        Token_Before_Swap_B = "0"
-    } = this.tokenSwapPage || {};
-
-    const parseAndValidate = (value, name) => {
-        const num = this.convertToPoints(value);
-        if (isNaN(num) || num < 0) {
-            throw new Error(`❌ ERROR! Invalid value for ${name}: ${value}`);
-        }
-        return parseFloat(num.toFixed(5));
-    };
-
-    const Token_After_Swap_A = parseAndValidate(Token_Before_Swap_A, "Token_After_Swap_A");
-    const Token_After_Swap_B = parseAndValidate(Token_Before_Swap_B, "Token_After_Swap_B");
-
-    const Expected_Total_Token_After_A = parseFloat((Actual_Total_Token_Before_A - Token_After_Swap_A).toFixed(5));
-    const Expected_Total_Token_After_B = parseFloat((Actual_Total_Token_Before_B + Token_After_Swap_B).toFixed(5));
-
-    if (Expected_Total_Token_After_A < 0) {
-        throw new Error("❌ ERROR! Expected Token A after wrap is negative.");
     }
 
-    const actual_Total_Token_After_A = parseFloat(Actual_Total_Token_After_A);
-    const actual_Total_Token_After_B = parseFloat(Actual_Total_Token_After_B);
-
-    const isMatchA = actual_Total_Token_After_A === Expected_Total_Token_After_A;
-    const isMatchB = actual_Total_Token_After_B === Expected_Total_Token_After_B;
-
-    if (isMatchA && isMatchB) {
-        console.log("✅ Wrap Successful!", {
-            Actual_Total_Token_After_A,
-            expected_Total_Token_After_A: Expected_Total_Token_After_A,
-            Actual_Total_Token_After_B,
-            expected_Total_Token_After_B: Expected_Total_Token_After_B
-        });
-        return true;
-    } else {
-        console.error("❌ ERROR! Wrap validation failed", {
-            Actual_Total_Token_After_A,
-            expected_Total_Token_After_A: Expected_Total_Token_After_A,
-            Difference_A: Math.abs(actual_Total_Token_After_A - Expected_Total_Token_After_A),
-            Actual_Total_Token_After_B,
-            expected_Total_Token_After_B: Expected_Total_Token_After_B,
-            Difference_B: Math.abs(actual_Total_Token_After_B - Expected_Total_Token_After_B)
-        });
-        // throw new Error("❌ ERROR! Wrap validation failed. Check logs for details.");
-    }
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async getTokenAllWeb() {
-    try {
-        const topBalanceSelector = "div.css-vurnku";
-        const swapBalanceSelector = "[data-testid='balance-text'] p:nth-of-type(2)";
+    async getTokenAllWeb() {
+        try {
+            const topBalanceSelector = "div.css-vurnku";
+            const swapBalanceSelector = "[data-testid='balance-text'] p:nth-of-type(2)";
 
-        await Promise.all([
-            this.page.waitForSelector(topBalanceSelector, { timeout: 20000 }),
-            this.page.waitForSelector(swapBalanceSelector, { timeout: 20000 }),
-        ]);
+            await Promise.all([
+                this.page.waitForSelector(topBalanceSelector, { timeout: 20000 }),
+                this.page.waitForSelector(swapBalanceSelector, { timeout: 20000 }),
+            ]);
 
-        // Lấy nội dung số dư
-        const topBalance = await this.page.locator(topBalanceSelector).textContent();
-        const swapBalance = await this.page.locator(swapBalanceSelector).nth(1).textContent();
+            const [topBalance, swapBalance] = await Promise.all([
+                this.page.locator(topBalanceSelector).textContent(),
+                this.page.locator(swapBalanceSelector).nth(1).textContent()
+            ]);
 
-        // Kiểm tra dữ liệu hợp lệ
-        if (!topBalance || !swapBalance) {
-            console.warn("⚠ Failed to retrieve AIOZ balance.");
+            if (!topBalance || !swapBalance) {
+                console.warn("⚠ Failed to retrieve AIOZ balance.");
+                return { topBalance: null, swapBalance: null };
+            }
+
+            const trimmedTopBalance = this.convertToPoints(topBalance.trim());
+            const trimmedSwapBalance = this.convertToPoints(swapBalance.trim());
+
+            const logBalance = (top, swap) => {
+                if (top === swap) {
+                    console.log(`✅ 🔹 AIOZ Top: ${top} | 🔹 AIOZ Swap: ${swap}`);
+                } else {
+                    console.warn(`❌ 🔹 AIOZ Top: ${top} | 🔹 AIOZ Swap: ${swap}`);
+                }
+            };
+
+            logBalance(trimmedTopBalance, trimmedSwapBalance);
+
+            return { topBalance: trimmedTopBalance, swapBalance: trimmedSwapBalance };
+
+        } catch (error) {
+            console.error("❌ Error retrieving AIOZ balance:", error);
             return { topBalance: null, swapBalance: null };
         }
-
-        const trimmedTopBalance = this.convertToPoints(topBalance.trim());
-        const trimmedSwapBalance = this.convertToPoints(swapBalance.trim());
-
-        if (trimmedTopBalance === trimmedSwapBalance) {
-            console.log(`✅ 🔹 AIOZ Top: ${trimmedTopBalance} | 🔹 AIOZ Swap: ${trimmedSwapBalance}`);
-        } else {
-            console.warn(`❌ 🔹 AIOZ Top: ${trimmedTopBalance} | 🔹 AIOZ Swap: ${trimmedSwapBalance}`);
-        }
-
-        return { topBalance: trimmedTopBalance, swapBalance: trimmedSwapBalance };
-
-    } catch (error) {
-        console.error("❌ Error retrieving AIOZ balance:", error);
-        return { topBalance: null, swapBalance: null };
     }
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

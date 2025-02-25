@@ -58,7 +58,15 @@ pipeline {
 
                             if ! command -v yarn &> /dev/null; then
                                 echo "Yarn not found. Installing yarn..."
-                                npm install -g yarn
+                                    pwd
+                                    whoami
+                                    ls -la      
+                                    node -v
+                                    npm -v   
+                                    which npm                       
+                                    which yarn 
+                                    curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+                                    sudo yum install nodejs npm -y                                  
                             fi
 
                             if [ -d "node_modules" ]; then
@@ -69,28 +77,14 @@ pipeline {
                                     echo "Playwright is already installed. Skipping installation."
                                 else
                                     echo "Playwright is not installed. Installing..."
-                                    rm -rf node_modules yarn.lock
-                                    pwd
-                                    whoami
-                                    ls -la      
-                                    node -v
-                                    npm -v   
-                                    which npm                       
-                                    which yarn 
-                                    curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
-                                    sudo yum install nodejs npm -y                                  
+                                    rm -rf node_modules yarn.lock                              
                                     npm install
                                     npx playwright install
                                     yarn add @playwright/test@latest
                                     yarn add @tenkeylabs/dappwright
                                 fi
                             else
-                                echo "node_modules does not exist. Installing dependencies..."
-                                    pwd
-                                    whoami
-                                    ls -la                                
-                                    yarn --version
-                                    which yarn                                   
+                                echo "node_modules does not exist. Installing dependencies..."                         
                                     npm install
                                     npx playwright install
                                     yarn add @playwright/test@latest

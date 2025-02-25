@@ -7,9 +7,6 @@ pipeline {
         SERVER_PATH = "${REPO_NAME}"
         BRANCH_NAME = 'main'
     }
-    tools {
-        nodejs 'NodeJS-LTS' // Replace 'NodeJS-LTS' with the actual name you configured in Global Tool Configuration
-    }
     triggers {
         cron('0 1 * * *')
     }

@@ -65,17 +65,17 @@ pipeline {
                                 else
                                     echo "Playwright is not installed. Installing..."
                                     rm -rf node_modules yarn.lock
-                                    yarn install || exit 1
-                                    npx playwright install || exit 1
-                                    yarn add @playwright/test@latest || exit 1
-                                    yarn add @tenkeylabs/dappwright || exit 1
+                                    yarn install
+                                    npx playwright install
+                                    yarn add @playwright/test@latest
+                                    yarn add @tenkeylabs/dappwright
                                 fi
                             else
                                 echo "node_modules does not exist. Installing dependencies..."
-                                yarn install || exit 1
-                                npx playwright install || exit 1
-                                yarn add @playwright/test@latest || exit 1
-                                yarn add @tenkeylabs/dappwright || exit 1
+                                    yarn install
+                                    npx playwright install
+                                    yarn add @playwright/test@latest
+                                    yarn add @tenkeylabs/dappwright
                             fi
                         """
                     } catch (Exception e) {

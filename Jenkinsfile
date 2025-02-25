@@ -72,9 +72,13 @@ pipeline {
                                     rm -rf node_modules yarn.lock
                                     pwd
                                     whoami
-                                    ls -la                                
-                                    yarn --version
-                                    which yarn                                   
+                                    ls -la      
+                                    node -v
+                                    npm -v   
+                                    which npm                       
+                                    which yarn 
+                                    curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+                                    sudo yum install nodejs npm -y                                  
                                     npm install
                                     npx playwright install
                                     yarn add @playwright/test@latest

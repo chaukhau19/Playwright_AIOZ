@@ -7,6 +7,9 @@ pipeline {
         SERVER_PATH = "${REPO_NAME}"
         BRANCH_NAME = 'main'
     }
+    tools {
+        nodejs 'NodeJS-LTS' // Replace 'NodeJS-LTS' with the actual name you configured in Global Tool Configuration
+    }
     triggers {
         cron('0 1 * * *')
     }
@@ -65,6 +68,11 @@ pipeline {
                                 else
                                     echo "Playwright is not installed. Installing..."
                                     rm -rf node_modules yarn.lock
+                                    which yarn
+                                    yarn --version
+                                    whoami
+                                    pwd
+                                    ls -la
                                     yarn install
                                     npx playwright install
                                     yarn add @playwright/test@latest
@@ -72,6 +80,11 @@ pipeline {
                                 fi
                             else
                                 echo "node_modules does not exist. Installing dependencies..."
+                                    which yarn
+                                    yarn --version
+                                    whoami
+                                    pwd
+                                    ls -la
                                     yarn install
                                     npx playwright install
                                     yarn add @playwright/test@latest

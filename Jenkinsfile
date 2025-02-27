@@ -86,7 +86,9 @@ pipeline {
                                 yarn playwright install
                                 yarn add @playwright/test@latest @tenkeylabs/dappwright
                             else
-                                echo "✅ yarn playwright found."
+                                yarn install
+                                yarn playwright install
+                                yarn add @playwright/test@latest @tenkeylabs/dappwright
                             fi
                         """
                     } catch (Exception e) {

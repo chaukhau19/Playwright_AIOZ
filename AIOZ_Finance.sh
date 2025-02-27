@@ -24,6 +24,6 @@
 # yarn test:AllFixed2 --workers=1
 # yarn test:AllFixed3 --workers=1
 
-yarn test:All --workers=1
+yarn test:AllFixed3 --workers=1
 
 read -p "Press Enter to continue..."

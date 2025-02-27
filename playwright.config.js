@@ -25,7 +25,7 @@ export default defineConfig({
   use: {
     actionTimeout: 0, // Không giới hạn thời gian cho từng action (click, nhập liệu, v.v.)
     navigationTimeout: 0, // Không giới hạn thời gian tải trang
-    headless: false, // Chạy trình duyệt có giao diện (nếu muốn chạy ẩn, đặt `true`)
+    headless: true, // Chạy trình duyệt có giao diện (nếu muốn chạy ẩn, đặt `true`)
 
     args: [
       "--disable-web-security", // Vô hiệu hóa bảo mật web, cho phép các request giữa các origin khác nhau

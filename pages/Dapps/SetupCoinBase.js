@@ -10,7 +10,7 @@ export const test = baseTest.extend({
         wallet: "coinbase",
         version: "3.99.0",
         seed:"gown pill disagree boring craft valve rival airport wrestle long vacuum auction", 
-        headless: false,
+        headless: true,
         slowMo: 250,
         args: [
           "--disable-web-security",

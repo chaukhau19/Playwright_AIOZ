@@ -12,7 +12,7 @@ export const test = baseTest.extend({
               wallet: "metamask",
               version: "12.10.1",
               seed: "boring raccoon elevator sustain long jar phrase ring mask region elder primary",
-              headless: false,
+              headless: true,
               slowMo: 500,
               args: [
                 "--disable-web-security",

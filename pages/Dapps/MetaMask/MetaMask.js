@@ -17,18 +17,22 @@ export class ConnectWalletMetaMaskPage {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Connect_MetaMask(wallet) {
-        await this.functionPage.gotoURL();
-        await this.functionPage.Connect_Wallet_MetaMask();
-        const browserContext = this.page.context();
-        const [popup] = await Promise.all([
-            browserContext.waitForEvent("page", { timeout: 60000 }),
-            wallet.approve()
-          ]);
-          await popup.waitForLoadState();
-          
-        // await wallet.approve();
-        // await this.functionPage.Verify_Account_MetaMask_Connected();
-        // await this.page.close();
+        try {
+            console.log("Navigating to URL...");
+            await this.functionPage.gotoURL();
+            console.log("Connecting to MetaMask...");
+            await this.functionPage.Connect_Wallet_MetaMask();
+            console.log("Approving wallet connection...");
+            await wallet.approve();
+            console.log("Verifying MetaMask connection...");
+            await this.functionPage.Verify_Account_MetaMask_Connected();
+            console.log("MetaMask connected successfully!");
+        } catch (error) {
+            console.error("❌ Error during MetaMask connection:", error);
+        } finally {
+            await this.page.close();
+            console.log("Page closed.");
+        }
     }
 
     async Disconnect_MetaMask(wallet) {

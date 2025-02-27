@@ -19,6 +19,13 @@ export class ConnectWalletMetaMaskPage {
     async Connect_MetaMask(wallet) {
         await this.functionPage.gotoURL();
         await this.functionPage.Connect_Wallet_MetaMask();
+        const browserContext = this.page.context();
+        const [popup] = await Promise.all([
+            browserContext.waitForEvent("page", { timeout: 60000 }),
+            wallet.approve()
+          ]);
+          await popup.waitForLoadState();
+          
         // await wallet.approve();
         // await this.functionPage.Verify_Account_MetaMask_Connected();
         // await this.page.close();

@@ -2,8 +2,8 @@ import { defineConfig, devices } from "@playwright/test"
 
 export default defineConfig({
   testDir: 'tests', // Directory containing tests
-  // fullyParallel: false, // To not overwrite logs.
-  fullyParallel: true, // Run all tests in parallel to speed up execution
+  fullyParallel: false, // To not overwrite logs.
+  // fullyParallel: true, // Run all tests in parallel to speed up execution
   quiet: true, // Reduce unnecessary logs to keep the terminal clean
   forbidOnly: !!process.env.CI, // Prevent committing code with `.only` tests, avoiding errors when pushing to CI/CD
   retries: 0, // Do not retry tests if they fail
@@ -36,6 +36,9 @@ export default defineConfig({
       "--no-sandbox", // Disable sandbox to avoid permission errors in CI environments
       "--disable-setuid-sandbox", // Disable setuid sandbox mode
       '--proxy-server=https://aiozswap-web.vercel.app/', // Set proxy server to test the website
+      "--disable-popup-blocking",
+      "--disable-infobars",
+      "--disable-backgrounding-occluded-windows",
     ],
 
     // video: 'only-on-failure',

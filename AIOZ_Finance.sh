@@ -1,29 +1,23 @@
 #!/bin/bash
+set -e  # Dừng script nếu có lỗi
 
+# Khởi động Xvfb (chạy trình duyệt trong môi trường không có GUI)
+Xvfb :99 -ac &
+XVFB_PID=$!  # Lưu PID của Xvfb để tắt sau khi test xong
+export DISPLAY=:99
+
+# Chờ Xvfb khởi động hoàn toàn
+sleep 2  
+
+# Chạy test
 yarn test:ConnectMetaMask --workers=1
+
+# Uncomment nếu cần chạy thêm test khác
 # yarn test:DisconnectMetaMask --workers=1
 # yarn test:SwitchNetworkMetaMask --workers=1
 
-# yarn test:ConnectCoinBase --workers=1
-# yarn test:DisconnectCoinBase --workers=1
-# yarn test:SwitchNetworkCoinBase --workers=1
+# Dừng Xvfb sau khi test xong
+kill $XVFB_PID
 
-# yarn test:Swap_AIOZtoUSDT_Valid --workers=1
-# yarn test:Swap_AIOZtoSTRK_Valid --workers=1
-# yarn test:Swap_STRKtoAIOZ_Valid --workers=1
-# yarn test:Swap_USDTtoAIOZ_Valid --workers=1
-# yarn test:Swap_AIOZtoWAIOZ_Valid --workers=1
-
-# yarn test:Swap_AIOZtoSTRK_Invalid --workers=1
-# yarn test:Swap_AIOZtoUSDT_Invalid --workers=1
-# yarn test:Swap_STRKtoAIOZ_Invalid --workers=1
-# yarn test:Swap_USDTtoAIOZ_Invalid --workers=1
-
-# Uncomment these lines if needed
-# yarn test:AllFixed1 --workers=1
-# yarn test:AllFixed2 --workers=1
-# yarn test:AllFixed3 --workers=1
-
-# yarn test:All --workers=1
-
+# Giữ terminal mở để debug (nếu cần)
 read -p "Press Enter to continue..."

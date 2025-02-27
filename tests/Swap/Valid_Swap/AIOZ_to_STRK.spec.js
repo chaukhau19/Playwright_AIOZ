@@ -51,10 +51,10 @@ test.afterEach(async ({ page }) => {
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// test("Swap with half value", async ({ wallet }) => { 
-//   console.log("Swap with half value");
-//   await functionPage.TimeoutTest(validSwapPage.SwapWithValueHalf.bind(validSwapPage), wallet);
-// });
+test("Swap with half value", async ({ wallet }) => { 
+  console.log("Swap with half value");
+  // await functionPage.TimeoutTest(validSwapPage.SwapWithValueHalf.bind(validSwapPage), wallet);
+});
 
 // test("Swap while network is down", async ({ wallet }) => { 
 //   console.log("Swap while network is down");

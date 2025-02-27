@@ -32,9 +32,9 @@ pipeline {
                         env.REPO_PATH = sh(script: "pwd", returnStdout: true).trim()
                         echo "Using workspace directory: ${env.REPO_PATH}"
                     } catch (Exception e) {
-                        echo "❌ Error during checkout: ${e.getMessage()}"
+                        echo "Error during checkout: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
-                        error("Checkout failed: ${e.getMessage()}")
+                        throw e
                     }
                 }
                 sh "pwd && ls -la"
@@ -44,60 +44,53 @@ pipeline {
         stage('Setup Dependencies') {
             steps {
                 script {
-                    def setupSuccess = false
                     try {
-                        def setupResult = sh(script: """
-                            # Check Node.js
-                            if command -v node > /dev/null 2>&1; then
-                                echo "Node.js found. Version: \$(node -v)"
+                        sh """
+                            # Check & Install Node.js
+                            if ! command -v node > /dev/null 2>&1; then
+                                echo "Node.js not found. Installing..."
+                                curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                                apt-get install -y nodejs
                             else
-                                echo "Node.js not found. Please install it."
-                                exit 1
+                                echo "✅ Node.js found. Version: \$(node -v)"
                             fi
 
-                            # Check Yarn
-                            if command -v yarn > /dev/null 2>&1; then
-                                echo "Yarn found. Version: \$(yarn -v)"
-                            else
+                            # Check & Install Yarn
+                            if ! command -v yarn > /dev/null 2>&1; then
                                 echo "Yarn not found. Installing..."
                                 npm install -g yarn
+                            else
+                                echo "✅ Yarn found. Version: \$(yarn -v)"
                             fi
 
-                            # Check Dependencies
-                            if [ -d "node_modules" ]; then
-                                echo "node_modules exists. Checking Playwright..."
-                                if npx playwright --version > /dev/null 2>&1; then
-                                    echo "Playwright already installed."
-                                else
-                                    echo "Playwright missing. Reinstalling dependencies..."
-                                    rm -rf node_modules yarn.lock
-                                    yarn install
-                                    npx playwright install
-                                    yarn add @playwright/test@latest @tenkeylabs/dappwright
-                                fi
-                            else
+                            # Check & Install Dependencies
+                            if [ ! -d "node_modules" ]; then
                                 echo "Installing dependencies..."
                                 yarn install
-                                npx playwright install
-                                yarn add @playwright/test@latest @tenkeylabs/dappwright
+                            else
+                                echo "✅ node_modules exists."
                             fi
-                            exit 0
-                        """, returnStatus: true)
-                        
-                        if (setupResult != 0) {
-                            echo "❌ Setup dependencies failed with exit code ${setupResult}"
-                            currentBuild.result = 'FAILURE'
-                            error("Setup dependencies failed")
-                        }
-                        setupSuccess = true
+
+                            # Check & Install Playwright
+                            if ! npx playwright --version > /dev/null 2>&1; then
+                                echo "Playwright not found. Installing..."
+                                npx playwright install
+                            else
+                                echo "✅ Playwright found."
+                            fi
+
+                            # Ensure required packages are installed
+                            yarn add @playwright/test@latest @tenkeylabs/dappwright
+                        """
                     } catch (Exception e) {
                         echo "❌ Error in Setup Dependencies: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
-                        error("Setup failed: ${e.getMessage()}")
+                        throw e
                     }
                 }
             }
         }
+
 
         stage('CD: Run Tests') {
             steps {

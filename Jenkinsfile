@@ -6,6 +6,7 @@ pipeline {
         FILE_BAT = 'AIOZ_Finance.bat'
         SERVER_PATH = "${REPO_NAME}"
         BRANCH_NAME = 'main'
+        TEST_SUCCESS = false
     }
 
     triggers {
@@ -31,9 +32,9 @@ pipeline {
                         env.REPO_PATH = sh(script: "pwd", returnStdout: true).trim()
                         echo "Using workspace directory: ${env.REPO_PATH}"
                     } catch (Exception e) {
-                        echo "Error during checkout: ${e.getMessage()}"
+                        echo "❌ Error during checkout: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
-                        throw e
+                        error("Checkout failed: ${e.getMessage()}")
                     }
                 }
                 sh "pwd && ls -la"
@@ -43,8 +44,9 @@ pipeline {
         stage('Setup Dependencies') {
             steps {
                 script {
+                    def setupSuccess = false
                     try {
-                        sh """
+                        def setupResult = sh(script: """
                             # Check Node.js
                             if command -v node > /dev/null 2>&1; then
                                 echo "Node.js found. Version: \$(node -v)"
@@ -79,11 +81,19 @@ pipeline {
                                 npx playwright install
                                 yarn add @playwright/test@latest @tenkeylabs/dappwright
                             fi
-                        """
+                            exit 0
+                        """, returnStatus: true)
+                        
+                        if (setupResult != 0) {
+                            echo "❌ Setup dependencies failed with exit code ${setupResult}"
+                            currentBuild.result = 'FAILURE'
+                            error("Setup dependencies failed")
+                        }
+                        setupSuccess = true
                     } catch (Exception e) {
-                        echo "Error in Setup Dependencies: ${e.getMessage()}"
+                        echo "❌ Error in Setup Dependencies: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
-                        throw e
+                        error("Setup failed: ${e.getMessage()}")
                     }
                 }
             }
@@ -93,21 +103,26 @@ pipeline {
             steps {
                 script {
                     try {
+                        def testResult = 1
                         if (isUnix()) {
-                            sh """
-                                chmod +x ${FILE_SH}
-                                ./${FILE_SH} || true  
-                            """
+                            echo "📋 Running tests using ${FILE_SH}"
+                            sh "chmod +x ${FILE_SH}"
+                            testResult = sh(script: "./${FILE_SH}", returnStatus: true)
                         } else {
-                            bat """
-                                ${FILE_BAT} || exit /b 0
-                            """
+                            echo "📋 Running tests using ${FILE_BAT}"
+                            testResult = bat(script: "${FILE_BAT}", returnStatus: true)
                         }
-                        currentBuild.result = 'SUCCESS'
+                        
+                        if (testResult == 0) {
+                            echo "✅ Tests completed successfully"
+                            env.TEST_SUCCESS = 'true'
+                        } else {
+                            echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
+                            env.TEST_SUCCESS = 'false'
+                        }
                     } catch (Exception e) {
                         echo "❌ Error running tests: ${e.getMessage()}"
-                        currentBuild.result = 'FAILURE'
-                        throw e
+                        env.TEST_SUCCESS = 'false'
                     }
                 }
             }
@@ -117,22 +132,35 @@ pipeline {
             steps {
                 script {
                     try {
-                        archiveArtifacts artifacts: '**/playwright-report/**/*', allowEmptyArchive: true
-                        echo 'Test results archived.'
+                        def resultsExist = sh(script: "find . -path '*/playwright-report/*' | wc -l", returnStdout: true).trim()
+                        if (resultsExist != '0') {
+                            echo "📊 Found test results to archive"
+                            archiveArtifacts artifacts: '**/playwright-report/**/*', allowEmptyArchive: true
+                            echo "✅ Test results archived successfully"
+                        } else {
+                            echo "⚠️ No test results found to archive"
+                        }
                     } catch (Exception e) {
-                        echo "Error archiving test results: ${e.getMessage()}"
+                        echo "⚠️ Error archiving test results: ${e.getMessage()}"
                     }
                 }
             }
         }
-
     }
 
     post {
         always {
             script {
                 cleanWs()
-                echo "🛑 Build finished with status: ${currentBuild.result}"
+                if (env.TEST_SUCCESS == 'true') {
+                    currentBuild.result = 'SUCCESS'
+                    echo "🎉 Build finished with status: SUCCESS"
+                } else if (currentBuild.result == null) {
+                    currentBuild.result = 'UNSTABLE'
+                    echo "⚠️ Build finished with status: UNSTABLE (tests ran but with issues)"
+                } else {
+                    echo "🛑 Build finished with status: ${currentBuild.result}"
+                }
             }
         }
     }

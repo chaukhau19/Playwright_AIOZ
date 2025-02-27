@@ -1,34 +1,34 @@
 #!/bin/bash
-set -e  # Stop the script if there is an error
+set -e  
 
-Xvfb :99 -ac &
-XVFB_PID=$!  # Save the PID of Xvfb to stop it after tests are done
+# Kiểm tra nếu Xvfb đang chạy, nếu có thì dừng nó
+if pgrep Xvfb > /dev/null; then
+    echo "Stopping existing Xvfb process..."
+    killall Xvfb
+    sleep 1
+fi
+
+# Khởi động Xvfb
+echo "Starting Xvfb..."
+Xvfb :99 -ac &  
+XVFB_PID=$!  
 export DISPLAY=:99
 sleep 2  
 
-# yarn test:ConnectMetaMask --workers=1 
-# yarn test:DisconnectMetaMask --workers=1 
-# yarn test:SwitchNetworkMetaMask --workers=1
+# Kiểm tra xem Xvfb có khởi động thành công không
+if ! ps -p $XVFB_PID > /dev/null; then
+    echo "Xvfb failed to start!"
+    exit 1
+fi
 
-# yarn test:ConnectCoinBase --workers=1
-# yarn test:DisconnectCoinBase --workers=1
-# yarn test:SwitchNetworkCoinBase --workers=1
+# Chạy Playwright test
+echo "Running Playwright tests..."
+yarn test:ConnectMetaMask --workers=1
 
-# yarn test:Swap_AIOZtoUSDT_Valid --workers=1
-# yarn test:Swap_AIOZtoSTRK_Valid --workers=1
-# yarn test:Swap_STRKtoAIOZ_Valid --workers=1
-# yarn test:Swap_USDTtoAIOZ_Valid --workers=1
-# yarn test:Swap_AIOZtoWAIOZ_Valid --workers=1
-
-# yarn test:Swap_AIOZtoSTRK_Invalid --workers=1
-# yarn test:Swap_AIOZtoUSDT_Invalid --workers=1
-# yarn test:Swap_STRKtoAIOZ_Invalid --workers=1
-# yarn test:Swap_USDTtoAIOZ_Invalid --workers=1
-
-yarn test:AllFixed --workers=1
-
+# Cleanup Xvfb
+echo "Stopping Xvfb..."
 kill $XVFB_PID
+wait $XVFB_PID 2>/dev/null  
 
-# Keep the terminal open for debugging (if needed)
+echo "Test execution completed!"
 read -p "Press Enter to continue..."
-

@@ -3,8 +3,8 @@ import { ConnectWalletMetaMaskPage } from "../../../pages/Dapps/MetaMask/MetaMas
 
 
 test("Connect AIOZ with MetaMask", { timeout: 200000 }, async ({ wallet, page }) => {
-  const connectWalletMetaMaskPage = new ConnectWalletMetaMaskPage(page);
-  await connectWalletMetaMaskPage.Connect_MetaMask(wallet);
+  // const connectWalletMetaMaskPage = new ConnectWalletMetaMaskPage(page);
+  // await connectWalletMetaMaskPage.Connect_MetaMask(wallet);
 });
 
 

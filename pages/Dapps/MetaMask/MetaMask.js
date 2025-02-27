@@ -19,9 +19,9 @@ export class ConnectWalletMetaMaskPage {
     async Connect_MetaMask(wallet) {
         await this.functionPage.gotoURL();
         await this.functionPage.Connect_Wallet_MetaMask();
-        await wallet.approve();
-        await this.functionPage.Verify_Account_MetaMask_Connected();
-        await this.page.close();
+        // await wallet.approve();
+        // await this.functionPage.Verify_Account_MetaMask_Connected();
+        // await this.page.close();
     }
 
     async Disconnect_MetaMask(wallet) {

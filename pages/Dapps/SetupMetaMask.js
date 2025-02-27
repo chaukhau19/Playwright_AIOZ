@@ -25,7 +25,7 @@ export const test = baseTest.extend({
           "--disable-popup-blocking",
           "--disable-infobars",
           "--disable-backgrounding-occluded-windows",
-          "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure"
+          // "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure"
         ],
       }),
       // new Promise((_, reject) => setTimeout(() => reject(new Error("Bootstrap Metamask Timeout!")), 120000))

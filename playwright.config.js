@@ -39,7 +39,7 @@ export default defineConfig({
       "--disable-popup-blocking",
       "--disable-infobars",
       "--disable-backgrounding-occluded-windows",
-      "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure",
+      // "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure",
     ],
 
     // video: 'only-on-failure',

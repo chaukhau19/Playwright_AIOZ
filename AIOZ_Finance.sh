@@ -25,7 +25,7 @@ sleep 2
 # yarn test:Swap_STRKtoAIOZ_Invalid --workers=1
 # yarn test:Swap_USDTtoAIOZ_Invalid --workers=1
 
-DEBUG=pw:api yarn test:AllFixed --workers=1
+yarn test:AllFixed --workers=1
 
 kill $XVFB_PID
 

@@ -52,9 +52,7 @@ export class FunctionPage {
         try {
             console.log(`Navigating to URL: ${swapconfig.URL}`);
             await this.page.goto(swapconfig.URL, { waitUntil: "domcontentloaded", timeout: 90000 });
-            console.log(`Page loaded successfully. Reloading page...`);
             await this.page.reload();
-            console.log(`Page reloaded successfully.`);
         } catch (error) {
             console.error(`❌ Failed to load URL: ${error.message}`);
         }
@@ -457,11 +455,8 @@ export class FunctionPage {
     
     async Connect_Wallet_MetaMask() {
         try {
-            console.log("🔹 Attempting to connect MetaMask wallet...");
             await this.page.locator('//button[@data-testid="navbar-connect-wallet"]').click({ timeout: 30000 });
-            console.log("🔹 Clicked on connect wallet button.");
             await this.page.locator("//div[contains(text(), 'MetaMask')]").click({ timeout: 30000 });
-            console.log("✅ MetaMask wallet connected successfully.");
         } catch (error) {
             console.error(`❌ MetaMask connection error: ${error.message}`);
         }

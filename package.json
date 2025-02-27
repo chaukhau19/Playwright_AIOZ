@@ -10,12 +10,14 @@
     "preview": "vite preview",
     "//": "Metamask locks chainIDs on port 8545 https://hardhat.org/hardhat-network/docs/metamask-issue",
     "chain": "hardhat node --port 8546",
+
     "test:ConnectMetaMask": "yarn build && playwright test tests/Dapps/MetaMask/connect.spec.js",
     "test:DisconnectMetaMask": "yarn build && playwright test tests/Dapps/MetaMask/disconnect.spec.js",
     "test:SwitchNetworkMetaMask": "yarn build && playwright test tests/Dapps/MetaMask/switchnetwork.spec.js",
     "test:ConnectCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/connect.spec.js",
     "test:DisconnectCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/disconnect.spec.js",
     "test:SwitchNetworkCoinBase": "yarn build && playwright test tests/Dapps/CoinBase/switchnetwork.spec.js",
+
     "test:Swap_AIOZtoUSDT_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js",
     "test:Swap_AIOZtoSTRK_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js",
     "test:Swap_STRKtoAIOZ_Valid": "yarn build && playwright test tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js",
@@ -26,11 +28,15 @@
     "test:Swap_AIOZtoUSDT_Invalid": "yarn build && playwright test tests/Swap/Invalid_Swap/AIOZ_to_USDT.spec.js",
     "test:Swap_STRKtoAIOZ_Invalid": "yarn build && playwright test tests/Swap/Invalid_Swap/STRK_to_AIOZ.spec.js",
     "test:Swap_USDTtoAIOZ_Invalid": "yarn build && playwright test tests/Swap/Invalid_Swap/USDT_to_AIOZ.spec.js",
+
     "test:Position_AIOZandSTRK_Valid": "yarn build && playwright test tests/Position/Valid_Position/AIOZandSTRK.spec.js",
     "test:Position_AIOZandUSDT_Valid": "yarn build && playwright test tests/Position/Valid_Position/AIOZandUSDT.spec.js",
-    "test:AllFixed1": "yarn build && playwright test tests/Dapps/MetaMask/connect.spec.js tests/Dapps/MetaMask/disconnect.spec.js tests/Dapps/MetaMask/switchnetwork.spec.js tests/Dapps/CoinBase/connect.spec.js tests/Dapps/CoinBase/disconnect.spec.js tests/Dapps/CoinBase/switchnetwork.spec.js",
-    "test:AllFixed2": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js tests/Swap/Valid_Swap/AIOZ_to_WAIOZ.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js",
-    "test:AllFixed3": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js",
+
+    "test:Swap": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js tests/Swap/Valid_Swap/AIOZ_to_WAIOZ.spec.js tests/Swap/Valid_Swap/WAIOZ_to_AIOZ.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js  tests/Swap/Invalid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Invalid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Invalid_Swap/USDT_to_AIOZ.spec.js",
+    "test:Position": "yarn build && playwright test tests/Position/Valid_Position/AIOZandSTRK.spec.js tests/Position/Valid_Position/AIOZandUSDT.spec.js",
+
+    "test:AllFixed": "yarn build && playwright test tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js",
+
     "test:All": "yarn build && playwright test tests/Dapps/MetaMask/connect.spec.js tests/Dapps/MetaMask/disconnect.spec.js tests/Dapps/MetaMask/switchnetwork.spec.js tests/Dapps/CoinBase/connect.spec.js tests/Dapps/CoinBase/disconnect.spec.js tests/Dapps/CoinBase/switchnetwork.spec.js tests/Swap/Valid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Valid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Valid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Valid_Swap/USDT_to_AIOZ.spec.js tests/Swap/Invalid_Swap/AIOZ_to_STRK.spec.js tests/Swap/Invalid_Swap/AIOZ_to_USDT.spec.js tests/Swap/Invalid_Swap/STRK_to_AIOZ.spec.js tests/Swap/Invalid_Swap/USDT_to_AIOZ.spec.js"
   },
   "dependencies": {

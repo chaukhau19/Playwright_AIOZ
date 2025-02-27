@@ -19,7 +19,6 @@ call yarn test:Swap_AIOZtoUSDT_Invalid --workers=1
 call yarn test:Swap_STRKtoAIOZ_Invalid --workers=1
 call yarn test:Swap_USDTtoAIOZ_Invalid --workers=1
 
-@REM call yarn test:AllFixed1 --workers=1
-@REM call yarn test:AllFixed2 --workers=1
-@REM call yarn test:AllFixed3 --workers=1
+call yarn test:AllFixed --workers=1
+
 pause

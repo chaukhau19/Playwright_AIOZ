@@ -1,5 +1,5 @@
 
-export const config = {
+export const swapconfig = {
 
   //DATA
   URL: "https://aiozswap-web.vercel.app/#/swap",
@@ -18,7 +18,7 @@ export const config = {
   Address_Token_Invalid: '0x8db0d1304013534EdDDb8fADE923889738A',
 
   //DATA VALID
-  InputValues: ["0.000000001", "0.1", "1", "100"],
+  InputValues: ["0.000000001"],
   InputValue_A_1: "1",  
   InputValue_A_0: "0",
   InputValue_A_high: "12345678900000", 

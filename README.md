@@ -10,6 +10,7 @@ You can find the different configurations in the [tests folder](https://github.c
 git clone https://github.com/TenKeyLabs/dappwright-examples.git
 cd dappwright-examples
 yarn install
+npm install playwright axios
 ```
 
 Additionally, you need to install the required browsers for Playwright:

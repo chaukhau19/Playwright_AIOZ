@@ -1,14 +1,14 @@
 import { expect } from "@playwright/test";
-import { config } from "../../data/Swap_Config.js";
+import { swapconfig } from "../data/Swap_Config.js";
 
 export class FunctionPage {
     constructor(page) {
         this.page = page;
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     convertToPoints(text) {
         const str = String(text);
@@ -50,15 +50,16 @@ export class FunctionPage {
     async gotoURL() {
         await this.page.waitForTimeout(5000);
         try {
-            await this.page.goto(config.URL, { waitUntil: "domcontentloaded", timeout: 90000 });
+            await this.page.goto(swapconfig.URL, { waitUntil: "domcontentloaded", timeout: 90000 });
             await this.page.reload();
         } catch (error) {
             console.error(`❌ Failed to load URL: ${error.message}`);
         }
     }  
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////          BUTTON       //////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////                 BUTTON TO CLICK          //////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Add_WAIOZ_to_MetaMask() {
         await this.page.waitForTimeout(10000);
@@ -71,7 +72,7 @@ export class FunctionPage {
     
     async Pools_Page() {
         try {
-            await this.page.waitForSelector('//a[@data-testid="pool-nav-link" and contains(text(), "Pools")]', { timeout: 50000 });
+            await this.page.waitForSelector('//a[@data-testid="pool-nav-link" and contains(text(), "Pools")]', { timeout: 20000 });
             await this.page.locator('//a[@data-testid="pool-nav-link" and contains(text(), "Pools")]').click();
         } catch (error) {
             console.error(`❌ Pools page error: ${error.message}`);
@@ -80,10 +81,28 @@ export class FunctionPage {
     
     async Swaps_Page() {
         try {
-            await this.page.waitForSelector("//a[contains(text(), 'Swap')]", { timeout: 50000 });
+            await this.page.waitForSelector("//a[contains(text(), 'Swap')]", { timeout: 20000 });
             await this.page.locator("//a[contains(text(), 'Swap')]").click();
         } catch (error) {
             console.error(`❌ Swaps page error: ${error.message}`);
+        }
+    }
+
+    async New_Position_Button() {
+        try {
+            await this.page.waitForSelector("//a[text()='New position']", { timeout: 20000 });
+            await this.page.locator("//a[text()='New position']").click();
+        } catch (error) {
+            console.error(`❌ New position button error: ${error.message}`);
+        }
+    }
+
+    async Clear_All_Button() {
+        try {
+            await this.page.waitForSelector("//div[text()='Clear all']", { timeout: 10000 });
+            await this.page.locator("//div[text()='Clear all']").click();
+        } catch (error) {
+            console.error(`❌ Clear all button error: ${error.message}`);
         }
     }
 
@@ -102,6 +121,16 @@ export class FunctionPage {
             await this.page.waitForTimeout(5000);
         } catch (error) {
             console.error(`❌ Close confirmation button error: ${error.message}`);
+        }
+    }
+
+    async Close_Transaction_Submitted_Button() {
+        try {
+            await this.page.waitForTimeout(1000);
+            await this.page.locator('//button[@data-testid="dismiss-tx-confirmation"]').click();
+            await this.page.waitForTimeout(1000);
+        } catch (error) {
+            console.error(`❌ Close transaction submitted button error: ${error.message}`);
         }
     }
 
@@ -153,23 +182,62 @@ export class FunctionPage {
         }
     }
 
+    async Supply_Button() {
+        try {
+            await this.page.waitForSelector("//div[button/div[text()='Supply']]", { timeout: 10000 });
+            await this.page.locator("//div[button/div[text()='Supply']]").click();
+        } catch (error) {
+            console.error(`❌ Supply button error: ${error.message}`);
+        }
+    }
+
+    async Confirm_Supply_Button() {
+        try {
+            await this.page.waitForSelector("//div[button/div[text()='Confirm Supply']]", { timeout: 10000 });
+            await this.page.locator("//div[button/div[text()='Confirm Supply']]").click();
+        } catch (error) {
+            console.error(`❌ Confirm Supply button error: ${error.message}`);
+        }
+    }
+
     async Token_Redemption_Button() {
         try {
             await this.page.waitForTimeout(500);
             await this.page.locator("//div[@data-testid='swap-currency-button']").click();
             await this.page.waitForTimeout(500);
         } catch (error) {
-            console.error(`❌ Error in Token_Redemption_Button: ${error.message}`);
+            console.error(`❌ Error in Token Redemption Button: ${error.message}`);
+        }
+    }
+
+    async hide_closed_positions_button() {
+        try {
+            await this.page.waitForTimeout(500);
+            await this.page.locator("//button[@id='desktop-hide-closed-positions' and text()='Hide closed positions']").click();
+            await this.page.waitForTimeout(500);
+        } catch (error) {
+            console.error(`❌ Error in Hide closed positions: ${error.message}`);
+        }
+    }
+
+    async show_closed_positions_button() {
+        try {
+            await this.page.waitForTimeout(500);
+            await this.page.locator("//button[@id='desktop-hide-closed-positions' and text()='Show closed positions']").click();
+            await this.page.waitForTimeout(500);
+        } catch (error) {
+            console.error(`❌ Error in Show closed positions: ${error.message}`);
         }
     }
     
-///////////////////////////////////////////////////////////  EXPECT RESULT ///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////           EXPECT RESULT          ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Verify_Account_MetaMask_Connected() {
         try {
             await this.page.locator("//img[@alt='Close' or @title='Close']").click({ timeout: 30000 });
-            await expect(this.page.locator(config.Expected_Account_MetaMask_Connected)).toBeVisible({ timeout: 30000 });
+            await expect(this.page.locator(swapconfig.Expected_Account_MetaMask_Connected)).toBeVisible({ timeout: 30000 });
         } catch (error) {
             console.error(`❌ MetaMask account verification error: ${error.message}`);
         }
@@ -178,7 +246,7 @@ export class FunctionPage {
     async Verify_Account_CoinBase_Connected() {
         try {
             await this.page.locator("//img[@alt='Close' or @title='Close']").click({ timeout: 30000 });
-            await expect(this.page.locator(config.Expected_Account_CoinBase_Connected)).toBeVisible({ timeout: 30000 });
+            await expect(this.page.locator(swapconfig.Expected_Account_CoinBase_Connected)).toBeVisible({ timeout: 30000 });
         } catch (error) {
             console.error(`❌ Coinbase account verification error: ${error.message}`);
         }
@@ -214,6 +282,114 @@ export class FunctionPage {
         try {
             await this.page.waitForSelector("(//div[contains(., 'Price impact warning')])[14]", { timeout: 30000 });
             await expect(this.page.locator("(//div[contains(., 'Price impact warning')])[14]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_Closed_001() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.01%') and contains(., 'Closed')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.01%') and contains(., 'Closed')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_Closed_005() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.05%') and contains(., 'Closed')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.05%') and contains(., 'Closed')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_Closed_03() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.3%') and contains(., 'Closed')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.3%') and contains(., 'Closed')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_Closed_1() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '1%') and contains(., 'Closed')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '1%') and contains(., 'Closed')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_OutRange_001() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.01%') and contains(., 'Out of range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.01%') and contains(., 'Out of range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_OutRange_005() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.05%') and contains(., 'Out of range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.05%') and contains(., 'Out of range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_OutRange_03() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.3%') and contains(., 'Out of range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.3%') and contains(., 'Out of range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_OutRange_1() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '1%') and contains(., 'Out of range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '1%') and contains(., 'Out of range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_InRange_001() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.01%') and contains(., 'In range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.01%') and contains(., 'In range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_InRange_005() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.05%') and contains(., 'In range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.05%') and contains(., 'In range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_InRange_03() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '0.3%') and contains(., 'In range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '0.3%') and contains(., 'In range')])[6]")).toBeVisible();
+        } catch (error) {
+            console.error(`❌ Price impact warning error: ${error.message}`);
+        }
+    }
+
+    async AIOZ_STRK_InRange_1() {
+        try {
+            await this.page.waitForSelector("(//div[contains(., 'STRK') and contains(., '1%') and contains(., 'In range')])[6]", { timeout: 5000 });
+            await expect(this.page.locator("(//div[contains(., 'STRK') and contains(., '1%') and contains(., 'In range')])[6]")).toBeVisible();
         } catch (error) {
             console.error(`❌ Price impact warning error: ${error.message}`);
         }
@@ -272,8 +448,9 @@ export class FunctionPage {
         }
     }
 
-///////////////////////////////////////////////////      STEP TEST CASE     ///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////               STEP BY STEP             ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     async Connect_Wallet_MetaMask() {
         try {
@@ -332,11 +509,27 @@ export class FunctionPage {
         }
     }    
 
+    async Fill_Amount_A_on_Pool(amount) {
+        try {
+            await this.page.locator('#add-liquidity-input-tokena').getByPlaceholder('0').fill(amount);
+        } catch (error) {
+            console.error(`❌ Error in Fill Amount A: ${error.message}`);
+        }
+    }
+
+    async Fill_Amount_B_on_Pool(amount) {
+        try {
+            await this.page.locator('#add-liquidity-input-tokenb').getByPlaceholder('0').fill(amount);
+        } catch (error) {
+            console.error(`❌ Error in Fill Amount B: ${error.message}`);
+        }
+    }
+
     async Fill_Amount_A(amount) {
         try {
             await this.page.getByPlaceholder('0.0').first().fill(amount);
         } catch (error) {
-            console.error(`❌ Error in Fill_Amount_A: ${error.message}`);
+            console.error(`❌ Error in Fill Amount A: ${error.message}`);
         }
     }
 
@@ -344,7 +537,7 @@ export class FunctionPage {
         try {
             await this.page.getByPlaceholder('0.0').nth(1).fill(amount);
         } catch (error) {
-            console.error(`❌ Error in Fill_Amount_B: ${error.message}`);
+            console.error(`❌ Error in Fill Amount B: ${error.message}`);
         }
     }
     
@@ -352,7 +545,7 @@ export class FunctionPage {
         try {
             await this.page.locator("(//button[contains(text(), 'Half')])[1]").click();
         } catch (error) {
-            console.error(`❌ Error in Fill_Amount_Half_A: ${error.message}`);
+            console.error(`❌ Error in Fill Amount Half A: ${error.message}`);
         }
     }
 
@@ -360,7 +553,7 @@ export class FunctionPage {
         try {
             await this.page.locator("(//button[contains(text(), 'Half')])[2]").click();
         } catch (error) {
-            console.error(`❌ Error in Fill_Amount_Half_B: ${error.message}`);
+            console.error(`❌ Error in Fill Amount Half B: ${error.message}`);
         }
     }
 
@@ -398,10 +591,89 @@ export class FunctionPage {
         }
     }
 
+    async Pool_Select_Token_AIOZ_A() {
+        try {
+            await this.page.locator('(//span[contains(@class, "token-symbol-container") and text()="Select a token"])[1]').click();
+            await this.page.locator("(//div[@title='AIOZ' and text()='AIOZ'])[1]").click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            console.error(`❌ Error in Pool Select Token AIOZ A: ${error.message}`);
+        }
+    }
+
+    async Pool_Select_Token_STRK_A() {
+        try {
+            await this.page.locator('(//span[contains(@class, "token-symbol-container") and text()="Select a token"])[1]').click();
+            await this.page.locator("(//div[@title='Starknet' and text()='Starknet'])[1]").click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            console.error(`❌ Error selecting Starknet token in Pool A: ${error.message}`);
+        }
+    }
+
+    async Pool_Select_Token_USDT_A() {
+        try {
+            await this.page.locator('(//span[contains(@class, "token-symbol-container") and text()="Select a token"])[1]').click();
+            await this.page.locator("(//div[@title='Tether USD' and text()='Tether USD'])[1]").click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            console.error(`❌ Error in Pool Select Token USDT A: ${error.message}`);
+        }
+    }
+
+    async Pool_Select_Token_AIOZ_B() {
+        try {
+            await this.page.locator('(//span[contains(@class, "token-symbol-container") and text()="Select a token"])[1]').click();
+            await this.page.locator("(//div[@title='AIOZ' and text()='AIOZ'])[1]").click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            console.error(`❌ Error in Pool Select Token AIOZ B: ${error.message}`);
+        }
+    }
+
+    
+    async Pool_Select_Token_STRK_B() {
+        try {
+            await this.page.locator('(//span[contains(@class, "token-symbol-container") and text()="Select a token"])[1]').click();
+            await this.page.locator("(//div[@title='Starknet' and text()='Starknet'])[1]").click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            console.error(`❌ Error selecting Starknet token in Pool B: ${error.message}`);
+        }
+    }
+
+    async Pool_Select_Token_USDT_B() {
+        try {
+            await this.page.locator('(//span[contains(@class, "token-symbol-container") and text()="Select a token"])[1]').click();
+            await this.page.locator("(//div[@title='Tether USD' and text()='Tether USD'])[1]").click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            console.error(`❌ Error in Pool Select Token USDT B: ${error.message}`);
+        }
+    }
+
     async Select_Token_USDT_B() {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
-            await this.page.getByText(config.Select_USDT_Token).click();
+            await this.page.getByText(swapconfig.Select_USDT_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -414,7 +686,7 @@ export class FunctionPage {
     async Select_Token_STRK_B() {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
-            await this.page.getByText(config.Select_STRK_Token).click();
+            await this.page.getByText(swapconfig.Select_STRK_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -427,7 +699,7 @@ export class FunctionPage {
     async Select_Token_WAIOZ_B() {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
-            await this.page.getByText(config.Select_WAIOZ_Token).click();
+            await this.page.getByText(swapconfig.Select_WAIOZ_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -440,7 +712,7 @@ export class FunctionPage {
     async Select_Token_BTC_B() {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
-            await this.page.getByText(config.Select_BTC_Token).click();
+            await this.page.getByText(swapconfig.Select_BTC_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -454,7 +726,7 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_Token_Invalid);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_Token_Invalid);
             await this.page.getByTestId('token-search-input').press('Enter');
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
@@ -469,9 +741,9 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_WAIOZ_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_WAIOZ_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
-            await this.page.getByText(config.Select_WAIOZ_Token).click();
+            await this.page.getByText(swapconfig.Select_WAIOZ_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -485,9 +757,9 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_UNI_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_UNI_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
-            await this.page.getByText(config.Select_UNKNOWN_Token).click();
+            await this.page.getByText(swapconfig.Select_UNKNOWN_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -501,9 +773,9 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_STRK_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_STRK_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
-            await this.page.getByText(config.Select_STRK_Token).click();
+            await this.page.getByText(swapconfig.Select_STRK_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -517,9 +789,9 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_USDT_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_USDT_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
-            await this.page.getByText(config.Select_USDT_Token).click();
+            await this.page.getByText(swapconfig.Select_USDT_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -533,9 +805,9 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_USDC_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_USDC_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
-            await this.page.getByText(config.Select_USDC_Token).click();
+            await this.page.getByText(swapconfig.Select_USDC_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -549,7 +821,7 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_WAIOZ_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_WAIOZ_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
             await this.page.locator('div').filter({ hasText: /^Unknown Token$/ }).first().click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
@@ -565,7 +837,7 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_STRK_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_STRK_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
             await this.page.locator('div').filter({ hasText: /^Unknown Token$/ }).first().click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
@@ -581,7 +853,7 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_USDT_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_USDT_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
             await this.page.locator('div').filter({ hasText: /^Unknown Token$/ }).first().click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
@@ -597,7 +869,7 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByTestId('token-search-input').click();
-            await this.page.getByTestId('token-search-input').fill(config.Address_USDC_Token);
+            await this.page.getByTestId('token-search-input').fill(swapconfig.Address_USDC_Token);
             await this.page.getByTestId('token-search-input').press('Enter');
             await this.page.locator('div').filter({ hasText: /^Unknown Token$/ }).first().click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
@@ -606,6 +878,38 @@ export class FunctionPage {
             }
         } catch (error) {
             console.error(`❌ Error in Search_Token_USDC_B_Invalid: ${error.message}`);
+        }
+    }
+
+    async Fee_Tier_001() {
+        try {
+            await this.page.locator("//button[.//div[contains(text(), '0.01%')]]").click({ timeout: 10000 });
+        } catch (error) {
+            console.error(`❌ Fee Tier 0.01% error: ${error.message}`);
+        }
+    }
+
+    async Fee_Tier_005() {
+        try {
+            await this.page.locator("//button[.//div[contains(text(), '0.05%')]]").click({ timeout: 10000 });
+        } catch (error) {
+            console.error(`❌ Fee Tier 0.05% error: ${error.message}`);
+        }
+    }
+
+    async Fee_Tier_03() {
+        try {
+            await this.page.locator("//button[.//div[contains(text(), '0.3%')]]").click({ timeout: 10000 });
+        } catch (error) {
+            console.error(`❌ Fee Tier 0.3% error: ${error.message}`);
+        }
+    }
+
+    async Fee_Tier_1() {
+        try {
+            await this.page.locator("(//button[.//div[contains(text(), '1%')]])[2]").click({ timeout: 10000 });
+        } catch (error) {
+            console.error(`❌ Fee Tier 1% error: ${error.message}`);
         }
     }
 
@@ -675,9 +979,116 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////                 FUNCTION            ///////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////                               FUNCTION                ///////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async Price_Liquidity() {
+        await this.page.waitForTimeout(5000);
+        try {
+            const TokenA = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[1]";
+            const TokenB = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[2]";
+            const LowPrice = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[3]";
+            const HighPrice = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[4]";
+            const Pcurrent = "(//div[contains(text(),'Prices and pool share')]/following-sibling::div//div[contains(text(),'per')]/preceding-sibling::div[1])[1]";
+            const ShareofPool = "//div[contains(text(),'Prices and pool share')]/following-sibling::div//div[contains(text(),'of')]/preceding-sibling::div[1]";
+
+            // Wait for elements to appear before retrieving data
+            await this.page.waitForSelector(TokenA, { timeout: 5000 });
+            await this.page.waitForSelector(TokenB, { timeout: 5000 });
+            await this.page.waitForSelector(LowPrice, { timeout: 5000 });
+            await this.page.waitForSelector(HighPrice, { timeout: 5000 });
+            await this.page.waitForSelector(Pcurrent, { timeout: 5000 });
+            await this.page.waitForSelector(ShareofPool, { timeout: 5000 });
+
+            // Retrieve data
+            const pointsTokenA = await this.page.locator(TokenA).inputValue().catch(() => "N/A");
+            const pointsTokenB = await this.page.locator(TokenB).inputValue().catch(() => "N/A");
+            const pointsLowPrice = await this.page.locator(LowPrice).inputValue().catch(() => "N/A");
+            const pointsHighPrice = await this.page.locator(HighPrice).inputValue().catch(() => "N/A");
+            const pointsPcurrent = await this.page.locator(Pcurrent).textContent().catch(() => "N/A");
+            const pointsShareofPool = await this.page.locator(ShareofPool).textContent().catch(() => "N/A");
+
+            this.PriceLiquidity = { 
+                TokenA: pointsTokenA,
+                TokenB: pointsTokenB,
+                LowPrice: pointsLowPrice,
+                HighPrice: pointsHighPrice,
+                Pcurrent: pointsPcurrent,
+                ShareofPool: pointsShareofPool
+            };
+
+            console.log("🚀 Price Liquidity Data:", JSON.stringify(this.PriceLiquidity, null, 2));
+
+            return this.PriceLiquidity;
+        } catch (error) {
+            console.error('❌ Error in Price Liquidity:', error.message);
+            return null;
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async Price_Range(feeTierPercent) {
+        await this.page.waitForTimeout(5000);
+        try {
+            const feeTier = feeTierPercent / 100;
+
+            const TokenA = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[1]";
+            const LowPrice = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[3]";
+            const HighPrice = "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[4]";
+            const Pcurrent = "(//div[contains(text(),'Prices and pool share')]/following-sibling::div//div[contains(text(),'per')]/preceding-sibling::div[1])[1]";
+
+            await this.page.waitForSelector(TokenA, { timeout: 5000 });
+            await this.page.waitForSelector(LowPrice, { timeout: 5000 });
+            await this.page.waitForSelector(HighPrice, { timeout: 5000 });
+            await this.page.waitForSelector(Pcurrent, { timeout: 5000 });
+
+            const pointsTokenA = parseFloat(await this.page.locator(TokenA).inputValue().catch(() => "0"));
+            const pointsLowPrice = parseFloat(await this.page.locator(LowPrice).inputValue().catch(() => "0"));
+            const pointsHighPrice = parseFloat(await this.page.locator(HighPrice).inputValue().catch(() => "0"));
+            const pointsPcurrent = parseFloat(await this.page.locator(Pcurrent).textContent().catch(() => "0"));
+
+            console.log("🔹 Token:", pointsTokenA);
+            console.log("🔹 Low Price:", pointsLowPrice);
+            console.log("🔹 High Price:", pointsHighPrice);
+            console.log("🔹 Pcurrent:", pointsPcurrent);
+            console.log(`🔹 Fee Tier (${feeTierPercent}%):`, feeTier);
+
+            // Check if Low Price ≤ Pcurrent ≤ High Price
+            const isPriceRangeValid = pointsLowPrice <= pointsPcurrent && pointsPcurrent <= pointsHighPrice;
+            if (!isPriceRangeValid) {
+                console.error("❌ Price is not within the valid range!");
+                throw new Error("Price is not within the valid range!");
+            }
+
+            // Check if Pcurrent is approximately equal to TokenA (allowing small error)
+            const isPcurrentValid = Math.abs(pointsPcurrent - pointsTokenA) < 0.1;
+            if (!isPcurrentValid) {
+                console.error("❌ Pcurrent does not match the entered Token!");
+                throw new Error("Pcurrent does not match the entered Token!");
+            }
+
+            // Final check
+            if (isPriceRangeValid && isPcurrentValid) {
+                console.log("✅ Price Range Verified!");
+                return true;
+            } else {
+                console.error("❌ Price Range Failed!");
+                throw new Error("Price Range Failed!");
+            }
+
+        } catch (error) {
+            console.error('❌ Error in Price Range:', error.message);
+            throw error; 
+        }
+    }
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Total_Token_Before() {
         await this.page.waitForTimeout(5000);
@@ -708,8 +1119,9 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Total_Token_After() {
         await this.page.waitForTimeout(35000);
@@ -739,8 +1151,10 @@ export class FunctionPage {
             console.error('❌ Error retrieving points:', error.message);
         }
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Swap_Page() {
         try {
@@ -819,8 +1233,9 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Wrap_Page() {
         try {
@@ -865,9 +1280,9 @@ export class FunctionPage {
         }
     }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Confirm token values after swap
     async Confirm_Swap_Page() {
@@ -911,8 +1326,9 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Compare token values on swap page and confirm swap page
     async Compare_Swap_And_Confirm_Swap_Page() {
@@ -971,8 +1387,9 @@ export class FunctionPage {
         return this.compareSwapAndConfirmSwapPage;
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Compare_Token_Before_And_After_Max_Swap(networkCostA) {
         await this.page.waitForTimeout(5000);
@@ -1075,8 +1492,9 @@ export class FunctionPage {
         return validateSuccessfulSwap();
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Compare_Token_Before_And_After_Valid_Swap(networkCostA) {
         await this.page.waitForTimeout(5000);
@@ -1198,8 +1616,91 @@ export class FunctionPage {
         return validateSuccessfulSwap();
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async Compare_Token_Before_And_After_Valid_Position() {
+        await this.page.waitForTimeout(5000);
+
+        const {
+            Point_A: Actual_Total_Token_Before_A = 0,
+            Point_B: Actual_Total_Token_Before_B = 0
+        } = this.totalTokenBefore || {};
+
+        const {
+            Point_A: Actual_Total_Token_After_A = 0,
+            Point_B: Actual_Total_Token_After_B = 0
+        } = this.totalTokenAfter || {};
+
+        const {
+            TokenA = "0",
+            TokenB = "0"
+        } = this.PriceLiquidity || {};
+
+        const Token_After_A = this.convertToPoints(TokenA);
+        const Token_After_B = this.convertToPoints(TokenB);
+
+        // Kiểm tra giá trị hợp lệ
+        const validateInput = (value, name) => {
+            if (value === undefined || isNaN(value) || value < 0) {
+                console.error(`❌ ERROR! Invalid input for ${name}. Value: ${value}`);
+                throw new Error(`❌ ERROR! Invalid input for ${name}. Value: ${value}`);
+            }
+        };
+
+        [Actual_Total_Token_Before_A, Token_After_A, Actual_Total_Token_Before_B, Token_After_B].forEach(
+            (val, index) => validateInput(val, `Parameter ${index + 1}`)
+        );
+
+        // Tính toán tổng sau khi thêm liquidity (nếu là trừ thì cần kiểm tra trước)
+        const expected_Total_Token_After_A = Actual_Total_Token_Before_A - Token_After_A;
+        const expected_Total_Token_After_B = Actual_Total_Token_Before_B - Token_After_B;
+
+        if (expected_Total_Token_After_A < 0 || expected_Total_Token_After_B < 0) {
+            console.error(`❌ ERROR! Insufficient liquidity. Token A: ${expected_Total_Token_After_A}, Token B: ${expected_Total_Token_After_B}`);
+            return false;
+        }
+
+        // Hàm kiểm tra trong khoảng sai số
+        const isWithinTolerance = (actual, expected, tolerance = 0.0001) => {
+            return Math.abs(actual - expected) <= tolerance;
+        };
+
+        // Thiết lập mức sai số chấp nhận được
+        const tolerance = 0.01; // Chấp nhận sai số 0.01
+
+        const passA = isWithinTolerance(Number(Actual_Total_Token_After_A), Number(expected_Total_Token_After_A), tolerance);
+        const passB = isWithinTolerance(Number(Actual_Total_Token_After_B), Number(expected_Total_Token_After_B), tolerance);
+
+        if (passA && passB) {
+            console.log("✅ Add Liquidity Successful!", {
+                Before_A: Actual_Total_Token_Before_A,
+                Added_A: Token_After_A,
+                After_A: Actual_Total_Token_After_A,
+                Expected_A: expected_Total_Token_After_A,
+
+                Before_B: Actual_Total_Token_Before_B,
+                Added_B: Token_After_B,
+                After_B: Actual_Total_Token_After_B,
+                Expected_B: expected_Total_Token_After_B
+            });
+            return true;
+        } else {
+            console.error(
+                `❌ ERROR! Add Liquidity validation failed.\n` +
+                `Token A -> Before: ${Actual_Total_Token_Before_A}, Added: ${Token_After_A}, After: ${Actual_Total_Token_After_A}, Expected: ${expected_Total_Token_After_A}\n` +
+                `Token B -> Before: ${Actual_Total_Token_Before_B}, Added: ${Token_After_B}, After: ${Actual_Total_Token_After_B}, Expected: ${expected_Total_Token_After_B}`
+            );
+            return false;
+        }
+    }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // async Compare_Token_Before_And_After_Valid_Swap(networkCostA) {
     //     await this.page.waitForTimeout(5000);
@@ -1264,8 +1765,10 @@ export class FunctionPage {
     //     }
     // }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     async Compare_Token_Before_And_After_Invalid_Swap() {
         await this.page.waitForTimeout(10000);  
 
@@ -1314,8 +1817,9 @@ export class FunctionPage {
         return invalidateRejectedSwap();
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async Compare_Token_Before_And_After_Wrap() {
         await this.waitForTimeout(10000);
@@ -1369,8 +1873,9 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async getTokenAllWeb() {
         try {
@@ -1413,7 +1918,7 @@ export class FunctionPage {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

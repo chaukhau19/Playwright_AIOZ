@@ -1,5 +1,5 @@
-import { config } from "./../../../data/Swap_Config.js";
-import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
+import { swapconfig } from "./../../../data/Swap_Config.js";
+import { FunctionPage } from "../../../pages/Functions.js";
 import { ConnectWalletMetaMaskPage } from "../../../pages/Dapps/MetaMask/MetaMask.js";
 
 export class ValidSwapPage {
@@ -42,7 +42,7 @@ export class ValidSwapPage {
             await this.functionPage.Swaps_Page();
             await this.functionPage.Select_Token_WAIOZ_B();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Wrap_Page();  
             await this.functionPage.Wrap_Button();
             await wallet.confirmTransaction(); 

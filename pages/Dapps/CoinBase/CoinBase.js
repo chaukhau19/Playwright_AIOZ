@@ -1,4 +1,4 @@
-import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
+import { FunctionPage } from "../../../pages/Functions.js";
 
 export class ConnectWalletCoinBasePage {
     constructor(page) {

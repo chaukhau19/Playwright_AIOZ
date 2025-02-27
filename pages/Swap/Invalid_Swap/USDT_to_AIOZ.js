@@ -1,5 +1,5 @@
-import { config } from "./../../../data/Swap_Config.js";
-import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
+import { swapconfig } from "./../../../data/Swap_Config.js";
+import { FunctionPage } from "../../../pages/Functions.js";
 import { ConnectWalletMetaMaskPage } from "../../../pages/Dapps/MetaMask/MetaMask.js";
 export class InvalidSwapPage {
     constructor(page) {
@@ -18,7 +18,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_0);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_0);
             await this.functionPage.Enter_An_Amount();
             
         } catch (error) {
@@ -34,7 +34,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_Insufficient);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_Insufficient);
             await this.functionPage.Enter_An_Amount();
 
         } catch (error) {
@@ -50,7 +50,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
             await this.functionPage.Confirm_Swap_Page();
@@ -74,7 +74,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
             await this.functionPage.Confirm_Swap_Page();
@@ -100,7 +100,7 @@ export class InvalidSwapPage {
             await this.functionPage.Close_Choose_Wallet_Button();
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Connect_Wallet_Button();
             await this.functionPage.Select_Wallet_To_Connect();   
 
@@ -117,7 +117,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Transaction_Deadline_100Percent();
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
@@ -144,7 +144,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Transaction_Deadline_0Percent();
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
@@ -170,7 +170,7 @@ export class InvalidSwapPage {
             await this.functionPage.Select_Token_USDT_B();
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_high);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_high);
             await this.functionPage.Price_Impact_Warning();
             await this.functionPage.Insufficient_AIOZ_Balance();
     
@@ -186,7 +186,7 @@ export class InvalidSwapPage {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
             await this.functionPage.Select_Token_BTC_B();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Price_Impact_Warning();
             await this.functionPage.Insufficient_ETH_Balance();
 
@@ -203,7 +203,7 @@ export class InvalidSwapPage {
             await this.functionPage.Swaps_Page();
             await this.functionPage.Search_Token_WAIOZ_B_Invalid();
             await this.functionPage.UNKNOWN_Token();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Insufficient_Liquidity_For_This_Trade();
 
         } catch (error) {
@@ -230,7 +230,7 @@ export class InvalidSwapPage {
             await this.functionPage.Pools_Page();
             await this.functionPage.Swaps_Page();
             await this.functionPage.Search_Token_UNI_B();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Insufficient_Liquidity_For_This_Trade();
 
         } catch (error) {
@@ -247,7 +247,7 @@ export class InvalidSwapPage {
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Transaction_Deadline_1M();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
             await this.functionPage.Confirm_Swap_Page();
@@ -274,7 +274,7 @@ export class InvalidSwapPage {
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Transaction_Deadline_0Percent();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
             await this.functionPage.Confirm_Swap_Page();
@@ -300,7 +300,7 @@ export class InvalidSwapPage {
             await this.functionPage.Token_Redemption_Button();
             await this.functionPage.Total_Token_Before();
             await this.functionPage.Transaction_Deadline_100Percent();
-            await this.functionPage.Fill_Amount_A(config.InputValue_A_1);
+            await this.functionPage.Fill_Amount_A(swapconfig.InputValue_A_1);
             await this.functionPage.Swap_Page();  
             await this.functionPage.Swap_Button();
             await this.functionPage.Confirm_Swap_Page();

@@ -8,16 +8,16 @@
 # yarn test:DisconnectCoinBase --workers=1
 # yarn test:SwitchNetworkCoinBase --workers=1
 
-# yarn test:AIOZtoUSDT_Valid --workers=1
-# yarn test:AIOZtoSTRK_Valid --workers=1
-# yarn test:STRKtoAIOZ_Valid --workers=1
-# yarn test:USDTtoAIOZ_Valid --workers=1
-# yarn test:AIOZtoWAIOZ_Valid --workers=1
+# yarn test:Swap_AIOZtoUSDT_Valid --workers=1
+# yarn test:Swap_AIOZtoSTRK_Valid --workers=1
+# yarn test:Swap_STRKtoAIOZ_Valid --workers=1
+# yarn test:Swap_USDTtoAIOZ_Valid --workers=1
+# yarn test:Swap_AIOZtoWAIOZ_Valid --workers=1
 
-# yarn test:AIOZtoSTRK_Invalid --workers=1
-# yarn test:AIOZtoUSDT_Invalid --workers=1
-# yarn test:STRKtoAIOZ_Invalid --workers=1
-# yarn test:USDTtoAIOZ_Invalid --workers=1
+# yarn test:Swap_AIOZtoSTRK_Invalid --workers=1
+# yarn test:Swap_AIOZtoUSDT_Invalid --workers=1
+# yarn test:Swap_STRKtoAIOZ_Invalid --workers=1
+# yarn test:Swap_USDTtoAIOZ_Invalid --workers=1
 
 # Uncomment these lines if needed
 # yarn test:AllFixed1 --workers=1

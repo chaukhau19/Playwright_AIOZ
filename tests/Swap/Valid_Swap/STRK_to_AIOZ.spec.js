@@ -1,8 +1,8 @@
 //Shared Functions
 import { test } from "../../../pages/Dapps/SetupMetaMask.js";
-import { config } from "./../../../data/Swap_Config.js";
+import { swapconfig } from "./../../../data/Swap_Config.js";
 import { ConnectWalletMetaMaskPage } from "../../../pages/Dapps/MetaMask/MetaMask.js";
-import { FunctionPage } from "../../../pages/Swap/Swap_Functions.js";
+import { FunctionPage } from "../../../pages/Functions.js";
 //Dedicated functions
 import { ValidSwapPage} from "../../../pages/Swap/Valid_Swap/STRK_to_AIOZ.js";
 
@@ -10,8 +10,8 @@ import { ValidSwapPage} from "../../../pages/Swap/Valid_Swap/STRK_to_AIOZ.js";
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let connectWalletMetaMaskPage;
-let validSwapPage;
 let functionPage; 
+let validSwapPage;
 
 test.beforeAll(async ({ page, wallet }) => {
   connectWalletMetaMaskPage = new ConnectWalletMetaMaskPage(page);
@@ -39,7 +39,7 @@ test.afterEach(async ({ page }) => {
 test("Swap with different input values", async ({ wallet }) => {
   console.log("Swap with different input values");
   await functionPage.TimeoutTest(async () => {
-    for (const inputValue of config.InputValues) {
+    for (const inputValue of swapconfig.InputValues) {
       await validSwapPage.SwapWithInputValue(wallet, inputValue);
       await page.waitForTimeout(3000);
       await page.reload();

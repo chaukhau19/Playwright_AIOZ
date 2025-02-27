@@ -122,7 +122,6 @@ export class InvalidSwapPage {
             await this.functionPage.Close_Confirmation_Button();
             await this.functionPage.Total_Token_After();
             await this.functionPage.Compare_Token_Before_And_After_Invalid_Swap();
-            await this.functionPage.Get_Token_All_Web();
     
         } catch (error) {
             console.error("Test failed:", error.message);

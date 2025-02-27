@@ -131,17 +131,19 @@ pipeline {
         stage('Archive Test Results') {
             steps {
                 script {
-                    try {
-                        def resultsExist = sh(script: "find . -path '*/playwright-report/*' | wc -l", returnStdout: true).trim()
-                        if (resultsExist != '0') {
-                            echo "📊 Found test results to archive"
-                            archiveArtifacts artifacts: '**/playwright-report/**/*', allowEmptyArchive: true
-                            echo "✅ Test results archived successfully"
-                        } else {
-                            echo "⚠️ No test results found to archive"
+                    dir(SERVER_PATH) {
+                        try {
+                            def resultsExist = sh(script: "find playwright-report/ -type f | wc -l", returnStdout: true).trim()
+                            if (resultsExist != '0') {
+                                echo "📊 Found test results to archive"
+                                archiveArtifacts artifacts: "playwright-report/**/*", allowEmptyArchive: true
+                                echo "✅ Test results archived successfully"
+                            } else {
+                                echo "⚠️ No test results found to archive"
+                            }
+                        } catch (Exception e) {
+                            echo "⚠️ Error archiving test results: ${e.getMessage()}"
                         }
-                    } catch (Exception e) {
-                        echo "⚠️ Error archiving test results: ${e.getMessage()}"
                     }
                 }
             }
@@ -151,7 +153,7 @@ pipeline {
     post {
         always {
             script {
-                cleanWs()
+                echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
                 if (env.TEST_SUCCESS == 'true') {
                     currentBuild.result = 'SUCCESS'
                     echo "🎉 Build finished with status: SUCCESS"

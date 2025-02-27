@@ -76,11 +76,18 @@ pipeline {
                                 echo "Playwright not found. Installing..."
                                 npx playwright install
                             else
-                                echo "✅ Playwright found."
+                                echo "✅ npx playwright found."
                             fi
 
-                            # Ensure required packages are installed
-                            yarn add @playwright/test@latest @tenkeylabs/dappwright
+                            # Check & Install yarn playwright
+                            if ! yarn playwright --version > /dev/null 2>&1; then
+                                echo "yarn playwright not found. Installing..."
+                                yarn install
+                                yarn playwright install
+                                yarn add @playwright/test@latest @tenkeylabs/dappwright
+                            else
+                                echo "✅ yarn playwright found."
+                            fi
                         """
                     } catch (Exception e) {
                         echo "❌ Error in Setup Dependencies: ${e.getMessage()}"

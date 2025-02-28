@@ -156,5 +156,5 @@ chmod -R 755 /var/lib/jenkins/.cache/ms-playwright/
 chown -R jenkins:jenkins /var/lib/jenkins/.cache/ms-playwright/
 chmod +x /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 
-
+ln -s chromium-1148/ chromium-1150
 ```

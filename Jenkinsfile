@@ -107,6 +107,21 @@ pipeline {
             }
         }
 
+        stage('Fix Chromium') {
+            steps {
+                script {
+                    sh """
+                        if [ -d "/var/lib/jenkins/.cache/ms-playwright/chromium-1155" ]; then
+                            echo "🔄 Moving Chromium folder..."
+                            mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148
+                            echo "✅ Moved Chromium successfully."
+                        else
+                            echo "⚠️ Chromium-1155 not found. Skipping move."
+                        fi
+                    """
+                }
+            }
+        }
 
         stage('CD: Run Tests') {
             steps {

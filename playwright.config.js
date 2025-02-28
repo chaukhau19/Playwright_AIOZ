@@ -8,6 +8,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI, // Prevent committing code with `.only` tests, avoiding errors when pushing to CI/CD
   retries: 0, // Do not retry tests if they fail
   workers: 1, // Run only 1 worker
+  preserveOutput: 'failures-only', // Preserve logs only for failed tests
+  maxFailures: 5, // Stop test execution after 5 failures
+
   reporter: [
     ['html', { outputFolder: './playwright-report', open: 'on', append: true, verbose: true }], // Keep logs from previous runs
     ['json', { outputFile: './playwright-report/report.json' }], // Save logs as JSON file
@@ -25,8 +28,11 @@ export default defineConfig({
   use: {
     actionTimeout: 0, // No time limit for each action (click, input, etc.)
     navigationTimeout: 0, // No time limit for page navigation
-    headless: true, // Run browser in headless mode (set to `false` to run with UI)
+    // headless: true, // Run browser in headless mode (set to `false` to run with UI)
+    headless: process.env.HEADLESS !== 'false', // Run browser in headless mode (set to `false` to run with UI)
+    channel: 'chrome', // Use Chrome browser
 
+    // Set browser launch arguments
     args: [
       "--disable-web-security", // Disable web security to allow cross-origin requests
       "--disable-features=IsolateOrigins,site-per-process", // Disable site isolation to avoid security errors
@@ -35,11 +41,12 @@ export default defineConfig({
       "--disable-extensions", // Disable browser extensions
       "--no-sandbox", // Disable sandbox to avoid permission errors in CI environments
       "--disable-setuid-sandbox", // Disable setuid sandbox mode
-      '--proxy-server=https://aiozswap-web.vercel.app/', // Set proxy server to test the website
-      "--disable-popup-blocking",
-      "--disable-infobars",
-      "--disable-backgrounding-occluded-windows",
-      // "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure",
+      // '--proxy-server=https://aiozswap-web.vercel.app/', // Set proxy server to test the website
+      '--proxy-server=' + (process.env.PROXY_SERVER || ''), // Set proxy server to test the website
+      "--disable-popup-blocking", // Disable popup blocking
+      "--disable-infobars", // Disable info bars
+      "--disable-backgrounding-occluded-windows", // Disable backgrounding occluded windows
+      "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure", // Disable same-site cookies
     ],
 
     // video: 'only-on-failure',
@@ -59,8 +66,21 @@ export default defineConfig({
 
   projects: [
     {
-      name: "chromium", // Run tests on Chrome browser
-      use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 768 } },
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        channel: "chrome",
+        executablePath: process.env.CHROMIUM_PATH || undefined, // Use custom Chromium path
+      },
     },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+    // {
+    //   name: "webkit",
+    //   use: { ...devices['Desktop Safari'] },
+    // },
   ],
+  
 });

@@ -158,10 +158,31 @@ chmod +x /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 
 ln -s chromium-1148/ chromium-1150
 
-# error: unable to unlink old 'dist/assets/index-b6bb3e45.js'
+
+```
+
+
+## Error Jenkins
+```bash
+# stderr: error: unable to unlink old 'dist/assets/index-b6bb3e45.js': Permission denied
+# error: unable to unlink old 'dist/assets/index-dfec0afb.css': Permission denied
 sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
 sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
 git reset --hard HEAD
 git clean -fd
 
+#> |   await wallet.approve();
+sudo apt-get install -y xvfb
+
+#Executable doesn't exist at /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
+ln -s chromium-1148/ chromium-1150
+mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148
+
+#Error: EACCES: permission denied, scandir '/tmp/dappwright/session/metamask/0'
+sudo chmod -R 777 /tmp/dappwright/session/
+sudo chmod -R 777 /tmp/dappwright/session/metamask
+
+#npm error [Error: EACCES: permission denied, rename '/usr/lib/node_modules/yarn' -> '/usr/lib/node_modules/.yarn-LH7MXRbz'] 
+
+#Error: browserContext.newPage: Target page, context or browser has been closed
 ```

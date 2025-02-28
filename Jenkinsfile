@@ -128,8 +128,12 @@ pipeline {
                 script {
                     try {
                         sh """
-                            Xvfb :99 -screen 0 1920x1080x24 &
-                            export DISPLAY=:99
+                        sudo apt-get update && sudo apt-get install -y x11-utils
+
+                        Xvfb :99 -screen 0 1920x1080x24 &
+                        export DISPLAY=:99
+
+                        xdpyinfo -display :99 || (echo "❌ Xvfb failed to start" && exit 1)
                         """
                         
                         def testResult = 1

@@ -48,7 +48,7 @@ pipeline {
                         sh """
                             # Check & Install Node.js
                             if ! command -v node > /dev/null 2>&1; then
-                                echo "Node.js not found. Installing..."
+                                echo "⚠️ Node.js not found. Installing..."
                                 curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
                                 apt-get install -y nodejs
                             else
@@ -57,39 +57,23 @@ pipeline {
 
                             # Check & Install Yarn
                             if ! command -v yarn > /dev/null 2>&1; then
-                                echo "Yarn not found. Installing..."
+                                echo "⚠️ Yarn not found. Installing..."
                                 npm install -g yarn
                             else
                                 echo "✅ Yarn found. Version: \$(yarn -v)"
                             fi
 
-                            # Check & Install Dependencies
-                            if [ ! -d "node_modules" ]; then
-                                echo "Installing dependencies..."
-                                yarn install
-                            else
-                                echo "✅ node_modules exists."
-                            fi
-
-                            # Check & Install Playwright
-                            if ! npx playwright --version > /dev/null 2>&1; then
-                                echo "Playwright not found. Installing..."
-                                npx playwright install
-                            else
-                                echo "✅ npx playwright found."
-                            fi
-
-                            # Check & Install yarn playwright
+                            # Check & Install Playwright via Yarn
                             if ! yarn playwright --version > /dev/null 2>&1; then
-                                echo "yarn playwright not found. Installing..."
-                                yarn install
-                                yarn playwright install
-                                yarn add @playwright/test@latest @tenkeylabs/dappwright
+                                echo "⚠️ Playwright not found. Installing..."
+                                yarn add @playwright/test@1.48.2 @tenkeylabs/dappwright
+                                yarn playwright install --with-deps
                             else
-                                yarn install
-                                yarn playwright install
-                                yarn add @playwright/test@latest @tenkeylabs/dappwright
+                                echo "✅ Playwright found. Version: \$(yarn playwright --version)"
                             fi
+
+                            # Ensure dependencies are installed
+                            yarn install
                         """
                     } catch (Exception e) {
                         echo "❌ Error in Setup Dependencies: ${e.getMessage()}"
@@ -99,6 +83,8 @@ pipeline {
                 }
             }
         }
+
+
 
 
         stage('CD: Run Tests') {

@@ -62,8 +62,19 @@ Xác minh rằng hệ thống xử lý đúng logic giao dịch và số dư ph�
 node -v
 npm -v
 yarn -v
+playwright --version
 npm playwright --version
 yarn playwright --version
+
+#Folder
+cd /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
+cd /var/lib/jenkins/.cache/ms-playwright
+
+#Xóa và cài lại node_modules và esbuild
+rm -rf node_modules package-lock.json yarn.lock
+npm install
+npm install esbuild --force
+ls -l node_modules/esbuild/bin/
 
 # Kiểm tra thư mục làm việc
 ls -lah /var/lib/jenkins/workspace/
@@ -83,10 +94,12 @@ yarn add ethers
 npm install ethers
 
 # Cài đặt Yarn
+npm uninstall -g yarn
 npm install -g yarn
 
-# Gỡ cài đặt Yarn
-npm uninstall -g yarn
+# Cài đặt npm
+npm uninstall playwright
+npm install playwright@1.48.2
 
 # Cài đặt Playwright và dependencies
 rm -rf node_modules yarn.lock
@@ -96,6 +109,7 @@ yarn playwright install --with-deps
 yarn add @playwright/test@latest @tenkeylabs/dappwright
 
 rm -rf node_modules package-lock.json yarn.lock
+npm install -g playwright@1.48.2
 npm install  # Hoặc dùng yarn nếu đang dùng yarn
 npx playwright install
 npx playwright install --with-deps
@@ -127,5 +141,18 @@ sudo journalctl -u jenkins --no-pager | tail -n 50
 
 # Kiểm tra logs trong thư mục Jenkins
 cat /var/log/jenkins/jenkins.log | tail -n 50
+
+#Cài đặt Chromium vào thư mục cụ thể
+mkdir -p /var/lib/jenkins/.cache/ms-playwright/chromium-1148/
+cd /var/lib/jenkins/.cache/ms-playwright/chromium-1148/
+wget https://playwright.azureedge.net/builds/chromium/1148/chromium-linux.zip
+
+unzip chromium-linux.zip
+mv chrome-linux /var/lib/jenkins/.cache/ms-playwright/chromium-1148/
+
+chmod -R 755 /var/lib/jenkins/.cache/ms-playwright/
+chown -R jenkins:jenkins /var/lib/jenkins/.cache/ms-playwright/
+chmod +x /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
+
 
 ```

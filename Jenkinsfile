@@ -18,13 +18,6 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main"
-                        sh "sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main"
-                        
-                        // Reset code về trạng thái sạch trước khi fetch code mới
-                        sh "git reset --hard HEAD"
-                        sh "git clean -fd"
-                        
                         sh "git fetch origin ${BRANCH_NAME}"
                         def latestRemoteCommit = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()
                         def latestLocalCommit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
@@ -54,9 +47,10 @@ pipeline {
                     try {
                         sh """
                             echo "🔍 Checking dependencies..."
+
                             # --- [Check & Manage Node.js] ---
-                            NODE_VERSIONS=$(ls /usr/bin | grep -E '^node[0-9]*$' | wc -l)
-                            if [ "$NODE_VERSIONS" -gt 1 ]; then
+                            NODE_VERSIONS=\$(ls /usr/bin | grep -E '^node[0-9]*\$' | wc -l)
+                            if [ "\$NODE_VERSIONS" -gt 1 ]; then
                                 echo "⚠️ Multiple Node.js versions found. Removing older versions..."
                                 sudo apt-get remove --purge nodejs -y || true
                                 sudo rm -rf /usr/local/{bin,lib}/node_modules || true
@@ -67,7 +61,38 @@ pipeline {
                                 curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
                                 apt-get install -y nodejs
                             else
-                                echo "✅ Node.js found. Version: $(node -v)"
+                                echo "✅ Node.js found. Version: \$(node -v)"
+                            fi
+
+                            # --- [Check & Manage Yarn] ---
+                            YARN_VERSIONS=\$(yarn --version 2>/dev/null | wc -l)
+                            if [ "\$YARN_VERSIONS" -gt 1 ]; then
+                                echo "⚠️ Multiple Yarn versions found. Removing older versions..."
+                                npm uninstall -g yarn || true
+                                rm -rf ~/.yarn ~/.config/yarn || true
+                                echo "✅ Yarn cleaned up."
+                            fi
+                            if ! command -v yarn > /dev/null 2>&1; then
+                                echo "⚠️ Yarn not found. Installing..."
+                                npm install -g yarn
+                            else
+                                echo "✅ Yarn found. Version: \$(yarn -v)"
+                            fi
+
+                            # --- [Check & Manage Playwright] ---
+                            PLAYWRIGHT_VERSIONS=\$(yarn list --depth=0 | grep '@playwright/test' | wc -l)
+                            if [ "\$PLAYWRIGHT_VERSIONS" -gt 1 ]; then
+                                echo "⚠️ Multiple Playwright versions found. Removing older versions..."
+                                rm -rf node_modules package-lock.json yarn.lock || true
+                                rm -rf ~/.cache/ms-playwright || true
+                                echo "✅ Playwright cleaned up."
+                            fi
+                            if ! yarn playwright --version > /dev/null 2>&1; then
+                                echo "⚠️ Playwright not found. Installing..."
+                                yarn add @playwright/test@latest @tenkeylabs/dappwright
+                                yarn playwright install
+                            else
+                                echo "✅ Playwright found. Version: \$(yarn playwright --version)"
                             fi
 
                             # Ensure dependencies are installed
@@ -102,7 +127,10 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99"
+                        sh """
+                            Xvfb :99 -screen 0 1920x1080x24 &
+                            export DISPLAY=:99
+                        """
                         
                         def testResult = 1
                         if (isUnix()) {
@@ -128,6 +156,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Archive Test Results') {
             steps {

@@ -157,4 +157,11 @@ chown -R jenkins:jenkins /var/lib/jenkins/.cache/ms-playwright/
 chmod +x /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 
 ln -s chromium-1148/ chromium-1150
+
+# error: unable to unlink old 'dist/assets/index-b6bb3e45.js'
+sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
+sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
+git reset --hard HEAD
+git clean -fd
+
 ```

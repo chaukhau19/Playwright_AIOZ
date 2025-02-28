@@ -13,11 +13,17 @@ pipeline {
         cron('0 1 * * *')  
     }
 
-    stages {
         stage('CI: Checkout Code') {
             steps {
                 script {
                     try {
+                        sh "sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main"
+                        sh "sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main"
+
+                        // Reset code về trạng thái sạch trước khi fetch code mới
+                        sh "git reset --hard HEAD"
+                        sh "git clean -fd"
+
                         sh "git fetch origin ${BRANCH_NAME}"
                         def latestRemoteCommit = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()
                         def latestLocalCommit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
@@ -40,6 +46,7 @@ pipeline {
                 sh "pwd && ls -la"
             }
         }
+
 
         stage('Setup Dependencies') {
             steps {

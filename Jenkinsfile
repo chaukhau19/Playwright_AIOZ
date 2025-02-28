@@ -46,40 +46,57 @@ pipeline {
                 script {
                     try {
                         sh """
-                            echo "🔥 Removing old dependencies..."
+                            echo "🔍 Checking dependencies..."
 
-                            # Remove Yarn
-                            npm uninstall -g yarn || true
-                            rm -rf ~/.yarn ~/.config/yarn || true
+                            # --- [Check & Manage Node.js] ---
+                            NODE_VERSIONS=\$(ls /usr/bin | grep -E '^node[0-9]*\$' | wc -l)
+                            if [ "\$NODE_VERSIONS" -gt 1 ]; then
+                                echo "⚠️ Multiple Node.js versions found. Removing older versions..."
+                                sudo apt-get remove --purge nodejs -y || true
+                                sudo rm -rf /usr/local/{bin,lib}/node_modules || true
+                                echo "✅ Node.js cleaned up."
+                            fi
+                            if ! command -v node > /dev/null 2>&1; then
+                                echo "⚠️ Node.js not found. Installing..."
+                                curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                                apt-get install -y nodejs
+                            else
+                                echo "✅ Node.js found. Version: \$(node -v)"
+                            fi
 
-                            # Remove npm & Node.js
-                            npm cache clean --force || true
-                            rm -rf ~/.npm || true
-                            sudo apt-get remove --purge nodejs -y || true
-                            sudo rm -rf /usr/local/{bin,lib}/node_modules || true
+                            # --- [Check & Manage Yarn] ---
+                            YARN_VERSIONS=\$(yarn --version 2>/dev/null | wc -l)
+                            if [ "\$YARN_VERSIONS" -gt 1 ]; then
+                                echo "⚠️ Multiple Yarn versions found. Removing older versions..."
+                                npm uninstall -g yarn || true
+                                rm -rf ~/.yarn ~/.config/yarn || true
+                                echo "✅ Yarn cleaned up."
+                            fi
+                            if ! command -v yarn > /dev/null 2>&1; then
+                                echo "⚠️ Yarn not found. Installing..."
+                                npm install -g yarn
+                            else
+                                echo "✅ Yarn found. Version: \$(yarn -v)"
+                            fi
 
-                            # Remove Playwright
-                            rm -rf node_modules package-lock.json yarn.lock || true
-                            rm -rf ~/.cache/ms-playwright || true
+                            # --- [Check & Manage Playwright] ---
+                            PLAYWRIGHT_VERSIONS=\$(yarn list --depth=0 | grep '@playwright/test' | wc -l)
+                            if [ "\$PLAYWRIGHT_VERSIONS" -gt 1 ]; then
+                                echo "⚠️ Multiple Playwright versions found. Removing older versions..."
+                                rm -rf node_modules package-lock.json yarn.lock || true
+                                rm -rf ~/.cache/ms-playwright || true
+                                echo "✅ Playwright cleaned up."
+                            fi
+                            if ! yarn playwright --version > /dev/null 2>&1; then
+                                echo "⚠️ Playwright not found. Installing..."
+                                yarn add @playwright/test@1.48.2 @tenkeylabs/dappwright
+                                yarn playwright install --with-deps
+                            else
+                                echo "✅ Playwright found. Version: \$(yarn playwright --version)"
+                            fi
 
-                            echo "✅ Dependencies removed. Installing fresh setup..."
-
-                            # Install Node.js 18
-                            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-                            sudo apt-get install -y nodejs
-
-                            # Install Yarn
-                            npm install -g yarn
-
-                            # Initialize project & install Playwright (v1.48.2)
-                            yarn init -y
-                            yarn add @playwright/test@1.48.2 @tenkeylabs/dappwright
-                            yarn playwright install --with-deps
-
-                            # Install Chromium 1148
-                            PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install chromium@1148
-
-                            echo "✅ Setup completed successfully!"
+                            # Ensure dependencies are installed
+                            yarn install
                         """
                     } catch (Exception e) {
                         echo "❌ Error in Setup Dependencies: ${e.getMessage()}"
@@ -89,7 +106,6 @@ pipeline {
                 }
             }
         }
-
 
 
 

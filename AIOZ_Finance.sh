@@ -15,7 +15,7 @@
 # trap cleanup EXIT  
 
 # # Chạy Playwright test
-yarn test:ConnectMetaMask --workers=1
+yarn test:AllFixed --workers=1
 
 
 

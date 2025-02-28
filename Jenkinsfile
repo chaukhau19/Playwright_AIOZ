@@ -127,6 +127,11 @@ pipeline {
             steps {
                 script {
                     try {
+                        sh """
+                            Xvfb :99 -screen 0 1920x1080x24 &
+                            export DISPLAY=:99
+                        """
+                        
                         def testResult = 1
                         if (isUnix()) {
                             echo "📋 Running tests using ${FILE_SH}"
@@ -151,6 +156,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Archive Test Results') {
             steps {

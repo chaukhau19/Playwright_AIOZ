@@ -66,11 +66,10 @@ export default defineConfig({
 
   projects: [
     {
-      name: "chromium",
+      name: "chrome",
       use: {
         ...devices["Desktop Chrome"],
         channel: "chrome",
-        executablePath: process.env.CHROMIUM_PATH || undefined, // Use custom Chromium path
       },
     },
     // {

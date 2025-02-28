@@ -14,6 +14,7 @@ export const test = baseTest.extend({
               seed: "boring raccoon elevator sustain long jar phrase ring mask region elder primary",
               headless: true,
               slowMo: 500,
+              browser: "chrome", 
               args: [
                 "--disable-web-security",
                 "--disable-features=IsolateOrigins,site-per-process",
@@ -26,9 +27,8 @@ export const test = baseTest.extend({
                 "--no-sandbox" 
               ],
             }),
-            // new Promise((_, reject) => setTimeout(() => reject(new Error("Bootstrap Metamask Timeout!")), 120000))
           ]);
-  
+
           await wallet.page.waitForTimeout(500); 
   
           await wallet.addNetwork({
@@ -38,7 +38,7 @@ export const test = baseTest.extend({
             symbol: "AIOZ",
             blockExplorer: "https://testnet-explorer.aioz.network",
           });
-  
+
           sharedContext = context;
         } catch (error) {
           console.error("Error during Metamask setup:", error);
@@ -53,8 +53,4 @@ export const test = baseTest.extend({
       const metamask = await dappwright.getWallet("metamask", context);
       await use(metamask);
     },
- 
 });
-
-
-

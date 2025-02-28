@@ -107,6 +107,8 @@ yarn install
 yarn playwright install
 yarn playwright install --with-deps
 yarn add @playwright/test@latest @tenkeylabs/dappwright
+yarn add @playwright/testt@1.48.2 @tenkeylabs/dappwright
+
 
 rm -rf node_modules package-lock.json yarn.lock
 npm install -g playwright@1.48.2

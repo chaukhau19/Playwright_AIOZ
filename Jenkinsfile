@@ -89,7 +89,7 @@ pipeline {
                             fi
                             if ! yarn playwright --version > /dev/null 2>&1; then
                                 echo "⚠️ Playwright not found. Installing..."
-                                yarn add @playwright/test@1.48.2 @tenkeylabs/dappwright
+                                yarn add @playwright/test@latest @tenkeylabs/dappwright
                                 yarn playwright install
                             else
                                 echo "✅ Playwright found. Version: \$(yarn playwright --version)"

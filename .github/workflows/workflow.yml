@@ -49,26 +49,30 @@ jobs:
         # working-directory: ./PLAYWRIGHT_AIOZ
         run: dir
 
-      - name: Check & Rename Playwright Chromium
+      - name: Rename Playwright Chromium
         run: |
-          Write-Host "🔍 Checking Playwright Chromium path..."
-          
-          # Lấy đường dẫn Chromium
-          $CHROMIUM_PATH = npx playwright browsers path chromium
-          Write-Host "Chromium Path: $CHROMIUM_PATH"
-          
-          # Lấy phiên bản Chromium từ đường dẫn
-          $CHROMIUM_VERSION = ($CHROMIUM_PATH -split '\\')[-1]
+          $CHROMIUM_PATH = "C:\Users\runneradmin\AppData\Local\ms-playwright"
+          $OLD_NAME1 = "chromium-1155"
+          $NEW_NAME1 = "chromium-1148"
+          $OLD_NAME2 = "chromium_headless_shell-1155"
+          $NEW_NAME2 = "chromium_headless_shell-1148"
 
-          Write-Host "Detected Chromium Version: $CHROMIUM_VERSION"
-
-          # Kiểm tra nếu là chromium-1155 thì đổi tên thành chromium-1148
-          if ($CHROMIUM_VERSION -like "chromium-1155*") {
-            Write-Host "🔄 Renaming Chromium-1155 to Chromium-1148..."
-            Rename-Item -Path "$CHROMIUM_PATH" -NewName "chromium-1148"
+          Write-Host "🔍 Checking if $OLD_NAME1 exists..."
+          if (Test-Path "$CHROMIUM_PATH\$OLD_NAME1") {
+            Write-Host "🔄 Renaming $OLD_NAME1 to $NEW_NAME1..."
+            Rename-Item -Path "$CHROMIUM_PATH\$OLD_NAME1" -NewName $NEW_NAME1
             Write-Host "✅ Rename completed!"
           } else {
-            Write-Host "⚠️ Chromium version is not 1155, no changes made."
+            Write-Host "⚠️ $OLD_NAME1 not found, skipping rename."
+          }
+
+          Write-Host "🔍 Checking if $OLD_NAME2 exists..."
+          if (Test-Path "$CHROMIUM_PATH\$OLD_NAME2") {
+            Write-Host "🔄 Renaming $OLD_NAME2 to $NEW_NAME2..."
+            Rename-Item -Path "$CHROMIUM_PATH\$OLD_NAME2" -NewName $NEW_NAME2
+            Write-Host "✅ Rename completed!"
+          } else {
+            Write-Host "⚠️ $OLD_NAME2 not found, skipping rename."
           }
         shell: pwsh
 

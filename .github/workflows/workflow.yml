@@ -20,11 +20,11 @@ jobs:
     steps:
       # Checkout code
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
@@ -62,7 +62,7 @@ jobs:
       # Archive test results
       - name: Archive test results for PLAYWRIGHT_AIOZ
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: playwright-results-playwright_aioz
           path: ./PLAYWRIGHT_AIOZ/playwright-report/

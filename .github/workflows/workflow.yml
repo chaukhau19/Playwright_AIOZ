@@ -31,7 +31,7 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        working-directory: ./PLAYWRIGHT_AIOZ
+        # working-directory: ./PLAYWRIGHT_AIOZ
         run: |
           npm install -g yarn
           yarn install
@@ -46,11 +46,11 @@ jobs:
           npx playwright --version
 
       - name: List directory contents
-        working-directory: ./PLAYWRIGHT_AIOZ
+        # working-directory: ./PLAYWRIGHT_AIOZ
         run: dir
 
       - name: Run Playwright tests
-        working-directory: ./PLAYWRIGHT_AIOZ
+        # working-directory: ./PLAYWRIGHT_AIOZ
         run: yarn test:AllFixed --workers=1
 
       - name: Archive test results
@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-results-playwright_aioz
-          path: ./PLAYWRIGHT_AIOZ/playwright-report/
+          path: ./playwright-report/
 
       # Deploy to Test Environment for PLAYWRIGHT_AIOZ
       - name: Deploy to Test Environment for PLAYWRIGHT_AIOZ

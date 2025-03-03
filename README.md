@@ -58,6 +58,7 @@ Xác minh rằng hệ thống xử lý đúng logic giao dịch và số dư ph�
 
 ## Additional Jenkins
 ```bash
+########################################################################
 # Kiểm tra phiên bản
 node -v
 npm -v
@@ -66,41 +67,51 @@ playwright --version
 npm playwright --version
 yarn playwright --version
 
+########################################################################
 #Folder
 cd /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
 cd /var/lib/jenkins/.cache/ms-playwright
 
+########################################################################
 #Xóa và cài lại node_modules và esbuild
 rm -rf node_modules package-lock.json yarn.lock
 npm install
 npm install esbuild --force
 ls -l node_modules/esbuild/bin/
 
+########################################################################
 # Kiểm tra thư mục làm việc
 ls -lah /var/lib/jenkins/workspace/
 
+########################################################################
 # Tìm kiếm file Jenkinsfile
 find / -type f -name "Jenkinsfile" 2>/dev/null
 du -ah ~ | grep "Jenkinsfile"
 
+########################################################################
 # Cài đặt Node.js 18
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt install -y nodejs
 
+########################################################################
 # Hoặc nếu dùng yarn
 yarn add ethers
 
+########################################################################
 # Hoặc nếu dùng npm
 npm install ethers
 
+########################################################################
 # Cài đặt Yarn
 npm uninstall -g yarn
 npm install -g yarn
 
+########################################################################
 # Cài đặt npm
 npm uninstall playwright
 npm install playwright@1.48.2
 
+########################################################################
 # Cài đặt Playwright và dependencies
 rm -rf node_modules yarn.lock
 yarn install
@@ -117,33 +128,40 @@ npx playwright install
 npx playwright install --with-deps
 npm install @playwright/test@latest @tenkeylabs/dappwright
 
+########################################################################
 # Xóa cài đặt Playwright và dependencies
 yarn remove @playwright/test @tenkeylabs/dappwright
 rm -rf node_modules package-lock.json yarn.lock
 npm uninstall @playwright/test @tenkeylabs/dappwright
 rm -rf node_modules package-lock.json yarn.lock
 
-
+########################################################################
 # Cài đặt Xvfb
 sudo apt-get install -y xvfb
 
+########################################################################
 # Gỡ cài đặt Xvfb
 sudo apt-get remove --purge -y xvfb
 sudo apt-get autoremove -y
 sudo apt-get clean
 
+########################################################################
 # Kiểm tra xem Xvfb có đang chạy không
 ps aux | grep Xvfb
 
+########################################################################
 #Trong Jenkinsfile, cập nhật command để chạy test như sau:
 xvfb-run --auto-servernum yarn test
 
+########################################################################
 # Kiểm tra log hệ thống của Jenkins
 sudo journalctl -u jenkins --no-pager | tail -n 50
 
+########################################################################
 # Kiểm tra logs trong thư mục Jenkins
 cat /var/log/jenkins/jenkins.log | tail -n 50
 
+########################################################################
 #Cài đặt Chromium vào thư mục cụ thể
 mkdir -p /var/lib/jenkins/.cache/ms-playwright/chromium-1148/
 cd /var/lib/jenkins/.cache/ms-playwright/chromium-1148/
@@ -155,7 +173,7 @@ mv chrome-linux /var/lib/jenkins/.cache/ms-playwright/chromium-1148/
 chmod -R 755 /var/lib/jenkins/.cache/ms-playwright/
 chown -R jenkins:jenkins /var/lib/jenkins/.cache/ms-playwright/
 chmod +x /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
-
+########################################################################
 ln -s chromium-1148/ chromium-1150
 
 
@@ -164,6 +182,7 @@ ln -s chromium-1148/ chromium-1150
 
 ## Error Jenkins
 ```bash
+########################################################################
 # stderr: error: unable to unlink old 'dist/assets/index-b6bb3e45.js': Permission denied
 # error: unable to unlink old 'dist/assets/index-dfec0afb.css': Permission denied
 sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
@@ -171,18 +190,42 @@ sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
 git reset --hard HEAD
 git clean -fd
 
+########################################################################
+# TimeoutError: browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event "page"
 #> |   await wallet.approve();
 sudo apt-get install -y xvfb
 
+########################################################################
 #Executable doesn't exist at /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 ln -s chromium-1148/ chromium-1150
 mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148
 
+########################################################################
 #Error: EACCES: permission denied, scandir '/tmp/dappwright/session/metamask/0'
+#Error: EACCES: permission denied, scandir '/tmp/dappwright/session/metamask/1'
+
 sudo chmod -R 777 /tmp/dappwright/session/
 sudo chmod -R 777 /tmp/dappwright/session/metamask
 
+########################################################################
 #npm error [Error: EACCES: permission denied, rename '/usr/lib/node_modules/yarn' -> '/usr/lib/node_modules/.yarn-LH7MXRbz'] 
 
+########################################################################
 #Error: browserContext.newPage: Target page, context or browser has been closed
+#Call log:
+#   [2m  - navigating to "chrome-extension://gadekpdjmpjjnnemgnhkbjgnjpdaakgh/home.html", waiting until "load"[22m
+
+//sudo apt-get update && sudo apt-get install -y x11-utils
+// Xvfb :99 -screen 0 1920x1080x24 &
+// export DISPLAY=:99
+// xdpyinfo -display :99 || (echo "❌ Xvfb failed to start" && exit 1)
+
+########################################################################
+# TimeoutError: browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event "page"
+#    > |             await wallet.reject();
+#    > |             await wallet.confirmTransaction();
+
+########################################################################
+#-bash: ./AIOZ_Finance.sh: Permission denied
+chmod +x AIOZ_Finance.sh
 ```

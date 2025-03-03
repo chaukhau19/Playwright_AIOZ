@@ -38,13 +38,14 @@ export default defineConfig({
       "--disable-features=IsolateOrigins,site-per-process", // Disable site isolation to avoid security errors
       "--ignore-certificate-errors", // Ignore SSL certificate errors
       "--disable-gpu", // Disable GPU to avoid graphical errors during tests
-      "--disable-extensions", // Disable browser extensions
+      // "--disable-extensions", // Disable browser extensions
       "--no-sandbox", // Disable sandbox to avoid permission errors in CI environments
-      "--disable-setuid-sandbox", // Disable setuid sandbox mode
+      // "--disable-setuid-sandbox", // Disable setuid sandbox mode
       // '--proxy-server=https://aiozswap-web.vercel.app/', // Set proxy server to test the website
       '--proxy-server=' + (process.env.PROXY_SERVER || ''), // Set proxy server to test the website
       "--disable-popup-blocking", // Disable popup blocking
       "--disable-infobars", // Disable info bars
+      "--disable-software-rasterizer", // Disable software rasterizer
       "--disable-backgrounding-occluded-windows", // Disable backgrounding occluded windows
       "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure", // Disable same-site cookies
     ],

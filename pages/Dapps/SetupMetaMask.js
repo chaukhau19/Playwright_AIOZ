@@ -20,7 +20,7 @@ export const test = baseTest.extend({
                 "--disable-features=IsolateOrigins,site-per-process",
                 "--ignore-certificate-errors",
                 "--disable-gpu",
-                "--disable-extensions", 
+                // "--disable-extensions", 
                 "--disable-popup-blocking",
                 "--disable-infobars",
                 "--disable-backgrounding-occluded-windows",

@@ -108,6 +108,7 @@ export class FunctionPage {
     }
 
     async Confirm_Swap_Button() {
+        await this.page.waitForTimeout(3000);
         try {
             await this.page.getByTestId('confirm-swap-button').click();
         } catch (error) {

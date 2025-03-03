@@ -51,23 +51,24 @@ jobs:
 
       - name: Check & Rename Playwright Chromium
         run: |
-          echo "🔍 Checking Playwright Chromium path..."
+          Write-Host "🔍 Checking Playwright Chromium path..."
           
           # Lấy phiên bản Chromium
-          CHROMIUM_VERSION=$(npx playwright show-browser chromium | awk -F '/' '{print $NF}')
-          CHROMIUM_PATH=$(npx playwright show-browser chromium)
-          
-          echo "Detected Chromium Version: $CHROMIUM_VERSION"
-          echo "Chromium Path: $CHROMIUM_PATH"
+          $CHROMIUM_PATH = npx playwright show-browser chromium
+          $CHROMIUM_VERSION = $CHROMIUM_PATH -split '/' | Select-Object -Last 1
+
+          Write-Host "Detected Chromium Version: $CHROMIUM_VERSION"
+          Write-Host "Chromium Path: $CHROMIUM_PATH"
 
           # Kiểm tra nếu là chromium-1155 thì đổi tên thành chromium-1148
-          if [[ "$CHROMIUM_VERSION" == "chromium-1155" ]]; then
-            echo "🔄 Renaming Chromium-1155 to Chromium-1148..."
-            mv "$CHROMIUM_PATH" "$(dirname "$CHROMIUM_PATH")/chromium-1148"
-            echo "✅ Rename completed!"
-          else
-            echo "⚠️ Chromium version is not 1155, no changes made."
-          fi
+          if ($CHROMIUM_VERSION -eq "chromium-1155") {
+            Write-Host "🔄 Renaming Chromium-1155 to Chromium-1148..."
+            Rename-Item -Path "$CHROMIUM_PATH" -NewName "chromium-1148"
+            Write-Host "✅ Rename completed!"
+          } else {
+            Write-Host "⚠️ Chromium version is not 1155, no changes made."
+          }
+
 
       - name: Run Playwright tests
         # working-directory: ./PLAYWRIGHT_AIOZ

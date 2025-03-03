@@ -49,6 +49,26 @@ jobs:
         # working-directory: ./PLAYWRIGHT_AIOZ
         run: dir
 
+      - name: Check & Rename Playwright Chromium
+        run: |
+          echo "🔍 Checking Playwright Chromium path..."
+          
+          # Lấy phiên bản Chromium
+          CHROMIUM_VERSION=$(npx playwright show-browser chromium | awk -F '/' '{print $NF}')
+          CHROMIUM_PATH=$(npx playwright show-browser chromium)
+          
+          echo "Detected Chromium Version: $CHROMIUM_VERSION"
+          echo "Chromium Path: $CHROMIUM_PATH"
+
+          # Kiểm tra nếu là chromium-1155 thì đổi tên thành chromium-1148
+          if [[ "$CHROMIUM_VERSION" == "chromium-1155" ]]; then
+            echo "🔄 Renaming Chromium-1155 to Chromium-1148..."
+            mv "$CHROMIUM_PATH" "$(dirname "$CHROMIUM_PATH")/chromium-1148"
+            echo "✅ Rename completed!"
+          else
+            echo "⚠️ Chromium version is not 1155, no changes made."
+          fi
+
       - name: Run Playwright tests
         # working-directory: ./PLAYWRIGHT_AIOZ
         run: yarn test:AllFixed --workers=1

@@ -11,58 +11,51 @@ on:
     - cron: '40 22 * * *' # Runs at 10:40 PM UTC daily
 
 env:
-  DEPLOY_ENV: 'Local' # Thay đổi giá trị này thành 'Test', 'Staging', 'Dev', hoặc 'Local' tùy theo nhu cầu
+  DEPLOY_ENV: 'Local' 
 
 jobs:
-  # Job for PLAYWRIGHT_AIOZ
   build-and-test-playwright:
     runs-on: windows-latest
-    steps:
-      # Checkout code
-      - name: Checkout code
-        uses: actions/checkout@v3
+    permissions:
+      contents: write
+      actions: write
+      packages: write
 
-      # Setup Node.js
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # Install Dependencies
       - name: Install Dependencies
         working-directory: ./PLAYWRIGHT_AIOZ
         run: |
-          yarn install
           npm install -g yarn
-          yarn playwright install
+          yarn install
+          npx playwright install --with-deps
           yarn add @playwright/test@latest @tenkeylabs/dappwright
 
-      # Check versions
       - name: Check versions
         run: |
           node -v
           npm -v
           yarn -v
-          playwright --version
-          npm playwright --version
-          yarn playwright --version
+          npx playwright --version
 
-      # List directory contents
       - name: List directory contents
         working-directory: ./PLAYWRIGHT_AIOZ
-        run: |
-          dir
+        run: dir
 
-      # Run Playwright tests
-      - name: Run Playwright tests for PLAYWRIGHT_AIOZ
+      - name: Run Playwright tests
         working-directory: ./PLAYWRIGHT_AIOZ
-        run: |
-          yarn test:AllFixed --workers=1
+        run: yarn test:AllFixed --workers=1
 
-      # Archive test results
-      - name: Archive test results for PLAYWRIGHT_AIOZ
+      - name: Archive test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-results-playwright_aioz
           path: ./PLAYWRIGHT_AIOZ/playwright-report/

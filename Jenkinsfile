@@ -128,13 +128,22 @@ pipeline {
             steps {
                 script {
                     try {
-                        def testResult = sh(script: "./${FILE_SH}", returnStatus: true)
 
+                        def testResult = 1
+                        if (isUnix()) {
+                            echo "📋 Running tests using ${FILE_SH}"
+                            sh "chmod +x ${FILE_SH}"
+                            testResult = sh(script: "./${FILE_SH}", returnStatus: true)
+                        } else {
+                            echo "📋 Running tests using ${FILE_BAT}"
+                            testResult = bat(script: "${FILE_BAT}", returnStatus: true)
+                        }
+                        
                         if (testResult == 0) {
-                            echo "✅ All tests passed"
+                            echo "✅ Tests completed successfully"
                             env.TEST_SUCCESS = 'true'
                         } else {
-                            echo "❌ Some tests failed. Exit code: ${testResult}"
+                            echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
                             env.TEST_SUCCESS = 'false'
                         }
                     } catch (Exception e) {
@@ -144,7 +153,6 @@ pipeline {
                 }
             }
         }
-
 
 
         stage('Archive Test Results') {

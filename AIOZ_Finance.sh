@@ -1,20 +1,20 @@
 #!/bin/bash
-# set -e  
+set -e  
 
-# # Khởi chạy Xvfb trong nền
-# Xvfb :99 -ac &  
-# XVFB_PID=$!  
-# export DISPLAY=:99
-# sleep 2  
+# Khởi chạy Xvfb trong nền
+Xvfb :99 -ac &  
+XVFB_PID=$!  
+export DISPLAY=:99
+sleep 2  
 
-# # Đảm bảo Xvfb bị tắt khi script kết thúc
-# cleanup() {
-#     echo "Stopping Xvfb..."
-#     kill $XVFB_PID || true
-# }
-# trap cleanup EXIT  
+# Đảm bảo Xvfb bị tắt khi script kết thúc
+cleanup() {
+    echo "Stopping Xvfb..."
+    kill $XVFB_PID || true
+}
+trap cleanup EXIT  
 
-# # Chạy Playwright test
+# Chạy Playwright test
 # yarn test:AllFixed --workers=1
 
 

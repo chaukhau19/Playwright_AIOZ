@@ -192,6 +192,8 @@ sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance
 sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
 git reset --hard HEAD
 git clean -fd
+#######
+OR DELETE Automation_AIOZ_Finance_main
 
 ########################################################################
 # TimeoutError: browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event "page"
@@ -210,6 +212,8 @@ mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/m
 sudo chmod -R 777 /tmp/dappwright/session/
 sudo chmod -R 777 /tmp/dappwright/session/metamask
 
+chmod -R 777 /tmp/dappwright/session/
+chmod -R 777 /tmp/dappwright/session/metamask
 ########################################################################
 #npm error [Error: EACCES: permission denied, rename '/usr/lib/node_modules/yarn' -> '/usr/lib/node_modules/.yarn-LH7MXRbz'] 
 
@@ -240,5 +244,10 @@ Mở file src/walletExtension.ts, tìm dòng:
 import { Eip1193Provider, Provider } from "ethers/types/providers";
 Cách sửa đúng trong ethers v6:
 Thay thế bằng: import { BrowserProvider, Eip1193Provider } from "ethers";
+
+########################################################################
+# Looks like you launched a headed browser without having a XServer running.                     
+# Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright.
+
 
 ```

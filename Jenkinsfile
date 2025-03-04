@@ -111,15 +111,15 @@ pipeline {
         stage('Fix Chromium') {
             steps {
                 script {
-                    def chromiumPath = "/var/lib/jenkins/.cache/ms-playwright/"
-                    def latestChromium = sh(script: "ls -d ${chromiumPath}chromium-* | sort -r | head -n 1", returnStdout: true).trim()
-                    if (latestChromium) {
-                        def newChromium = latestChromium.replaceAll('-[0-9]+$', '-1148')
-                        sh "mv ${latestChromium} ${newChromium}"
-                        echo "✅ Chromium moved to ${newChromium}"
-                    } else {
-                        echo "⚠️ No Chromium version found to move."
-                    }
+                    sh """
+                        if [ -d "/var/lib/jenkins/.cache/ms-playwright/chromium-1155" ]; then
+                            echo "🔄 Moving Chromium folder..."
+                            mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148
+                            echo "✅ Moved Chromium successfully."
+                        else
+                            echo "⚠️ Chromium-1155 not found. Skipping move."
+                        fi
+                    """
                 }
             }
         }

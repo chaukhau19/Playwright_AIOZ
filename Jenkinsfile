@@ -18,13 +18,13 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh """
-                            sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
-                            sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
-                            cd /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
-                            git reset --hard HEAD
-                            git clean -fd
-                        """
+                        // sh """
+                        //     sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
+                        //     sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
+                        //     cd /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
+                        //     git reset --hard HEAD
+                        //     git clean -fd
+                        // """
 
                         sh "git fetch origin ${BRANCH_NAME}"
                         def latestRemoteCommit = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()

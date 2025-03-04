@@ -126,11 +126,6 @@ pipeline {
                         else
                             echo "⚠️ Chromium-1155 not found. Skipping move."
                         fi
-                        
-                        echo "🔧 Setting permissions for Dappwright session..."
-                        sudo chmod -R 777 /tmp/dappwright/session/
-                        sudo chmod -R 777 /tmp/dappwright/session/metamask
-                        echo "✅ Permissions updated for Dappwright session."
                     """
                 }
             }

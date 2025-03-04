@@ -128,22 +128,13 @@ pipeline {
             steps {
                 script {
                     try {
+                        def testResult = sh(script: "./${FILE_SH}", returnStatus: true)
 
-                        def testResult = 1
-                        if (isUnix()) {
-                            echo "📋 Running tests using ${FILE_SH}"
-                            sh "chmod +x ${FILE_SH}"
-                            testResult = sh(script: "./${FILE_SH}", returnStatus: true)
-                        } else {
-                            echo "📋 Running tests using ${FILE_BAT}"
-                            testResult = bat(script: "${FILE_BAT}", returnStatus: true)
-                        }
-                        
                         if (testResult == 0) {
-                            echo "✅ Tests completed successfully"
+                            echo "✅ All tests passed"
                             env.TEST_SUCCESS = 'true'
                         } else {
-                            echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
+                            echo "❌ Some tests failed. Exit code: ${testResult}"
                             env.TEST_SUCCESS = 'false'
                         }
                     } catch (Exception e) {
@@ -153,6 +144,7 @@ pipeline {
                 }
             }
         }
+
 
 
         stage('Archive Test Results') {
@@ -182,11 +174,9 @@ pipeline {
                     if (env.TEST_SUCCESS == 'true') {
                         currentBuild.result = 'SUCCESS'
                         echo "🎉 Build finished successfully."
-                    } else if (currentBuild.result == null) {
-                        currentBuild.result = 'UNSTABLE'
-                        echo "⚠️ Build finished with status: UNSTABLE (tests ran but with issues)."
                     } else {
-                        echo "🛑 Build finished with status: ${currentBuild.result}"
+                        currentBuild.result = 'FAILURE'  
+                        echo "🛑 Build finished with status: FAILURE (some tests failed)."
                     }
                 } catch (Exception e) {
                     echo "⚠️ Error in post-processing: ${e.getMessage()}"

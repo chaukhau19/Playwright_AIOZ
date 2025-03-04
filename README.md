@@ -255,4 +255,8 @@ Thay thế bằng: import { BrowserProvider, Eip1193Provider } from "ethers";
 ./AIOZ_Finance.sh --disable-gpu
 export DISPLAY=:0
 
+########################################################################
+# Error: EBUSY: resource busy or locked, unlink 'C:\Users\BVSSH_~1\AppData\Local\Temp\dappwright\session\metamask\1\Default\Affiliation Database'
+Restart PC
+
 ```

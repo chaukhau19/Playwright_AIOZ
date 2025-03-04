@@ -35,18 +35,18 @@ test.afterEach(async ({ page }) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// test("Swap with different input values", { timeout: 180000 }, async ({ page, wallet }) => {
-//   console.log("Swap with different input values");
-//   for (const inputValue of swapconfig.InputValues) {
-//     try {
-//       await validSwapPage.SwapWithInputValue(wallet, inputValue);
-//       await page.waitForTimeout(3000);
-//       await page.reload();
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// });
+test("Swap with different input values", { timeout: 180000 }, async ({ page, wallet }) => {
+  console.log("Swap with different input values");
+  for (const inputValue of swapconfig.InputValues) {
+    try {
+      await validSwapPage.SwapWithInputValue(wallet, inputValue);
+      await page.waitForTimeout(3000);
+      await page.reload();
+    } catch (error) {
+      throw error;
+    }
+  }
+});
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,22 +56,22 @@ test("Swap with half value", async ({ wallet }) => {
   // await functionPage.TimeoutTest(validSwapPage.SwapWithValueHalf.bind(validSwapPage), wallet);
 });
 
-// test("Swap while network is down", async ({ wallet }) => { 
-//   console.log("Swap while network is down");
-//   await functionPage.TimeoutTest(validSwapPage.SwapWithNetworkIssue.bind(validSwapPage), wallet);
-// });
+test("Swap while network is down", async ({ wallet }) => { 
+  console.log("Swap while network is down");
+  await functionPage.TimeoutTest(validSwapPage.SwapWithNetworkIssue.bind(validSwapPage), wallet);
+});
 
-// test("Swap with long pending time", async ({ wallet }) => { 
-//   console.log("Swap with long pending time");
-//   await functionPage.TimeoutTest(validSwapPage.SwapWithLongPendingTime.bind(validSwapPage), wallet);
-// });
+test("Swap with long pending time", async ({ wallet }) => { 
+  console.log("Swap with long pending time");
+  await functionPage.TimeoutTest(validSwapPage.SwapWithLongPendingTime.bind(validSwapPage), wallet);
+});
 
-// test("Swap with max value", async ({ wallet }) => { 
-//   console.log("Swap with max value");
-//   await functionPage.TimeoutTest(validSwapPage.SwapWithValueMax.bind(validSwapPage), wallet);
-//   console.log("Swap with back half value");
-//   await functionPage.TimeoutTest(validSwapPage.BackTokenHalf.bind(validSwapPage), wallet);
-// });
+test("Swap with max value", async ({ wallet }) => { 
+  console.log("Swap with max value");
+  await functionPage.TimeoutTest(validSwapPage.SwapWithValueMax.bind(validSwapPage), wallet);
+  console.log("Swap with back half value");
+  await functionPage.TimeoutTest(validSwapPage.BackTokenHalf.bind(validSwapPage), wallet);
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

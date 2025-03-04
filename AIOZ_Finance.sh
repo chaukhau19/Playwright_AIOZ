@@ -14,7 +14,7 @@ cleanup() {
 }
 trap cleanup EXIT  
 
-yarn test:Swap_AIOZtoSTRK_Invalid --workers=1
+yarn test:Swap --workers=1
 
 
 

@@ -8,7 +8,7 @@ echo Checking Yarn version...
 yarn --version
 
 echo Running Playwright test...
-call yarn test:ConnectMetaMask
+call yarn test:Swap --workers=1
 
 pause
 

@@ -14,16 +14,12 @@ cleanup() {
 }
 trap cleanup EXIT  
 
-# Chạy Playwright test
-# yarn test:AllFixed --workers=1
-
-
 yarn test:Swap_AIOZtoSTRK_Invalid --workers=1
 
 
 
 
-
+##############################################################
 # #!/bin/bash
 # set -e 
 

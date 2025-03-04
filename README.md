@@ -250,4 +250,9 @@ Thay thế bằng: import { BrowserProvider, Eip1193Provider } from "ethers";
 # Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright.
 
 
+########################################################################
+# libEGL warning: failed to open /dev/dri/card0: Permission denied
+./AIOZ_Finance.sh --disable-gpu
+export DISPLAY=:0
+
 ```

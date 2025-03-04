@@ -18,13 +18,6 @@ pipeline {
             steps {
                 script {
                     try {
-                        // sh """
-                        //     sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
-                        //     sudo chmod -R 755 /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
-                        //     cd /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main
-                        //     git reset --hard HEAD
-                        //     git clean -fd
-                        // """
 
                         sh "git fetch origin ${BRANCH_NAME}"
                         def latestRemoteCommit = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()
@@ -118,15 +111,15 @@ pipeline {
         stage('Fix Chromium') {
             steps {
                 script {
-                    sh """
-                        if [ -d "/var/lib/jenkins/.cache/ms-playwright/chromium-1155" ]; then
-                            echo "🔄 Moving Chromium folder..."
-                            mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148
-                            echo "✅ Moved Chromium successfully."
-                        else
-                            echo "⚠️ Chromium-1155 not found. Skipping move."
-                        fi
-                    """
+                    def chromiumPath = "/var/lib/jenkins/.cache/ms-playwright/"
+                    def latestChromium = sh(script: "ls -d ${chromiumPath}chromium-* | sort -r | head -n 1", returnStdout: true).trim()
+                    if (latestChromium) {
+                        def newChromium = latestChromium.replaceAll('-[0-9]+$', '-1148')
+                        sh "mv ${latestChromium} ${newChromium}"
+                        echo "✅ Chromium moved to ${newChromium}"
+                    } else {
+                        echo "⚠️ No Chromium version found to move."
+                    }
                 }
             }
         }
@@ -135,15 +128,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        // sh """
-                        // sudo apt-get update && sudo apt-get install -y x11-utils
 
-                        // Xvfb :99 -screen 0 1920x1080x24 &
-                        // export DISPLAY=:99
-
-                        // xdpyinfo -display :99 || (echo "❌ Xvfb failed to start" && exit 1)
-                        // """
-                        
                         def testResult = 1
                         if (isUnix()) {
                             echo "📋 Running tests using ${FILE_SH}"
@@ -173,19 +158,16 @@ pipeline {
         stage('Archive Test Results') {
             steps {
                 script {
-                    dir(SERVER_PATH) {
-                        try {
-                            def resultsExist = sh(script: "find playwright-report/ -type f | wc -l", returnStdout: true).trim()
-                            if (resultsExist != '0') {
-                                echo "📊 Found test results to archive"
-                                archiveArtifacts artifacts: "playwright-report/**/*", allowEmptyArchive: true
-                                echo "✅ Test results archived successfully"
-                            } else {
-                                echo "⚠️ No test results found to archive"
-                            }
-                        } catch (Exception e) {
-                            echo "⚠️ Error archiving test results: ${e.getMessage()}"
+                    try {
+                        def resultsExist = sh(script: "find playwright-report/ -type f | wc -l", returnStdout: true).trim()
+                        if (resultsExist != '0') {
+                            archiveArtifacts artifacts: "playwright-report/**/*", allowEmptyArchive: true
+                            echo "✅ Test results archived successfully"
+                        } else {
+                            echo "⚠️ No test results found to archive"
                         }
+                    } catch (Exception e) {
+                        echo "⚠️ Error archiving test results: ${e.getMessage()}"
                     }
                 }
             }
@@ -196,14 +178,18 @@ pipeline {
         always {
             script {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
-                if (env.TEST_SUCCESS == 'true') {
-                    currentBuild.result = 'SUCCESS'
-                    echo "🎉 Build finished with status: SUCCESS"
-                } else if (currentBuild.result == null) {
-                    currentBuild.result = 'UNSTABLE'
-                    echo "⚠️ Build finished with status: UNSTABLE (tests ran but with issues)"
-                } else {
-                    echo "🛑 Build finished with status: ${currentBuild.result}"
+                try {
+                    if (env.TEST_SUCCESS == 'true') {
+                        currentBuild.result = 'SUCCESS'
+                        echo "🎉 Build finished successfully."
+                    } else if (currentBuild.result == null) {
+                        currentBuild.result = 'UNSTABLE'
+                        echo "⚠️ Build finished with status: UNSTABLE (tests ran but with issues)."
+                    } else {
+                        echo "🛑 Build finished with status: ${currentBuild.result}"
+                    }
+                } catch (Exception e) {
+                    echo "⚠️ Error in post-processing: ${e.getMessage()}"
                 }
             }
         }

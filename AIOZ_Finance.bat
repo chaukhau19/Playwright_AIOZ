@@ -1,9 +1,16 @@
+@echo off
+@REM cd /d C:\Worker_KhauNTC\Github\Playwright_AIOZ
+
+echo Checking Yarn location...
 where yarn
+
+echo Checking Yarn version...
 yarn --version
-call yarn test:ConnectMetaMask --workers=1
 
+echo Running Playwright test...
+call yarn test:ConnectMetaMask
 
-
+pause
 
 
 

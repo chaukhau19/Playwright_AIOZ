@@ -1,19 +1,6 @@
-@echo off
-setlocal enabledelayedexpansion
-
-:: Khởi động Xvfb (không cần trên Windows)
-:: set -e không có trong Windows, thay bằng `if errorlevel 1 exit /b 1`
-
-:: Thiết lập Display giả lập (bỏ qua trên Windows)
-set DISPLAY=:99
-
-:: Chạy lệnh kiểm thử
-yarn test:ConnectMetaMask --workers=1
-
-:: Dừng Xvfb (không áp dụng trên Windows)
-
-:: Đợi người dùng nhấn Enter để thoát
-pause
+where yarn
+yarn --version
+call yarn test:ConnectMetaMask --workers=1
 
 
 

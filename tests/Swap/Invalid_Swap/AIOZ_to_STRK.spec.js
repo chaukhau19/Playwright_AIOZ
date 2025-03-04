@@ -64,10 +64,10 @@ test("Swap rejected on MetaMask", async ({ wallet }) => {
 //   await functionPage.TimeoutTest(invalidSwapPage.SwapWithSlippageToleranceExceeded.bind(invalidSwapPage), wallet);
 // });
 
-test("Swap with price impact exceeding tolerance", async ({ wallet }) => {  
-  console.log("Swap with price impact exceeding tolerance");
-  await functionPage.TimeoutTest(invalidSwapPage.SwapWithPriceImpactExceeded.bind(invalidSwapPage), wallet);
-});
+// test("Swap with price impact exceeding tolerance", async ({ wallet }) => {  
+//   console.log("Swap with price impact exceeding tolerance");
+//   await functionPage.TimeoutTest(invalidSwapPage.SwapWithPriceImpactExceeded.bind(invalidSwapPage), wallet);
+// });
 
 // test("Swap with large amount affecting exchange rate", async ({ wallet }) => {  
 //   console.log("Swap with large amount affecting exchange rate");

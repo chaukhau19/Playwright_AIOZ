@@ -35,7 +35,7 @@ yarn test:ConnectCoinBase
 yarn test:ConnectMetaMask && yarn test:ConnectCoinBase
 ```
 
-## Running the dApp
+###### Running the dApp ######
 
 In order to run the test dApp, it requires running both the application and local blockchain which requires two terminal sessions.
 
@@ -44,7 +44,7 @@ yarn dev # first terminal
 yarn chain # second terminal
 ```
 
-## Additional Information
+###### Additional Information ######
 
 ```bash
 C:\Worker KhauNTC\Github\Playwright_AIOZ\playwright-report
@@ -56,7 +56,7 @@ Bắt đầu với số dư 500 mỗi loại, thực hiện các giao dịch đ�
 Xác minh rằng hệ thống xử lý đúng logic giao dịch và số dư phản ánh chính xác sau mỗi bước
 ```
 
-## Additional Jenkins
+###### Additional Jenkins ######
 ```bash
 ########################################################################
 # Kiểm tra phiên bản
@@ -180,7 +180,10 @@ ln -s chromium-1148/ chromium-1150
 ```
 
 
-## Error Jenkins
+
+
+
+###### Error Jenkins ######
 ```bash
 ########################################################################
 # stderr: error: unable to unlink old 'dist/assets/index-b6bb3e45.js': Permission denied
@@ -224,8 +227,18 @@ sudo chmod -R 777 /tmp/dappwright/session/metamask
 # TimeoutError: browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event "page"
 #    > |             await wallet.reject();
 #    > |             await wallet.confirmTransaction();
+changed headless: true to headless: false on setup metamask
 
 ########################################################################
 #-bash: ./AIOZ_Finance.sh: Permission denied
 chmod +x AIOZ_Finance.sh
+
+########################################################################
+# src/walletExtension.ts:2:43 - error TS2307: Cannot find module 'ethers/types/providers' or its corresponding type declarations.
+# 2 import { Eip1193Provider, Provider } from "ethers/types/providers";
+Mở file src/walletExtension.ts, tìm dòng:
+import { Eip1193Provider, Provider } from "ethers/types/providers";
+Cách sửa đúng trong ethers v6:
+Thay thế bằng: import { BrowserProvider, Eip1193Provider } from "ethers";
+
 ```

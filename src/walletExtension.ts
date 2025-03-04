@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { Eip1193Provider, Provider } from "ethers/types/providers";
+import { Eip1193Provider, Provider } from "ethers";
 import counterContract from "./counterContract.json";
 
 declare global {

@@ -81,7 +81,7 @@ jobs:
       - name: Run Playwright tests
         run: |
           export DISPLAY=:99
-          yarn test:Swap --workers=1
+          yarn test:ConnectMetaMask --workers=1
 
       - name: Archive test results
         if: always()

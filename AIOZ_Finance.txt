@@ -1,0 +1,29 @@
+call yarn test:ConnectMetaMask --workers=1 
+call yarn test:DisconnectMetaMask --workers=1 
+call yarn test:SwitchNetworkMetaMask --workers=1
+
+call yarn test:ConnectCoinBase --workers=1
+call yarn test:DisconnectCoinBase --workers=1
+call yarn test:SwitchNetworkCoinBase --workers=1
+
+call yarn test:Swap_AIOZtoUSDT_Valid --workers=1
+call yarn test:Swap_AIOZtoSTRK_Valid --workers=1
+call yarn test:Swap_STRKtoAIOZ_Valid --workers=1
+call yarn test:Swap_USDTtoAIOZ_Valid --workers=1
+call yarn test:Swap_AIOZtoWAIOZ_Valid --workers=1
+call yarn test:Swap_WAIOZtoAIOZ_Valid --workers=1
+
+call yarn test:Swap_AIOZtoSTRK_Invalid --workers=1
+call yarn test:Swap_AIOZtoUSDT_Invalid --workers=1
+call yarn test:Swap_STRKtoAIOZ_Invalid --workers=1
+call yarn test:Swap_USDTtoAIOZ_Invalid --workers=1
+
+call yarn test:Position_AIOZandSTRK_Valid --workers=1
+call yarn test:Position_AIOZandUSDT_Valid --workers=1
+
+call yarn test:AllFixed --workers=1
+
+call yarn test:Swap --workers=1
+call yarn test:Position --workers=1
+
+call yarn test:All --workers=1

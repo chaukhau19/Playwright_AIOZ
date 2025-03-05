@@ -76,11 +76,8 @@ jobs:
           }
         shell: pwsh
 
-      - name: Grant execute permission
-        run: chmod +x AIOZ_Finance.sh
-
       - name: Run Playwright tests
-        run: ./AIOZ_Finance.sh
+        run: yarn test:Swap --workers=1
 
       - name: Archive test results
         if: always()

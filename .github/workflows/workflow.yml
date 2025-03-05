@@ -78,7 +78,7 @@ jobs:
 
       - name: Run Playwright tests
         # working-directory: ./PLAYWRIGHT_AIOZ
-        run: yarn test:AllFixed --workers=1
+        run: ./AIOZ_Finance.bat
 
       - name: Archive test results
         if: always()

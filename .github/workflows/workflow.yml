@@ -76,9 +76,11 @@ jobs:
           }
         shell: pwsh
 
+      - name: Grant execute permission
+        run: chmod +x AIOZ_Finance.sh
+
       - name: Run Playwright tests
-        # working-directory: ./PLAYWRIGHT_AIOZ
-        run: ./AIOZ_Finance.bat
+        run: ./AIOZ_Finance.sh
 
       - name: Archive test results
         if: always()

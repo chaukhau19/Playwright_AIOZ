@@ -1,4 +1,4 @@
-name: Playwright CI-CD 
+name: Playwright CI-CD
 
 on:
   push:
@@ -15,7 +15,7 @@ env:
 
 jobs:
   build-and-test-playwright:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: write
@@ -31,7 +31,6 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        # working-directory: ./PLAYWRIGHT_AIOZ
         run: |
           npm install -g yarn
           yarn install
@@ -46,38 +45,43 @@ jobs:
           npx playwright --version
 
       - name: List directory contents
-        # working-directory: ./PLAYWRIGHT_AIOZ
-        run: dir
+        run: ls -la
 
       - name: Rename Playwright Chromium
         run: |
-          $CHROMIUM_PATH = "C:\Users\runneradmin\AppData\Local\ms-playwright"
-          $OLD_NAME1 = "chromium-1155"
-          $NEW_NAME1 = "chromium-1148"
-          $OLD_NAME2 = "chromium_headless_shell-1155"
-          $NEW_NAME2 = "chromium_headless_shell-1148"
+          CHROMIUM_PATH="$HOME/.cache/ms-playwright"
+          OLD_NAME1="chromium-1155"
+          NEW_NAME1="chromium-1148"
+          OLD_NAME2="chromium_headless_shell-1155"
+          NEW_NAME2="chromium_headless_shell-1148"
 
-          Write-Host "🔍 Checking if $OLD_NAME1 exists..."
-          if (Test-Path "$CHROMIUM_PATH\$OLD_NAME1") {
-            Write-Host "🔄 Renaming $OLD_NAME1 to $NEW_NAME1..."
-            Rename-Item -Path "$CHROMIUM_PATH\$OLD_NAME1" -NewName $NEW_NAME1
-            Write-Host "✅ Rename completed!"
-          } else {
-            Write-Host "⚠️ $OLD_NAME1 not found, skipping rename."
-          }
+          echo "🔍 Checking if $OLD_NAME1 exists..."
+          if [ -d "$CHROMIUM_PATH/$OLD_NAME1" ]; then
+            echo "🔄 Renaming $OLD_NAME1 to $NEW_NAME1..."
+            mv "$CHROMIUM_PATH/$OLD_NAME1" "$CHROMIUM_PATH/$NEW_NAME1"
+            echo "✅ Rename completed!"
+          else
+            echo "⚠️ $OLD_NAME1 not found, skipping rename."
+          fi
 
-          Write-Host "🔍 Checking if $OLD_NAME2 exists..."
-          if (Test-Path "$CHROMIUM_PATH\$OLD_NAME2") {
-            Write-Host "🔄 Renaming $OLD_NAME2 to $NEW_NAME2..."
-            Rename-Item -Path "$CHROMIUM_PATH\$OLD_NAME2" -NewName $NEW_NAME2
-            Write-Host "✅ Rename completed!"
-          } else {
-            Write-Host "⚠️ $OLD_NAME2 not found, skipping rename."
-          }
-        shell: pwsh
+          echo "🔍 Checking if $OLD_NAME2 exists..."
+          if [ -d "$CHROMIUM_PATH/$OLD_NAME2" ]; then
+            echo "🔄 Renaming $OLD_NAME2 to $NEW_NAME2..."
+            mv "$CHROMIUM_PATH/$OLD_NAME2" "$CHROMIUM_PATH/$NEW_NAME2"
+            echo "✅ Rename completed!"
+          else
+            echo "⚠️ $OLD_NAME2 not found, skipping rename."
+          fi
+
+      - name: Start Xvfb
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb
+          Xvfb :99 -ac & echo "Xvfb started"
 
       - name: Run Playwright tests
-        run: yarn test:Swap --workers=1
+        run: |
+          export DISPLAY=:99
+          yarn test:Swap --workers=1
 
       - name: Archive test results
         if: always()
@@ -86,61 +90,45 @@ jobs:
           name: playwright-results-playwright_aioz
           path: ./playwright-report/
 
-      # Deploy to Test Environment for PLAYWRIGHT_AIOZ
       - name: Deploy to Test Environment for PLAYWRIGHT_AIOZ
         if: env.DEPLOY_ENV == 'Test' && success()
-        shell: pwsh
         env:
           DEPLOY_HOST: ${{ secrets.TEST_DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.TEST_DEPLOY_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          if (-not (Test-Path -Path "$env:USERPROFILE/.ssh")) {
-            New-Item -Path "$env:USERPROFILE/.ssh" -ItemType Directory
-          }
-          $env:SSH_PRIVATE_KEY | Out-File -FilePath "$env:USERPROFILE/.ssh/id_rsa" -Encoding ascii
-          icacls "$env:USERPROFILE/.ssh/id_rsa" /inheritance:r
-          icacls "$env:USERPROFILE/.ssh/id_rsa" /grant:r "${env:USERNAME}:(R,W)"
-          ssh-keyscan -H $env:DEPLOY_HOST | Out-File -FilePath "$env:USERPROFILE/.ssh/known_hosts" -Append
-          ssh -i "$env:USERPROFILE/.ssh/id_rsa" -o StrictHostKeyChecking=no $env:DEPLOY_USER@$env:DEPLOY_HOST "cd $env:GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          ssh $DEPLOY_USER@$DEPLOY_HOST "cd $GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
 
-      # Deploy to Staging Environment for PLAYWRIGHT_AIOZ
       - name: Deploy to Staging Environment for PLAYWRIGHT_AIOZ
         if: env.DEPLOY_ENV == 'Staging' && success()
-        shell: pwsh
         env:
           DEPLOY_HOST: ${{ secrets.STAGING_DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.STAGING_DEPLOY_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          if (-not (Test-Path -Path "$env:USERPROFILE/.ssh")) {
-            New-Item -Path "$env:USERPROFILE/.ssh" -ItemType Directory
-          }
-          $env:SSH_PRIVATE_KEY | Out-File -FilePath "$env:USERPROFILE/.ssh/id_rsa" -Encoding ascii
-          icacls "$env:USERPROFILE/.ssh/id_rsa" /inheritance:r
-          icacls "$env:USERPROFILE/.ssh/id_rsa" /grant:r "${env:USERNAME}:(R,W)"
-          ssh-keyscan -H $env:DEPLOY_HOST | Out-File -FilePath "$env:USERPROFILE/.ssh/known_hosts" -Append
-          ssh -i "$env:USERPROFILE/.ssh/id_rsa" -o StrictHostKeyChecking=no $env:DEPLOY_USER@$env:DEPLOY_HOST "cd $env:GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          ssh $DEPLOY_USER@$DEPLOY_HOST "cd $GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
 
-      # Deploy to Dev Environment for PLAYWRIGHT_AIOZ
       - name: Deploy to Dev Environment for PLAYWRIGHT_AIOZ
         if: env.DEPLOY_ENV == 'Dev' && success()
-        shell: pwsh
         env:
           DEPLOY_HOST: ${{ secrets.DEV_DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEV_DEPLOY_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          if (-not (Test-Path -Path "$env:USERPROFILE/.ssh")) {
-            New-Item -Path "$env:USERPROFILE/.ssh" -ItemType Directory
-          }
-          $env:SSH_PRIVATE_KEY | Out-File -FilePath "$env:USERPROFILE/.ssh/id_rsa" -Encoding ascii
-          icacls "$env:USERPROFILE/.ssh/id_rsa" /inheritance:r
-          icacls "$env:USERPROFILE/.ssh/id_rsa" /grant:r "${env:USERNAME}:(R,W)"
-          ssh-keyscan -H $env:DEPLOY_HOST | Out-File -FilePath "$env:USERPROFILE/.ssh/known_hosts" -Append
-          ssh -i "$env:USERPROFILE/.ssh/id_rsa" -o StrictHostKeyChecking=no $env:DEPLOY_USER@$env:DEPLOY_HOST "cd $env:GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          ssh $DEPLOY_USER@$DEPLOY_HOST "cd $GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
 
-      # Deploy to Local Environment for PLAYWRIGHT_AIOZ
       - name: Deploy to Local Environment for PLAYWRIGHT_AIOZ
         if: env.DEPLOY_ENV == 'Local' && success()
         env:
@@ -148,7 +136,6 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          # Add your local deployment steps here
           echo "Deploying to local environment for PLAYWRIGHT_AIOZ"
-          echo "DEPLOY_HOST: $env:DEPLOY_HOST"
-          echo "DEPLOY_USER: $env:DEPLOY_USER"
+          echo "DEPLOY_HOST: $DEPLOY_HOST"
+          echo "DEPLOY_USER: $DEPLOY_USER"

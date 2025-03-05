@@ -20,9 +20,7 @@ export class ConnectWalletMetaMaskPage {
         try {
             await this.functionPage.gotoURL();
             await this.functionPage.Connect_Wallet_MetaMask();
-            console.log("Approving wallet connection...");
             await wallet.approve();
-            console.log("Verifying MetaMask connection...");
             await this.functionPage.Verify_Account_MetaMask_Connected();
         } catch (error) {
             console.error("❌ Error during MetaMask connection:", error);

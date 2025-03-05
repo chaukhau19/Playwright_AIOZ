@@ -9,7 +9,7 @@ export default defineConfig({
   retries: 0, // Do not retry tests if they fail
   workers: 1, // Run only 1 worker
   preserveOutput: 'failures-only', // Preserve logs only for failed tests
-  maxFailures: 5, // Stop test execution after 5 failures
+  // maxFailures: 5, // Stop test execution after 5 failures
 
   reporter: [
     ['html', { outputFolder: './playwright-report', open: 'on', append: true, verbose: true }], // Keep logs from previous runs
@@ -32,7 +32,7 @@ export default defineConfig({
     // headless: process.env.HEADLESS !== 'false', // Run browser in headless mode (set to `false` to run with UI)
     channel: 'chrome', // Use Chrome browser
 
-    // Set browser launch arguments
+
     args: [
       "--disable-web-security", // Disable web security to allow cross-origin requests
       "--disable-features=IsolateOrigins,site-per-process", // Disable site isolation to avoid security errors
@@ -53,6 +53,7 @@ export default defineConfig({
     // video: 'only-on-failure',
     // trace: 'on-first-retry',
     // screenshot: 'only-on-failure',
+    
     video: 'retain-on-failure', // Record video only on test failure to speed up test execution
     trace: 'retain-on-failure', // Enable tracing only on test failure for debugging
     screenshot: 'only-on-failure', // Take screenshots only on test failure to speed up test execution

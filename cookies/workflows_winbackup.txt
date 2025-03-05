@@ -1,0 +1,140 @@
+name: Playwright CI-CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '40 22 * * *' # Runs at 10:40 PM UTC daily
+
+env:
+  DEPLOY_ENV: 'Local' 
+
+jobs:
+  build-and-test-playwright:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      actions: write
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          npm install -g yarn
+          yarn install
+          npx playwright install --with-deps
+          yarn add @playwright/test@latest @tenkeylabs/dappwright
+        shell: pwsh
+
+      - name: Check versions
+        run: |
+          node -v
+          npm -v
+          yarn -v
+          npx playwright --version
+        shell: pwsh
+
+      - name: List directory contents
+        run: Get-ChildItem -Path . -Recurse
+        shell: pwsh
+
+      - name: Rename Playwright Chromium
+        run: |
+          $chromiumPath = "$env:USERPROFILE\AppData\Local\ms-playwright"
+          $oldName1 = "chromium-1155"
+          $newName1 = "chromium-1148"
+          $oldName2 = "chromium_headless_shell-1155"
+          $newName2 = "chromium_headless_shell-1148"
+
+          if (Test-Path "$chromiumPath\$oldName1") {
+            Rename-Item -Path "$chromiumPath\$oldName1" -NewName $newName1
+            Write-Output "✅ Renamed $oldName1 to $newName1"
+          } else {
+            Write-Output "⚠️ $oldName1 not found, skipping rename."
+          }
+
+          if (Test-Path "$chromiumPath\$oldName2") {
+            Rename-Item -Path "$chromiumPath\$oldName2" -NewName $newName2
+            Write-Output "✅ Renamed $oldName2 to $newName2"
+          } else {
+            Write-Output "⚠️ $oldName2 not found, skipping rename."
+          }
+        shell: pwsh
+
+      - name: Run Playwright tests
+        run: |
+          yarn test:ConnectMetaMask --workers=1
+        shell: pwsh
+
+      - name: Archive test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-playwright_aioz
+          path: ./playwright-report/
+
+      - name: Deploy to Test Environment for PLAYWRIGHT_AIOZ
+        if: env.DEPLOY_ENV == 'Test' && success()
+        env:
+          DEPLOY_HOST: ${{ secrets.TEST_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.TEST_DEPLOY_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir C:\Users\runneradmin\.ssh -Force
+          Set-Content -Path C:\Users\runneradmin\.ssh\id_rsa -Value "$env:SSH_PRIVATE_KEY"
+          icacls C:\Users\runneradmin\.ssh\id_rsa /inheritance:r /grant:r SYSTEM:F
+          echo "$env.DEPLOY_HOST" | Out-File -Append -FilePath C:\Users\runneradmin\.ssh\known_hosts
+          ssh "$env:DEPLOY_USER@$env:DEPLOY_HOST" "cd $env:GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
+        shell: pwsh
+
+      - name: Deploy to Staging Environment for PLAYWRIGHT_AIOZ
+        if: env.DEPLOY_ENV == 'Staging' && success()
+        env:
+          DEPLOY_HOST: ${{ secrets.STAGING_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.STAGING_DEPLOY_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir C:\Users\runneradmin\.ssh -Force
+          Set-Content -Path C:\Users\runneradmin\.ssh\id_rsa -Value "$env:SSH_PRIVATE_KEY"
+          icacls C:\Users\runneradmin\.ssh\id_rsa /inheritance:r /grant:r SYSTEM:F
+          echo "$env.DEPLOY_HOST" | Out-File -Append -FilePath C:\Users\runneradmin\.ssh\known_hosts
+          ssh "$env:DEPLOY_USER@$env:DEPLOY_HOST" "cd $env:GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
+        shell: pwsh
+
+      - name: Deploy to Dev Environment for PLAYWRIGHT_AIOZ
+        if: env.DEPLOY_ENV == 'Dev' && success()
+        env:
+          DEPLOY_HOST: ${{ secrets.DEV_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEV_DEPLOY_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir C:\Users\runneradmin\.ssh -Force
+          Set-Content -Path C:\Users\runneradmin\.ssh\id_rsa -Value "$env:SSH_PRIVATE_KEY"
+          icacls C:\Users\runneradmin\.ssh\id_rsa /inheritance:r /grant:r SYSTEM:F
+          echo "$env.DEPLOY_HOST" | Out-File -Append -FilePath C:\Users\runneradmin\.ssh\known_hosts
+          ssh "$env:DEPLOY_USER@$env:DEPLOY_HOST" "cd $env:GITHUB_WORKSPACE/PLAYWRIGHT_AIOZ && git pull origin main && yarn install && yarn build"
+        shell: pwsh
+
+      - name: Deploy to Local Environment for PLAYWRIGHT_AIOZ
+        if: env.DEPLOY_ENV == 'Local' && success()
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "Deploying to local environment for PLAYWRIGHT_AIOZ"
+          echo "DEPLOY_HOST: $env:DEPLOY_HOST"
+          echo "DEPLOY_USER: $env:DEPLOY_USER"
+        shell: pwsh

@@ -12,6 +12,7 @@ export const test = baseTest.extend({
           seed:"gown pill disagree boring craft valve rival airport wrestle long vacuum auction", 
           headless: false,
           slowMo: 250,
+
           args: [
             "--disable-web-security",
             "--disable-features=IsolateOrigins,site-per-process",
@@ -23,6 +24,7 @@ export const test = baseTest.extend({
             "--disable-backgrounding-occluded-windows",
             "--no-sandbox" 
           ],
+          
         });
         await wallet.page.waitForTimeout(500); 
 

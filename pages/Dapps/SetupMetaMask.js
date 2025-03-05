@@ -15,6 +15,7 @@ export const test = baseTest.extend({
               headless: false,
               slowMo: 500,
               browser: "chrome", 
+
               args: [
                 "--disable-web-security",
                 "--disable-features=IsolateOrigins,site-per-process",
@@ -26,6 +27,7 @@ export const test = baseTest.extend({
                 "--disable-backgrounding-occluded-windows",
                 "--no-sandbox" 
               ],
+              
             }),
           ]);
 

@@ -11,6 +11,7 @@ pipeline {
 
     triggers {
         cron('0 1 * * *')  
+        pollSCM('H/5 * * * *') 
     }
 
     stages {
@@ -18,7 +19,6 @@ pipeline {
             steps {
                 script {
                     try {
-
                         sh "git fetch origin ${BRANCH_NAME}"
                         def latestRemoteCommit = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()
                         def latestLocalCommit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
@@ -153,61 +153,24 @@ pipeline {
                 }
             }
         }
-
-
-        stage('Archive Test Results') {
-            steps {
-                script {
-                    try {
-                        def resultsExist = sh(script: "find playwright-report/ -type f | wc -l", returnStdout: true).trim()
-                        if (resultsExist != '0') {
-                            archiveArtifacts artifacts: "playwright-report/**/*", allowEmptyArchive: true
-                            echo "✅ Test results archived successfully"
-                        } else {
-                            echo "⚠️ No test results found to archive"
-                        }
-                    } catch (Exception e) {
-                        echo "⚠️ Error archiving test results: ${e.getMessage()}"
-                    }
-                }
-            }
-        }
     }
 
     post {
-    always {
-        script {
-            try {
+        always {
+            script {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
-
-                // 📝 Đảm bảo index.html tồn tại trước khi publish
-                def reportExists = sh(script: "ls playwright-report/index.html 2>/dev/null | wc -l", returnStdout: true).trim()
-                if (reportExists == '1') {
-                    publishHTML (target: [
-                        reportDir: 'playwright-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Playwright Test Report',
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true
-                    ])
-                    echo "📊 View report: ${BUILD_URL}artifact/playwright-report/index.html"
-                } else {
-                    echo "⚠️ No index.html found, skipping report publishing."
+                try {
+                    if (env.TEST_SUCCESS == 'true') {
+                        currentBuild.result = 'SUCCESS'
+                        echo "🎉 Build finished successfully."
+                    } else {
+                        currentBuild.result = 'FAILURE'  
+                        echo "🛑 Build finished with status: FAILURE (some tests failed)."
+                    }
+                } catch (Exception e) {
+                    echo "⚠️ Error in post-processing: ${e.getMessage()}"
                 }
-
-                // 📌 Kiểm tra biến TEST_SUCCESS
-                if (env.TEST_SUCCESS?.trim() == 'true') {
-                    currentBuild.result = 'SUCCESS'
-                    echo "🎉 Build finished successfully."
-                } else {
-                    currentBuild.result = 'FAILURE'
-                    echo "🛑 Build finished with status: FAILURE (some tests failed)."
-                }
-            } catch (Exception e) {
-                echo "⚠️ Error in post-processing: ${e.getMessage()}"
             }
         }
     }
-}
-
 }

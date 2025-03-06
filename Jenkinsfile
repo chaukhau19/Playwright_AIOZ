@@ -128,14 +128,11 @@ pipeline {
             steps {
                 script {
                     try {
-
                         def testResult = 1
                         if (isUnix()) {
-                            echo "📋 Running tests using ${FILE_SH}"
                             sh "chmod +x ${FILE_SH}"
                             testResult = sh(script: "./${FILE_SH}", returnStatus: true)
                         } else {
-                            echo "📋 Running tests using ${FILE_BAT}"
                             testResult = bat(script: "${FILE_BAT}", returnStatus: true)
                         }
                         

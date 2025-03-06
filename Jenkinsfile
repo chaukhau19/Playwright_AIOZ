@@ -152,15 +152,14 @@ pipeline {
                 }
             }
         }
+    }
 
     post {
         always {
             script {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
-
                 try {
                     def testExitCode = env.TEST_EXIT_CODE ?: '1' 
-                    
                     if (testExitCode == '0') {
                         echo "🎉 Build finished successfully."
                         currentBuild.result = 'SUCCESS'

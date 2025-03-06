@@ -128,7 +128,6 @@ pipeline {
             steps {
                 script {
                     try {
-
                         def testResult = 1
                         if (isUnix()) {
                             echo "📋 Running tests using ${FILE_SH}"
@@ -139,28 +138,30 @@ pipeline {
                             testResult = bat(script: "${FILE_BAT}", returnStatus: true)
                         }
 
-                        if (testResult == 0) {
-                            echo "✅ Tests completed successfully"
-                            env.TEST_EXIT_CODE = 0  
-                        } else {
-                            echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
-                            env.TEST_EXIT_CODE = testResult 
+                        withEnv(["TEST_EXIT_CODE=${testResult}"]) {  
+                            if (testResult == 0) {
+                                echo "✅ Tests completed successfully"
+                            } else {
+                                echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
+                            }
                         }
                     } catch (Exception e) {
                         echo "❌ Error running tests: ${e.getMessage()}"
-                        env.TEST_EXIT_CODE = 1 
+                        withEnv(["TEST_EXIT_CODE=1"]) 
                     }
                 }
             }
         }
-    }
 
     post {
         always {
             script {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
+
                 try {
-                    if (env.TEST_EXIT_CODE == 0) {
+                    def testExitCode = env.TEST_EXIT_CODE ?: '1' 
+                    
+                    if (testExitCode == '0') {
                         echo "🎉 Build finished successfully."
                         currentBuild.result = 'SUCCESS'
                     } else {

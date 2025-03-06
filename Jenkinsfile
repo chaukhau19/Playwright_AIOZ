@@ -175,21 +175,39 @@ pipeline {
     }
 
     post {
-        always {
-            script {
+    always {
+        script {
+            try {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
-                try {
-                    if (env.TEST_SUCCESS == 'true') {
-                        currentBuild.result = 'SUCCESS'
-                        echo "🎉 Build finished successfully."
-                    } else {
-                        currentBuild.result = 'FAILURE'  
-                        echo "🛑 Build finished with status: FAILURE (some tests failed)."
-                    }
-                } catch (Exception e) {
-                    echo "⚠️ Error in post-processing: ${e.getMessage()}"
+
+                // 📝 Đảm bảo index.html tồn tại trước khi publish
+                def reportExists = sh(script: "ls playwright-report/index.html 2>/dev/null | wc -l", returnStdout: true).trim()
+                if (reportExists == '1') {
+                    publishHTML (target: [
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright Test Report',
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true
+                    ])
+                    echo "📊 View report: ${BUILD_URL}artifact/playwright-report/index.html"
+                } else {
+                    echo "⚠️ No index.html found, skipping report publishing."
                 }
+
+                // 📌 Kiểm tra biến TEST_SUCCESS
+                if (env.TEST_SUCCESS?.trim() == 'true') {
+                    currentBuild.result = 'SUCCESS'
+                    echo "🎉 Build finished successfully."
+                } else {
+                    currentBuild.result = 'FAILURE'
+                    echo "🛑 Build finished with status: FAILURE (some tests failed)."
+                }
+            } catch (Exception e) {
+                echo "⚠️ Error in post-processing: ${e.getMessage()}"
             }
         }
     }
+}
+
 }

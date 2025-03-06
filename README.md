@@ -8,6 +8,30 @@ You can find the different configurations in the [tests folder](https://github.c
 ################################################################################################################################################
 ################################################################################################################################################
 
+
+###### RUN ######
+
+```bash
+#Jenkins run on 1h sáng
+on Jenkins server: /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main/AIOZ_Finance.sh
+#Result Jenkins:
+on ??
+############
+#Local run on 5h sáng
+on Jenkins server: /var/lib/jenkins/workspace/Automation/AIOZ_Finance_Auto/run_on_remote_windows.sh
+#Result Local: 
+on Local
+############
+# Git run on 3h sáng
+on Run Playwright tests: use CMD
+#Result Git:
+on ??
+############
+```
+################################################################################################################################################
+################################################################################################################################################
+################################################################################################################################################
+
 ## Installation
 
 ```bash
@@ -266,6 +290,9 @@ export DISPLAY=:0
 ########################################################################
 # Error: EBUSY: resource busy or locked, unlink 'C:\Users\BVSSH_~1\AppData\Local\Temp\dappwright\session\metamask\1\Default\Affiliation Database'
 Restart PC
+
+########################################################################
+# Error: EACCES: permission denied, unlink '/var/lib/jenkins/workspace/Automation_AIOZ_Finance_main/test-results/Swap-Invalid_Swap-AIOZ_to_-6a5e2-ked-token-spending-approval-chrome/trace.zip'
 
 ```
 

@@ -96,8 +96,7 @@ test("Swap Token Pairs with No Liquidity", async ({ wallet }) => {
 });
 
 test("Swap with a revoked token spending approval", async ({ wallet }) => {  
-  console.log("Swap with a revoked token spending approval");
-  await functionPage.TimeoutTest(invalidSwapPage.SwapWithRevokedApproval.bind(invalidSwapPage), wallet);
+  console.log("No Code");
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

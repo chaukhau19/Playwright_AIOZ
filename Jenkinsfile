@@ -128,24 +128,27 @@ pipeline {
             steps {
                 script {
                     try {
+
                         def testResult = 1
                         if (isUnix()) {
+                            echo "📋 Running tests using ${FILE_SH}"
                             sh "chmod +x ${FILE_SH}"
                             testResult = sh(script: "./${FILE_SH}", returnStatus: true)
                         } else {
+                            echo "📋 Running tests using ${FILE_BAT}"
                             testResult = bat(script: "${FILE_BAT}", returnStatus: true)
                         }
-                        
+
                         if (testResult == 0) {
                             echo "✅ Tests completed successfully"
-                            env.TEST_SUCCESS = 'true'
+                            env.TEST_EXIT_CODE = 0  
                         } else {
                             echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
-                            env.TEST_SUCCESS = 'false'
+                            env.TEST_EXIT_CODE = testResult 
                         }
                     } catch (Exception e) {
                         echo "❌ Error running tests: ${e.getMessage()}"
-                        env.TEST_SUCCESS = 'false'
+                        env.TEST_EXIT_CODE = 1 
                     }
                 }
             }
@@ -157,12 +160,12 @@ pipeline {
             script {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
                 try {
-                    if (env.TEST_SUCCESS == 'true') {
+                    if (env.TEST_EXIT_CODE == 0) {
                         echo "🎉 Build finished successfully."
                         currentBuild.result = 'SUCCESS'
                     } else {
-                        echo "🛑 Build finished with status: FAILURE (some tests failed)."
-                        currentBuild.result = 'FAILURE'  
+                        echo "🛑 Build finished with status: FAILURE (tests failed or error)"
+                        currentBuild.result = 'FAILURE'
                     }
                 } catch (Exception e) {
                     echo "⚠️ Error in post-processing: ${e.getMessage()}"

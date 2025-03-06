@@ -138,16 +138,16 @@ pipeline {
                             testResult = bat(script: "${FILE_BAT}", returnStatus: true)
                         }
 
-                        withEnv(["TEST_EXIT_CODE=${testResult}"]) {  
-                            if (testResult == 0) {
-                                echo "✅ Tests completed successfully"
-                            } else {
-                                echo "⚠️ Tests completed with non-zero exit code: ${testResult}"
-                            }
+                        env.TEST_EXIT_CODE = "${testResult}" 
+
+                        if (testResult == 0) {
+                            echo "✅ Tests PASSED!"
+                        } else {
+                            echo "⚠️ Tests FAILED with exit code: ${testResult}"
                         }
                     } catch (Exception e) {
                         echo "❌ Error running tests: ${e.getMessage()}"
-                        withEnv(["TEST_EXIT_CODE=1"]) 
+                        env.TEST_EXIT_CODE = "1"  
                     }
                 }
             }
@@ -158,17 +158,12 @@ pipeline {
         always {
             script {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
-                try {
-                    def testExitCode = env.TEST_EXIT_CODE ?: '1' 
-                    if (testExitCode == '0') {
-                        echo "🎉 Build finished successfully."
-                        currentBuild.result = 'SUCCESS'
-                    } else {
-                        echo "🛑 Build finished with status: FAILURE (tests failed or error)"
-                        currentBuild.result = 'FAILURE'
-                    }
-                } catch (Exception e) {
-                    echo "⚠️ Error in post-processing: ${e.getMessage()}"
+
+                if (env.TEST_EXIT_CODE == '0') {
+                    echo "🎉 Build SUCCESS!"
+                    currentBuild.result = 'SUCCESS'
+                } else {
+                    echo "🛑 Build FAILURE: Tests failed!"
                     currentBuild.result = 'FAILURE'
                 }
             }

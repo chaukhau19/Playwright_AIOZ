@@ -14,5 +14,5 @@ cleanup() {
 }
 trap cleanup EXIT  
 
-yarn test:Swap --workers=1
+yarn test:ConnectMetaMask --workers=1
 

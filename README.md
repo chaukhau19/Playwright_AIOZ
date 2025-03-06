@@ -16,17 +16,23 @@ You can find the different configurations in the [tests folder](https://github.c
 on Jenkins server: /var/lib/jenkins/workspace/Automation_AIOZ_Finance_main/AIOZ_Finance.sh
 #Result Jenkins:
 on ??
+
+
+############
 ############
 #Local run on 5h sáng
 on Jenkins server: /var/lib/jenkins/workspace/Automation/AIOZ_Finance_Auto/run_on_remote_windows.sh
 #Result Local: 
 on Local
+
+
+############
 ############
 # Git run on 3h sáng
 on Run Playwright tests: use CMD
 #Result Git:
 on ??
-############
+
 ```
 ################################################################################################################################################
 ################################################################################################################################################

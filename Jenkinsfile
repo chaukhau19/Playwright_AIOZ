@@ -161,14 +161,15 @@ pipeline {
                 echo "🔍 Logs can be found at ${SERVER_PATH}/playwright-report/"
                 try {
                     if (env.TEST_SUCCESS == 'true') {
-                        currentBuild.result = 'SUCCESS'
                         echo "🎉 Build finished successfully."
+                        currentBuild.result = 'SUCCESS'
                     } else {
-                        currentBuild.result = 'FAILURE'  
                         echo "🛑 Build finished with status: FAILURE (some tests failed)."
+                        currentBuild.result = 'FAILURE'  
                     }
                 } catch (Exception e) {
                     echo "⚠️ Error in post-processing: ${e.getMessage()}"
+                    currentBuild.result = 'FAILURE'
                 }
             }
         }

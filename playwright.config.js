@@ -29,7 +29,7 @@ export default defineConfig({
   use: {
     actionTimeout: 0, // No time limit for each action (click, input, etc.)
     navigationTimeout: 0, // No time limit for page navigation
-    headless: false, // Run browser in headless mode (set to `false` to run with UI)
+    headless: true, // Run browser in headless mode (set to `false` to run with UI)
     // headless: process.env.HEADLESS !== 'false', // Run browser in headless mode (set to `false` to run with UI)
     channel: 'chrome', // Use Chrome browser
 

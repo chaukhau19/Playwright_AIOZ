@@ -255,6 +255,15 @@ OR DELETE Automation_AIOZ_Finance_main
 sudo apt-get install -y xvfb
 
 ########################################################################
+# Error: Playwright Test did not expect test.beforeAll() to be called here.
+# Most common reasons include:
+# - You are calling test.beforeAll() in a configuration file.
+# - You are calling test.beforeAll() in a file that is imported by the configuration file.
+# - You have two different versions of @playwright/test. This usually happens
+#   when one of the dependencies in your package.json depends on @playwright/test.
+# > 16 | test.beforeAll(async ({ page, wallet }) => {
+#      |      ^
+########################################################################
 #Executable doesn't exist at /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 ln -s chromium-1148/ chromium-1150
 mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148

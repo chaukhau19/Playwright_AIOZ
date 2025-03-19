@@ -174,7 +174,7 @@ yarn playwright install --with-deps
 yarn add @playwright/test@latest @tenkeylabs/dappwright
 yarn add @playwright/testt@1.48.2 @tenkeylabs/dappwright
 
-
+###########################
 rm -rf node_modules package-lock.json yarn.lock
 npm install -g playwright@1.48.2
 npm install  # Hoặc dùng yarn nếu đang dùng yarn
@@ -263,6 +263,8 @@ sudo apt-get install -y xvfb
 #   when one of the dependencies in your package.json depends on @playwright/test.
 # > 16 | test.beforeAll(async ({ page, wallet }) => {
 #      |      ^
+
+
 ########################################################################
 #Executable doesn't exist at /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 ln -s chromium-1148/ chromium-1150
@@ -294,7 +296,7 @@ chmod -R 777 /tmp/dappwright/session/metamask
 # TimeoutError: browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event "page"
 #    > |             await wallet.reject();
 #    > |             await wallet.confirmTransaction();
-changed headless: true to headless: false on setup metamask
+changed headless: true ===> headless: false on setup metamask
 
 ########################################################################
 #-bash: ./AIOZ_Finance.sh: Permission denied

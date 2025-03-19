@@ -32,17 +32,24 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          rm -rf node_modules package-lock.json yarn.lock
           npm install -g yarn
           yarn install
           npx playwright install --with-deps
           yarn add @playwright/test@latest @tenkeylabs/dappwright
+          npm dedupe
 
       - name: Check versions
         run: |
           node -v
           npm -v
           yarn -v
+          node -v
+          playwright --version
+          npm playwright --version
+          yarn playwright --version
           npx playwright --version
+          npm list @playwright/test
 
       - name: List directory contents
         run: ls -la

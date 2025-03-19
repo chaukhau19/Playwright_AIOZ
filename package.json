@@ -41,7 +41,7 @@
 
     "test:Assets": "yarn build && playwright test tests/3_Assets/01_Valid_Assets/Your_Assets.spec.js",
     
-    "test:All": "yarn build && playwright test tests/1_Swap/01_Valid_Swap/AIOZ_to_STRK.spec.js tests/1_Swap/02_Invalid_Swap/AIOZ_to_STRK.spec.js tests/2_Position/01_Valid_Position/AIOZandUSDT.spec.js tests/2_Position/02_Invalid_Position/AIOZandUSDT.spec.js tests/3_Assets/02_Invalid_Assets/Your_Assets.spec.js tests/6_Dapps/01_CoinBase/CoinBase.spec.js tests/6_Dapps/02_MetaMask/MetaMask.spec.js"
+    "test:All": "yarn build && playwright test /1_Swap/01_Valid_Swap/AIOZ_to_STRK.spec.js tests/1_Swap/02_Invalid_Swap/AIOZ_to_STRK.spec.js tests/2_Position/01_Valid_Position/AIOZandUSDT.spec.js tests/2_Position/02_Invalid_Position/AIOZandUSDT.spec.js tests/3_Assets/02_Invalid_Assets/Your_Assets.spec.js tests/6_Dapps/01_CoinBase/CoinBase.spec.js tests/6_Dapps/02_MetaMask/MetaMask.spec.js"
   },
   "dependencies": {
     "axios": "^1.7.9",

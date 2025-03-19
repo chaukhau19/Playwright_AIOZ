@@ -17,6 +17,7 @@ export default defineConfig({
     ['junit', { outputFile: './playwright-report/output.xml' }], // Save logs as XML file
     ['list', { printSteps: true }], // Display list of test cases
     ['line'], // Display logs line by line
+    ['allure-playwright'],
   ],
 
   timeout: 0, // Disable global timeout to avoid tests being stopped midway
@@ -28,7 +29,7 @@ export default defineConfig({
   use: {
     actionTimeout: 0, // No time limit for each action (click, input, etc.)
     navigationTimeout: 0, // No time limit for page navigation
-    headless: true, // Run browser in headless mode (set to `false` to run with UI)
+    headless: false, // Run browser in headless mode (set to `false` to run with UI)
     // headless: process.env.HEADLESS !== 'false', // Run browser in headless mode (set to `false` to run with UI)
     channel: 'chrome', // Use Chrome browser
 
@@ -50,13 +51,13 @@ export default defineConfig({
       "--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure", // Disable same-site cookies
     ],
 
-    // video: 'only-on-failure',
-    // trace: 'on-first-retry',
-    // screenshot: 'only-on-failure',
+    video: 'on',
+    trace: 'on',
+    screenshot: 'on',
     
-    video: 'retain-on-failure', // Record video only on test failure to speed up test execution
-    trace: 'retain-on-failure', // Enable tracing only on test failure for debugging
-    screenshot: 'only-on-failure', // Take screenshots only on test failure to speed up test execution
+    // video: 'only-on-failure', // Record video only on test failure to speed up test execution
+    // trace: 'retain-on-failure', // Enable tracing only on test failure for debugging
+    // screenshot: 'only-on-failure', // Take screenshots only on test failure to speed up test execution
 
     launchOptions: {
       slowMo: 0, // Do not slow down actions (can set to 100-300ms to see UI actions clearly)
@@ -69,8 +70,7 @@ export default defineConfig({
   projects: [
     {
       name: "chrome",
-      use: {
-        ...devices["Desktop Chrome"],
+      use: { ...devices["Desktop Chrome"],
         channel: "chrome",
       },
     },

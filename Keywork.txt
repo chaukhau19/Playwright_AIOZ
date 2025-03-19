@@ -1,0 +1,62 @@
+######## GO TO ########
+#    // Go to the page
+#    // Timeout for each testcase
+#    // Convert formatted number to float
+#    // Format number with commas
+#    // Format number with fixed decimal places
+#    // Delay execution for a specific time
+########################
+
+
+
+######## CLICK ########
+#    // Attempt to click on the button, catch error if it fails
+#    // Wait for a fixed timeout, then attempt to click the button
+#    // Wait until the button appears, then click
+#    // If it appears, click it; otherwise, ignore it
+#    // After click, verify expected element appears
+#    // Retry click if the first attempt fails
+########################
+
+
+
+######## EXPECT ########
+#    // Wait until the button appears, then verify expect
+#    // Wait until the button appears, then click, then verify expect
+#    // Verify that expected changes happened after action
+#    // Verify if an element does not exist
+#    // XPath tests don't exist in the first place
+########################
+
+
+
+######## FILL TEXT ########
+#    // Fill in data and input text
+#    // Ensure the input field has the correct value after filling
+###########################
+
+
+
+######## NETWORK ########
+#    // Turn the network on and off the network
+#    // Verify network status after changing
+#########################
+
+
+
+######## STEP ########
+#    // Click, fill, press "Enter"
+#    // Handle cases where pressing "Enter" doesn't work
+######################
+
+
+
+######## FUNCTION ########
+#    // Comparing 2 values on 2 pages
+#    // Check if Low Price ≤ Pcurrent ≤ High Price
+#    // Get xpath and wait for elements to appear, show value current on web
+#    // Get XPath, wait for element, retrieve current value, and convert using convertToPoints
+#    // Handle errors if elements do not appear
+###########################
+
+

@@ -60,16 +60,16 @@ jobs:
 
           if (Test-Path "$chromiumPath\$oldName1") {
             Rename-Item -Path "$chromiumPath\$oldName1" -NewName $newName1
-            Write-Output "✅ Renamed $oldName1 to $newName1"
+            Write-Output "Renamed $oldName1 to $newName1"
           } else {
-            Write-Output "⚠️ $oldName1 not found, skipping rename."
+            Write-Output "$oldName1 not found, skipping rename."
           }
 
           if (Test-Path "$chromiumPath\$oldName2") {
             Rename-Item -Path "$chromiumPath\$oldName2" -NewName $newName2
-            Write-Output "✅ Renamed $oldName2 to $newName2"
+            Write-Output "Renamed $oldName2 to $newName2"
           } else {
-            Write-Output "⚠️ $oldName2 not found, skipping rename."
+            Write-Output "$oldName2 not found, skipping rename."
           }
         shell: pwsh
 

@@ -52,55 +52,55 @@ pipeline {
                             # --- [Check & Manage Node.js] ---
                             NODE_VERSIONS=\$(ls /usr/bin | grep -E '^node[0-9]*\$' | wc -l)
                             if [ "\$NODE_VERSIONS" -gt 1 ]; then
-                                echo "⚠️ Multiple Node.js versions found. Removing older versions..."
+                                echo "Multiple Node.js versions found. Removing older versions..."
                                 sudo apt-get remove --purge nodejs -y || true
                                 sudo rm -rf /usr/local/{bin,lib}/node_modules || true
-                                echo "✅ Node.js cleaned up."
+                                echo "Node.js cleaned up."
                             fi
                             if ! command -v node > /dev/null 2>&1; then
-                                echo "⚠️ Node.js not found. Installing..."
+                                echo "Node.js not found. Installing..."
                                 curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
                                 apt-get install -y nodejs
                             else
-                                echo "✅ Node.js found. Version: \$(node -v)"
+                                echo "Node.js found. Version: \$(node -v)"
                             fi
 
                             # --- [Check & Manage Yarn] ---
                             YARN_VERSIONS=\$(yarn --version 2>/dev/null | wc -l)
                             if [ "\$YARN_VERSIONS" -gt 1 ]; then
-                                echo "⚠️ Multiple Yarn versions found. Removing older versions..."
+                                echo "Multiple Yarn versions found. Removing older versions..."
                                 npm uninstall -g yarn || true
                                 rm -rf ~/.yarn ~/.config/yarn || true
-                                echo "✅ Yarn cleaned up."
+                                echo "Yarn cleaned up."
                             fi
                             if ! command -v yarn > /dev/null 2>&1; then
-                                echo "⚠️ Yarn not found. Installing..."
+                                echo "Yarn not found. Installing..."
                                 npm install -g yarn
                             else
-                                echo "✅ Yarn found. Version: \$(yarn -v)"
+                                echo "Yarn found. Version: \$(yarn -v)"
                             fi
 
                             # --- [Check & Manage Playwright] ---
                             PLAYWRIGHT_VERSIONS=\$(yarn list --depth=0 | grep '@playwright/test' | wc -l)
                             if [ "\$PLAYWRIGHT_VERSIONS" -gt 1 ]; then
-                                echo "⚠️ Multiple Playwright versions found. Removing older versions..."
+                                echo "Multiple Playwright versions found. Removing older versions..."
                                 rm -rf node_modules package-lock.json yarn.lock || true
                                 rm -rf ~/.cache/ms-playwright || true
-                                echo "✅ Playwright cleaned up."
+                                echo "Playwright cleaned up."
                             fi
                             if ! yarn playwright --version > /dev/null 2>&1; then
-                                echo "⚠️ Playwright not found. Installing..."
+                                echo "Playwright not found. Installing..."
                                 yarn add @playwright/test@latest @tenkeylabs/dappwright
                                 yarn playwright install
                             else
-                                echo "✅ Playwright found. Version: \$(yarn playwright --version)"
+                                echo "Playwright found. Version: \$(yarn playwright --version)"
                             fi
 
                             # Ensure dependencies are installed
                             yarn install
                         """
                     } catch (Exception e) {
-                        echo "❌ Error in Setup Dependencies: ${e.getMessage()}"
+                        echo " Error in Setup Dependencies: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
                         throw e
                     }
@@ -115,9 +115,9 @@ pipeline {
                         if [ -d "/var/lib/jenkins/.cache/ms-playwright/chromium-1155" ]; then
                             echo "🔄 Moving Chromium folder..."
                             mv /var/lib/jenkins/.cache/ms-playwright/chromium-1155 /var/lib/jenkins/.cache/ms-playwright/chromium-1148
-                            echo "✅ Moved Chromium successfully."
+                            echo "Moved Chromium successfully."
                         else
-                            echo "⚠️ Chromium-1155 not found. Skipping move."
+                            echo "Chromium-1155 not found. Skipping move."
                         fi
                     """
                 }
@@ -141,12 +141,12 @@ pipeline {
                         env.TEST_EXIT_CODE = "${testResult}" 
 
                         if (testResult == 0) {
-                            echo "✅ Tests PASSED!"
+                            echo "Tests PASSED!"
                         } else {
-                            echo "⚠️ Tests FAILED with exit code: ${testResult}"
+                            echo "Tests FAILED with exit code: ${testResult}"
                         }
                     } catch (Exception e) {
-                        echo "❌ Error running tests: ${e.getMessage()}"
+                        echo " Error running tests: ${e.getMessage()}"
                         env.TEST_EXIT_CODE = "1"  
                     }
                 }
@@ -167,6 +167,50 @@ pipeline {
                     currentBuild.result = 'FAILURE'
                 }
             }
+        }
+    }
+}
+
+def cleanTemporaryFolder() {
+    script {
+        echo 'Cleaning up temporary files and directories...'
+        def pathsToCheck = [
+            "${env.REPO_PATH}/package-lock.json",
+            "${env.REPO_PATH}/playwright-report",
+            "${env.REPO_PATH}/Results",
+            "${env.REPO_PATH}/test-results",
+            "${env.REPO_PATH}/temp",
+            "${env.REPO_PATH}/logs"
+        ]
+        if (isUnix()) {
+            pathsToCheck.each { path ->
+                sh "if [ -e '${path}' ]; then echo '${path} exists'; fi"
+            }
+
+            sh """
+                rm -rf ${env.REPO_PATH}/package-lock.json 
+                rm -rf ${env.REPO_PATH}/playwright-report 
+                rm -rf ${env.REPO_PATH}/Results 
+                rm -rf ${env.REPO_PATH}/test-results 
+                rm -rf ${env.REPO_PATH}/temp/*
+                rm -rf ${env.REPO_PATH}/logs/*        
+                find ${env.REPO_PATH} -name '*.log' -delete  
+            """
+        } else {
+            pathsToCheck.each { path ->
+                def winPath = path.replace("/", "\\")
+                bat "if exist '${winPath}' (echo '${winPath} exists')"
+            }
+
+            bat """
+                del /Q ${env.REPO_PATH}\\package-lock.json 
+                rmdir /s /q ${env.REPO_PATH}\\playwright-report 
+                rmdir /s /q ${env.REPO_PATH}\\Results 
+                rmdir /s /q ${env.REPO_PATH}\\test-results 
+                del /Q ${env.REPO_PATH}\\temp\\* 
+                del /Q ${env.REPO_PATH}\\logs\\*           
+                del /Q ${env.REPO_PATH}\\*.log              
+            """
         }
     }
 }

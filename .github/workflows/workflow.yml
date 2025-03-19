@@ -59,18 +59,18 @@ jobs:
           if [ -d "$CHROMIUM_PATH/$OLD_NAME1" ]; then
             echo "🔄 Renaming $OLD_NAME1 to $NEW_NAME1..."
             mv "$CHROMIUM_PATH/$OLD_NAME1" "$CHROMIUM_PATH/$NEW_NAME1"
-            echo "✅ Rename completed!"
+            echo "Rename completed!"
           else
-            echo "⚠️ $OLD_NAME1 not found, skipping rename."
+            echo "$OLD_NAME1 not found, skipping rename."
           fi
 
           echo "🔍 Checking if $OLD_NAME2 exists..."
           if [ -d "$CHROMIUM_PATH/$OLD_NAME2" ]; then
             echo "🔄 Renaming $OLD_NAME2 to $NEW_NAME2..."
             mv "$CHROMIUM_PATH/$OLD_NAME2" "$CHROMIUM_PATH/$NEW_NAME2"
-            echo "✅ Rename completed!"
+            echo "Rename completed!"
           else
-            echo "⚠️ $OLD_NAME2 not found, skipping rename."
+            echo "$OLD_NAME2 not found, skipping rename."
           fi
 
       - name: Start Xvfb
@@ -81,7 +81,7 @@ jobs:
       - name: Run Playwright tests
         run: |
           export DISPLAY=:99
-          yarn test:Swap --workers=1
+          yarn test:All --workers=1
 
       - name: Archive test results
         if: always()

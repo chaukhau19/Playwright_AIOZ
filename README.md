@@ -8,7 +8,6 @@ You can find the different configurations in the [tests folder](https://github.c
 ################################################################################################################################################
 ################################################################################################################################################
 
-
 ###### RUN ######
 
 ```bash
@@ -38,19 +37,36 @@ on ??
 ################################################################################################################################################
 ################################################################################################################################################
 
-## Installation
+## Installation Library
 
 ```bash
+
 git clone https://github.com/TenKeyLabs/dappwright-examples.git
 cd dappwright-examples
+
+########## LIBRARY ########## 
 yarn install
-npm install playwright axios
-```
-
-Additionally, you need to install the required browsers for Playwright:
-
-```bash
+npm install -g yarn
+apt-get install -y nodejs
 yarn playwright install
+yarn add @playwright/test@latest @tenkeylabs/dappwright
+
+npm install playwright axios
+
+########## LOG ########## 
+winget install --id Oracle.JDK.17
+java -version
+$env:JAVA_HOME="C:\Program Files\Java\jdk-17"  
+$env:Path+=";$env:JAVA_HOME\bin"
+
+npm install -D allure-playwright
+npm install -g allure-commandline
+npm install -D @playwright/test allure-playwright
+
+########## OPEN LOG ########## 
+npx allure generate allure-results --clean
+npx allure open
+
 ```
 
 ## Running the examples
@@ -263,7 +279,7 @@ chmod -R 777 /tmp/dappwright/session/metamask
 //sudo apt-get update && sudo apt-get install -y x11-utils
 // Xvfb :99 -screen 0 1920x1080x24 &
 // export DISPLAY=:99
-// xdpyinfo -display :99 || (echo "❌ Xvfb failed to start" && exit 1)
+// xdpyinfo -display :99 || (echo " Xvfb failed to start" && exit 1)
 
 ########################################################################
 # TimeoutError: browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event "page"

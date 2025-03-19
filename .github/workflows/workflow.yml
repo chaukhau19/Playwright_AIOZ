@@ -44,8 +44,6 @@ jobs:
           node -v
           npm -v
           yarn -v
-          node -v
-          playwright --version
           npm playwright --version
           yarn playwright --version
           npx playwright --version

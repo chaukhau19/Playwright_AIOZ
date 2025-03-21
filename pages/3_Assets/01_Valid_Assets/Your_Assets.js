@@ -1,4 +1,5 @@
 import { assetsconfig } from "../../../data/Assets_Config.js";
+import { farmconfig } from "../../../data/Farm_Config.js";
 import { FunctionPage } from "../../Functions.js";
 import { ConnectWalletMetaMaskPage } from "../../../pages/6_Dapps/02_MetaMask/MetaMask.js";
 
@@ -27,6 +28,8 @@ export class ValidAssetsPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();    
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Hide_Closed_Positions_Button(); 
             await this.functionPage.Verify_AIOZ_USDC_InRange_03();
             await this.functionPage.Assets_Page();
@@ -42,6 +45,8 @@ export class ValidAssetsPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Verify_AIOZ_USDC_InRange_03_Not_Exist();
             await this.functionPage.Assets_Page();
             await this.functionPage.Assets_Liquidity_Element();

@@ -1,4 +1,5 @@
 import { positionconfig } from "../../../data/Position_Config.js";
+import { farmconfig } from "../../../data/Farm_Config.js";
 import { ConnectWalletMetaMaskPage } from "../../6_Dapps/02_MetaMask/MetaMask.js";
 import { FunctionPage } from "../../Functions.js";
 
@@ -25,7 +26,9 @@ export class ValidPositionPage {
             await this.functionPage.Supply_Button();
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction();  
-            await this.functionPage.Close_Transaction_Submitted_Button();     
+            await this.functionPage.Close_Transaction_Submitted_Button();  
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);   
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -55,6 +58,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -85,6 +90,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -114,6 +121,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();

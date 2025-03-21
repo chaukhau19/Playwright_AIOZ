@@ -263,8 +263,23 @@ sudo apt-get install -y xvfb
 #   when one of the dependencies in your package.json depends on @playwright/test.
 # > 16 | test.beforeAll(async ({ page, wallet }) => {
 #      |      ^
-
-
+vào workflow thêm
+rm -rf node_modules package-lock.json yarn.lock 
+    run: |
+          rm -rf node_modules package-lock.json yarn.lock
+          npm install -g yarn
+          yarn install
+          npx playwright install --with-deps
+          yarn add @playwright/test@latest @tenkeylabs/dappwright
+          npm dedupe
+    run: |
+          node -v
+          npm -v
+          yarn -v
+          npm playwright --version
+          yarn playwright --version
+          npx playwright --version
+          npm list @playwright/test
 ########################################################################
 #Executable doesn't exist at /var/lib/jenkins/.cache/ms-playwright/chromium-1148/chrome-linux/chrome
 ln -s chromium-1148/ chromium-1150

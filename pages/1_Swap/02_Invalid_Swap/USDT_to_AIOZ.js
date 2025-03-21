@@ -1,4 +1,5 @@
 import { swapconfig } from "../../../data/Swap_Config.js";
+import { farmconfig } from "../../../data/Farm_Config.js";
 import { FunctionPage } from "../../Functions.js";
 import { ConnectWalletMetaMaskPage } from "../../../pages/6_Dapps/02_MetaMask/MetaMask.js";
 export class InvalidSwapPage {

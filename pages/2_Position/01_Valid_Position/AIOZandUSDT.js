@@ -1,4 +1,5 @@
 import { positionconfig } from "../../../data/Position_Config.js";
+import { farmconfig } from "../../../data/Farm_Config.js";
 import { ConnectWalletMetaMaskPage } from "../../6_Dapps/02_MetaMask/MetaMask.js";
 import { FunctionPage } from "../../Functions.js";
 
@@ -27,6 +28,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();     
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -45,6 +48,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_001_Not_Exist();
@@ -71,6 +76,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -89,6 +96,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_005_Not_Exist();
@@ -116,6 +125,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -134,6 +145,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_03_Not_Exist();
@@ -160,6 +173,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.New_Position_Button();
             await this.functionPage.Clear_All_Button();
             await this.functionPage.Pool_Select_Token_AIOZ_A();
@@ -178,6 +193,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_1_Not_Exist();
@@ -206,6 +223,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Hide_Closed_Positions_Button();
             await this.functionPage.Verify_AIOZ_USDT_OutRange_001();
             await this.functionPage.AIOZ_USDT_OutRange_001_Element();
@@ -216,6 +235,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_OutRange_001_Not_Exist();
@@ -243,6 +264,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Hide_Closed_Positions_Button();
             await this.functionPage.Verify_AIOZ_USDT_OutRange_001();
             await this.functionPage.AIOZ_USDT_OutRange_001_Element();
@@ -253,6 +276,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_OutRange_001_Not_Exist();
@@ -278,6 +303,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Hide_Closed_Positions_Button();
             await this.functionPage.Verify_AIOZ_USDT_InRange_001();
             await this.functionPage.AIOZ_USDT_InRange_001_Element();
@@ -288,6 +315,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_001_Not_Exist();
@@ -315,6 +344,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Hide_Closed_Positions_Button();
             await this.functionPage.Verify_AIOZ_USDT_InRange_001();
             await this.functionPage.AIOZ_USDT_InRange_001_Element();
@@ -325,6 +356,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_001_Not_Exist();
@@ -348,6 +381,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button(); 
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Verify_AIOZ_USDT_InRange_001();
             await this.functionPage.AIOZ_USDT_InRange_001_Element();
             await this.functionPage.Remove_Liquidity_Button();
@@ -357,6 +392,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_001_Not_Exist();
@@ -383,6 +420,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Verify_AIOZ_USDT_InRange_005();
             await this.functionPage.AIOZ_USDT_InRange_005_Element();
             await this.functionPage.Verify_Collected_Fees_Not_Exist();
@@ -395,6 +434,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.waitForTimeout(5000);
             await this.functionPage.Pools_Page();
             await this.functionPage.Verify_AIOZ_USDT_InRange_005();
@@ -404,6 +445,8 @@ export class ValidPositionPage {
             await this.functionPage.Collect_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.waitForTimeout(5000);
             await this.functionPage.Verify_Collected_Fees_Not_Exist();
             await this.functionPage.Remove_Liquidity_Button();
@@ -413,6 +456,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.waitForTimeout(10000);
@@ -441,6 +486,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Supply_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.AIOZ_USDT_OutRange_005_Element();
             await this.functionPage.Verify_Collected_Fees_Not_Exist();
             await this.functionPage.Swaps_Page();
@@ -452,6 +499,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.waitForTimeout(5000);
             await this.functionPage.Pools_Page();
             await this.functionPage.AIOZ_USDT_OutRange_005_Element();
@@ -463,6 +512,8 @@ export class ValidPositionPage {
             await this.functionPage.Confirm_Remove_Button();
             await wallet.confirmTransaction();  
             await this.functionPage.Close_Transaction_Submitted_Button();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             // await this.functionPage.Verify_Remove_Liquidity();
             await this.functionPage.Pools_Page();
             await this.functionPage.waitForTimeout(10000);

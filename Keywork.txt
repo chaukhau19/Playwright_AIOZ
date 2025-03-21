@@ -57,6 +57,33 @@
 #    // Get xpath and wait for elements to appear, show value current on web
 #    // Get XPath, wait for element, retrieve current value, and convert using convertToPoints
 #    // Handle errors if elements do not appear
+#    // selectDateTime
 ###########################
+
+
+1. 
+element:
+    <p font-size="14px" class="sc-jNwOwP iZGuJB">
+    "USDT"
+    "&nbsp;/&nbsp;"
+    "AIOZ"
+    </p>
+<p class="sc-jNwOwP bgoDXT">
+    "1.00"
+    "WAIOZ"
+</p>
+web display USDT/AIOZ==> check xpath chứa: dùng translate, descendant, ancestor, parent, following, following-sibling, child
+    //p[translate(.,' /','')='USDTAIOZ']//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+    //div[@data-testid='farm-item']//following::p[contains(text(),'USDT')]//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+    //p[translate(.,' /','')='USDTAIOZ']//following-sibling::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+    //p[self::p[translate(.,' /','')='USDTAIOZ']]//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+    
+    //p[translate(.,' /','')='USDTAIOZ']/ancestor::div[@data-testid='farm-item']//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+    //div[@data-testid='farm-item']//descendant::p[translate(.,' /','')='USDTAIOZ']//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+
+    //div[@data-testid='farm-item']//child::p[translate(.,' /','')='USDTAIOZ']//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+    //p[translate(.,' /','')='USDTAIOZ']/parent::*//following::*[contains(text(),'0.01%')]//following::*[contains(text(),'On going')]
+
+    (//p[translate(.,' /','')='AIOZSTRK']//following::*[contains(text(),'0.05%')]//following::p[normalize-space(.)='1.00 WAIOZ']//following::*[contains(text(),'Not started')])[1]
 
 

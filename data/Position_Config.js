@@ -9,6 +9,7 @@ export const positionconfig = {
   //DATA INVALID
 
   //Xpath
+
   Increment_Low_Element: '(//button[@data-testid="increment-price-range"])[1]',
   Increment_High_Element: '(//button[@data-testid="increment-price-range"])[2]',
   Decrement_Low_Element: '(//button[@data-testid="decrement-price-range"])[1]',
@@ -61,6 +62,8 @@ export const positionconfig = {
   InputText_Token_To: "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[2]",
   InputText_Token_Low_Price: "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[3]",
   InputText_Token_High_Price: "(//input[@type='text' and @pattern='^[0-9]*[.,]?[0-9]*$'])[4]",
+  InputText_Amount_From: '#add-liquidity-input-tokena',
+  InputText_Amount_To: '#add-liquidity-input-tokenb',
 
   Pool_Page: '//a[@data-testid="pool-nav-link" and contains(text(), "Pools")]',
 

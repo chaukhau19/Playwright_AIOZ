@@ -54,6 +54,122 @@ export class FunctionPage {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // selectDateTime
+    async selectDateTime_Backup(startDateOffset = 0, endDateOffset = 0, startTimeOffset = 0, endTimeOffset = 0, useCalendar = false) {
+        try {
+            let now = new Date();
+            let startDate = new Date(now);
+            startDate.setDate(startDate.getDate() + startDateOffset);
+            let endDate = new Date(now);
+            endDate.setDate(endDate.getDate() + endDateOffset);
+            let startTime = new Date(now);
+            startTime.setHours(startTime.getHours() + startTimeOffset);
+            let endTime = new Date(now);
+            endTime.setHours(endTime.getHours() + endTimeOffset);
+    
+            let formattedStartDate = startDate.toISOString().split('T')[0];
+            let formattedEndDate = endDate.toISOString().split('T')[0];
+            let formattedStartTime = startTime.toTimeString().slice(0, 5);
+            let formattedEndTime = endTime.toTimeString().slice(0, 5);
+    
+            if (useCalendar) {
+                await this.page.click(farmconfig.Start_Date_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.Start_Date_Element, formattedStartDate);
+    
+                await this.page.click(farmconfig.End_Date_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.End_Date_Element, formattedEndDate);
+    
+                await this.page.click(farmconfig.Start_Time_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.Start_Time_Element, formattedStartTime);
+    
+                await this.page.click(farmconfig.End_Time_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.End_Time_Element, formattedEndTime);
+            } else {
+                await this.page.fill(farmconfig.Start_Date_Element, formattedStartDate);
+                await this.page.fill(farmconfig.End_Date_Element, formattedEndDate);
+                await this.page.fill(farmconfig.Start_Time_Element, formattedStartTime);
+                await this.page.fill(farmconfig.End_Time_Element, formattedEndTime);
+            }
+        } catch (error) {
+            // console.error(`Test case failed: ${error.message}`);
+            // throw new Error("Test Failed: " + error.message);  
+            throw error; 
+            // this.testStatus = false;
+        }
+    }
+    
+    // selectDateTime
+    async selectDateTime(startDateOffset = { days: 0, months: 0, years: 0 }, 
+        endDateOffset = { days: 0, months: 0, years: 0 }, 
+        startTimeOffset = { hours: 0, minutes: 0 }, 
+        endTimeOffset = { hours: 0, minutes: 0 }, 
+        useCalendar = false) {
+    
+        try {
+            let now = new Date();
+    
+            let startDate = new Date(now);
+            startDate.setFullYear(startDate.getFullYear() + startDateOffset.years);
+            startDate.setMonth(startDate.getMonth() + startDateOffset.months);
+            startDate.setDate(startDate.getDate() + startDateOffset.days);
+    
+            let endDate = new Date(now);
+            endDate.setFullYear(endDate.getFullYear() + endDateOffset.years);
+            endDate.setMonth(endDate.getMonth() + endDateOffset.months);
+            endDate.setDate(endDate.getDate() + endDateOffset.days);
+    
+            let startTime = new Date(now);
+            startTime.setHours(startTime.getHours() + startTimeOffset.hours);
+            startTime.setMinutes(startTime.getMinutes() + startTimeOffset.minutes);
+    
+            let endTime = new Date(now);
+            endTime.setHours(endTime.getHours() + endTimeOffset.hours);
+            endTime.setMinutes(endTime.getMinutes() + endTimeOffset.minutes);
+    
+            let formattedStartDate = startDate.toISOString().split('T')[0];
+            let formattedEndDate = endDate.toISOString().split('T')[0];
+            let formattedStartTime = startTime.toTimeString().slice(0, 5);
+            let formattedEndTime = endTime.toTimeString().slice(0, 5);
+    
+            console.log(`Selecting Date & Time:
+            Start Date: ${formattedStartDate}, End Date: ${formattedEndDate}
+            Start Time: ${formattedStartTime}, End Time: ${formattedEndTime}`);
+    
+            if (useCalendar) {
+                await this.page.click(farmconfig.Start_Date_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.Start_Date_Element, formattedStartDate);
+    
+                await this.page.click(farmconfig.End_Date_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.End_Date_Element, formattedEndDate);
+    
+                await this.page.click(farmconfig.Start_Time_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.Start_Time_Element, formattedStartTime);
+    
+                await this.page.click(farmconfig.End_Time_Element);
+                await this.page.waitForTimeout(200);
+                await this.page.fill(farmconfig.End_Time_Element, formattedEndTime);
+            } else {
+                await this.page.fill(farmconfig.Start_Date_Element, formattedStartDate);
+                await this.page.fill(farmconfig.End_Date_Element, formattedEndDate);
+                await this.page.fill(farmconfig.Start_Time_Element, formattedStartTime);
+                await this.page.fill(farmconfig.End_Time_Element, formattedEndTime);
+            }
+    
+        } catch (error) {
+            // console.error(`Test case failed: ${error.message}`);
+            // throw new Error("Test Failed: " + error.message);  
+            throw error; 
+            // this.testStatus = false;
+        }
+    }
+
     // Timeout for each testcase
     async TimeoutTest(Function, wallet, timeout = 900000) {
         try {
@@ -85,9 +201,17 @@ export class FunctionPage {
             // this.testStatus = false;
         }
     }  
+    
+    async isElementVisible(selector) {
+        try {
+            return await page.waitForSelector(selector, { timeout: 2000 }).then(() => true).catch(() => false);
+        } catch (error) {
+            return false;
+        }
+    }    
 
     // Wait until the button appears, then click
-    async clickButton(identifier, name, type = "xpath", timeout = 30000) {
+    async clickButton(identifier, name, type = "xpath", timeout = 50000) {
         try {   
             await this.page.waitForTimeout(1000);
             const locator = this.getLocator(identifier, type);
@@ -106,8 +230,28 @@ export class FunctionPage {
         }
     }   
 
+    async fillInputField(identifier, value, type = "xpath", timeout = 50000) {
+        try {
+            const locator = this.getLocator(identifier, type);
+            await locator.waitFor({ state: 'visible', timeout });
+            await locator.fill(value);
+            await this.page.waitForTimeout(500); 
+            
+            const enteredValue = await locator.inputValue();
+            if (enteredValue !== value) {
+                throw new Error(`Value mismatch: expected '${value}', but found '${enteredValue}'`);
+            }
+
+        } catch (error) {
+            console.error(`Failed to fill input '${identifier}': ${error.message}`);
+            // throw new Error("Test Failed: " + error.message);  
+            throw error; 
+            // this.testStatus = false;
+        }
+    }    
+    
     // Wait until the button appears, then click, then verify expectation
-    async clickAndVerify(clickIdentifier, verifyIdentifier, actionName, type = "xpath", timeout = 30000) {
+    async clickAndVerify(clickIdentifier, verifyIdentifier, actionName, type = "xpath", timeout = 50000) {
         try {
             await this.page.waitForTimeout(1000);
             const clickLocator = this.getLocator(clickIdentifier, type); 
@@ -136,7 +280,7 @@ export class FunctionPage {
     
 
     // If the element appears, click it; otherwise, ignore it
-    async clickIfVisible(selector, name, timeout = 20000) {
+    async clickIfVisible(selector, name, timeout = 50000) {
         try {
             await this.page.waitForTimeout(1000);
             const element = this.page.locator(selector);
@@ -155,22 +299,26 @@ export class FunctionPage {
     }
 
     // Verify if an element does not exist
-    async verifyElementNotExist(identifier, name, type = "xpath", timeout = 20000) {
+    async verifyElementNotExist(identifier, name, type = "xpath", timeout = 50000) {
         try {
             await this.page.waitForTimeout(1000);
             if (!identifier) throw new Error("Missing identifier for element locator");
+    
             const locator = this.getLocator(identifier, type);
+            
             if (await locator.count() === 0) {
                 console.log(`'${name}' does not exist as expected.`);
                 return true;
             }
+
             await locator.waitFor({ state: 'detached', timeout });
+    
             if (await locator.count() > 0) {
                 throw new Error(`'${name}' should have been removed, but it still exists.`);
             }
             // console.log(`'${name}' has been removed successfully.`);
             return true;
-
+    
         } catch (error) {
             console.error(`'${name}' verification should not exist failed: ${error.message}`);
             // throw new Error("Test Failed: " + error.message);  
@@ -178,9 +326,10 @@ export class FunctionPage {
             // this.testStatus = false;
         }
     }
+    
 
     // Verify if an element does not exist
-    async verifyElementNotExist_Backup(identifier, name, type = "xpath", timeout = 20000) {
+    async verifyElementNotExist_Backup(identifier, name, type = "xpath", timeout = 50000) {
         try {
             await this.page.waitForTimeout(1000);
             if (!identifier) throw new Error("Missing identifier for element locator");
@@ -201,7 +350,7 @@ export class FunctionPage {
     }
       
     // Wait until the button appears, then verify expect
-    async verifyElementEnabled(identifier, name, type = "xpath", roleType = "button", timeout = 20000) {
+    async verifyElementEnabled(identifier, name, type = "xpath", roleType = "button", timeout = 50000) {
         try {
             if (!identifier) throw new Error(" Missing identifier for element locator");
             await this.page.waitForTimeout(1000); 
@@ -222,7 +371,7 @@ export class FunctionPage {
     }
 
     // Wait until the button appears, then verify expect
-    async verifyElementDisabled(identifier, name, type = "xpath", roleType = "button", timeout = 20000) {
+    async verifyElementDisabled(identifier, name, type = "xpath", roleType = "button", timeout = 50000) {
         try {
             if (!identifier) throw new Error(" Missing identifier for element locator");
             await this.page.waitForTimeout(1000); 
@@ -331,6 +480,182 @@ export class FunctionPage {
     }
 
     // Wait until the button appears, then click
+    async Create_Incentive_Button() {
+        await this.page.waitForTimeout(1000);
+        await this.clickButton(farmconfig.Create_Incentive_Button, "Create Incentive", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Stake_Token_Button() {
+        await this.clickButton(farmconfig.Stake_Token_Button, "Stake Token", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Approve_Button() {
+        await this.clickButton(farmconfig.Approve_Button, "Approve", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Confirm_Stake_Token_Button() {
+        await this.clickButton(farmconfig.Confirm_Stake_Token_Button, "Confirm Stake Token", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Threedots_Icon() {
+        await this.clickButton(farmconfig.Threedots_Icon, "Threedots", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Unstake_Button() {
+        await this.clickButton(farmconfig.Unstake_Button, "Unstake", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Confirm_Unstake_Button() {
+        await this.clickButton(farmconfig.Confirm_Unstake_Button, "Confirm Unstake", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Collect_Fees_Button() {
+        await this.clickButton(farmconfig.Collect_Fees_Button, "Collect Fees", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Confirm_Collect_Fees_Button() {
+        await this.clickButton(farmconfig.Confirm_Collect_Fees_Button, "Confirm Collect Fees", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Confirm_Create_Incentive_Button() {
+        await this.clickButton(farmconfig.Confirm_Create_Incentive_Button, "Confirm Create Incentive", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_001_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDC_AIOZ_001_Element, "AIOZ/USDC On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_005_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDC_AIOZ_005_Element, "AIOZ/USDC On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_03_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDC_AIOZ_03_Element, "AIOZ/USDC On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_1_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDC_AIOZ_1_Element, "AIOZ/USDC On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_001_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDT_AIOZ_001_Element, "AIOZ/USDT On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_005_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDT_AIOZ_005_Element, "AIOZ/USDT On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_03_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDT_AIOZ_03_Element, "AIOZ/USDT On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_1_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_USDT_AIOZ_1_Element, "AIOZ/USDT On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_001_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_STRK_AIOZ_001_Element, "AIOZ/STRK On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_005_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_STRK_AIOZ_005_Element, "AIOZ/STRK On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_03_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_STRK_AIOZ_03_Element, "AIOZ/STRK On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_1_OnGoing_Element() {
+        await this.clickButton(farmconfig.Ongoing_STRK_AIOZ_1_Element, "AIOZ/STRK On Going", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_001_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDC_AIOZ_001_Element, "AIOZ/USDC Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_005_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDC_AIOZ_005_Element, "AIOZ/USDC Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_03_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDC_AIOZ_03_Element, "AIOZ/USDC Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDC_1_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDC_AIOZ_1_Element, "AIOZ/USDC Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_001_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDT_AIOZ_001_Element, "AIOZ/USDT Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_005_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDT_AIOZ_005_Element, "AIOZ/USDT Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_03_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDT_AIOZ_03_Element, "AIOZ/USDT Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZUSDT_1_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_USDT_AIOZ_1_Element, "AIOZ/USDT Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_001_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_STRK_AIOZ_001_Element, "AIOZ/STRK Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_005_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_STRK_AIOZ_005_Element, "AIOZ/STRK Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_03_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_STRK_AIOZ_03_Element, "AIOZ/STRK Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Incentive_AIOZSTRK_1_NotStarted_Element() {
+        await this.clickButton(farmconfig.NotStarted_STRK_AIOZ_1_Element, "AIOZ/STRK Not Started", "xpath");
+    }  
+
+    // Wait until the button appears, then click
+    async Create_Incentive_Element() {
+        await this.clickButton(farmconfig.Create_Incentive_Element, "Create Incentive", "xpath");
+    }
+
+    // Wait until the button appears, then click
     async Clear_All_Button() {
         await this.clickButton(positionconfig.Clear_All_Button, "Clear all", "xpath");
     }
@@ -364,6 +689,21 @@ export class FunctionPage {
     // Wait until the button appears, then click
     async Unwrap_Button() {
         await this.clickButton(swapconfig.Unwrap_Button, "Unwrap", "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Rewards_Amount_InputText(amount) {
+        await this.fillInputField(farmconfig.InputText_Rewards_Amount, amount, "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Pool_Pair_InputText(amount) {
+        await this.fillInputField(farmconfig.InputText_Pool_Pair, amount, "xpath");
+    }
+
+    // Wait until the button appears, then click
+    async Refundee_Address_InputText(amount) {
+        await this.fillInputField(farmconfig.InputText_Refundee_Address, amount, "xpath");
     }
 
     // Wait until the button appears, then click
@@ -438,97 +778,81 @@ export class FunctionPage {
 
     // Wait until the button appears, then click
     async AIOZ_USDT_OutRange_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_OutRange_001_Element, "AIOZ_USDT Out Of Range 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_USDT_OutRange_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_OutRange_005_Element, "AIOZ_USDT Out Of Range 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDT_OutRange_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_OutRange_03_Element, "AIOZ_USDT Out Of Range 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDT_OutRange_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_OutRange_1_Element, "AIOZ_USDT Out Of Range 1%", "xpath");
     }
 
     // Wait until the button appears, then click
     async AIOZ_USDT_InRange_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_InRange_001_Element, "AIOZ_USDT In range 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_USDT_InRange_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_InRange_005_Element, "AIOZ_USDT In range 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDT_InRange_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_InRange_03_Element, "AIOZ_USDT In range 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDT_InRange_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_InRange_1_Element, "AIOZ_USDT In range 1%", "xpath");
     }
 
     // Wait until the button appears, then click
     async AIOZ_USDT_Closed_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_Closed_001_Element, "AIOZ_USDT Closed 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_USDT_Closed_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_Closed_005_Element, "AIOZ_USDT Closed 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDT_Closed_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_Closed_03_Element, "AIOZ_USDT Closed 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDT_Closed_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDT_Closed_1_Element, "AIOZ_USDT Closed 1%", "xpath");
     }
 
     // Wait until the button appears, then click
     async AIOZ_USDC_InRange_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDC_InRange_001_Element, "AIOZ_USDC In range 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_USDC_InRange_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDC_InRange_005_Element, "AIOZ_USDC In range 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDC_InRange_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDC_InRange_03_Element, "AIOZ_USDC In range 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_USDC_InRange_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_USDC_InRange_1_Element, "AIOZ_USDC In range 1%", "xpath");
     }
 
@@ -554,73 +878,61 @@ export class FunctionPage {
 
         // Wait until the button appears, then click
     async AIOZ_STRK_OutRange_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_OutRange_001_Element, "AIOZ_STRK Out Of Range 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_STRK_OutRange_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_OutRange_005_Element, "AIOZ_STRK Out Of Range 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_STRK_OutRange_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_OutRange_03_Element, "AIOZ_STRK Out Of Range 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_STRK_OutRange_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_OutRange_1_Element, "AIOZ_STRK Out Of Range 1%", "xpath");
     }
 
     // Wait until the button appears, then click
     async AIOZ_STRK_InRange_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_InRange_001_Element, "AIOZ_STRK In range 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_STRK_InRange_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_InRange_005_Element, "AIOZ_STRK In range 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_STRK_InRange_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_InRange_03_Element, "AIOZ_STRK In range 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_STRK_InRange_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_InRange_1_Element, "AIOZ_STRK In range 1%", "xpath");
     }
 
     // Wait until the button appears, then click
     async AIOZ_STRK_Closed_001_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_Closed_001_Element, "AIOZ_STRK Closed 0.01%", "xpath");
     }
 
 	// Wait until the button appears, then click
     async AIOZ_STRK_Closed_005_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_Closed_005_Element, "AIOZ_STRK Closed 0.05%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_STRK_Closed_03_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_Closed_03_Element, "AIOZ_STRK Closed 0.3%", "xpath");
     }
 	
     // Wait until the button appears, then click
     async AIOZ_STRK_Closed_1_Element() {
-        await this.page.waitForTimeout(1000);
         await this.clickButton(positionconfig.AIOZ_STRK_Closed_1_Element, "AIOZ_STRK Closed 1%", "xpath");
     }
     
@@ -749,15 +1061,11 @@ export class FunctionPage {
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_InRange_001_Not_Exist() {
         await this.page.reload();
-        await this.page.waitForTimeout(5000);
-        await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_InRange_001_Element, "AIOZ_USDT In Range 0.01%", "xpath");
     }
 
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_InRange_005_Not_Exist() {
-        await this.page.reload();
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_InRange_005_Element, "AIOZ_USDT In Range 0.05%", "xpath");
     }
@@ -765,71 +1073,59 @@ export class FunctionPage {
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_InRange_03_Not_Exist() {
         await this.page.reload();
-        await this.page.waitForTimeout(5000);
-        await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_InRange_03_Element, "AIOZ_USDT In Range 0.3%", "xpath");
     }
 
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_InRange_1_Not_Exist() {
         await this.page.reload();
-        await this.page.waitForTimeout(5000);
-        await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_InRange_1_Element, "AIOZ_USDT In Range 1%", "xpath");
     }
     
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_OutRange_001_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_OutRange_001_Element, "AIOZ_USDT Out Range 0.01%", "xpath");
     }
     
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_OutRange_005_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_OutRange_005_Element, "AIOZ_USDT Out Range 0.05%", "xpath");
     }
     
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_OutRange_03_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_OutRange_03_Element, "AIOZ_USDT Out Range 0.3%", "xpath");
     }
     
     // Verify if an element does not exist
     async Verify_AIOZ_USDT_OutRange_1_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDT_OutRange_1_Element, "AIOZ_USDT Out Range 1%", "xpath");
     }
 
 // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_001_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDC_InRange_001_Element, "AIOZ_USDC In range 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_005_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDC_InRange_005_Element, "AIOZ_USDC In range 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_03_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDC_InRange_03_Element, "AIOZ_USDC In range 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_1_Not_Exist() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementNotExist(positionconfig.AIOZ_USDC_InRange_1_Element, "AIOZ_USDC In range 1%", "xpath");
     }
@@ -851,112 +1147,96 @@ export class FunctionPage {
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_Closed_001() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_Closed_001_Element, "AIOZ_STRK Closed 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_Closed_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_Closed_005_Element, "AIOZ_STRK Closed 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_Closed_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_Closed_03_Element, "AIOZ_STRK Closed 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_Closed_1() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_Closed_1_Element, "AIOZ_STRK Closed 1%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_Closed_001() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_Closed_001_Element, "AIOZ_USDT Closed 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_Closed_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_Closed_005_Element, "AIOZ_USDT Closed 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_Closed_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_Closed_03_Element, "AIOZ_USDT Closed 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
-    async Verify_AIOZ_USDT_Closed_1() {
-        await this.page.waitForTimeout(5000);
+    async Verify_AIOZ_USDT_Closed_1() {;
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_Closed_1_Element, "AIOZ_USDT Closed 1%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_OutRange_001() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_OutRange_001_Element, "AIOZ_STRK Out of range 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_OutRange_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_OutRange_005_Element, "AIOZ_STRK Out of range 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_OutRange_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_OutRange_03_Element, "AIOZ_STRK Out of range 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_STRK_OutRange_1() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_OutRange_1_Element, "AIOZ_STRK Out of range 1%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_OutRange_001() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_OutRange_001_Element, "AIOZ_USDT Out of range 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_OutRange_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_OutRange_005_Element, "AIOZ_USDT Out of range 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_OutRange_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_OutRange_03_Element, "AIOZ_USDT Out of range 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_OutRange_1() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_OutRange_1_Element, "AIOZ_USDT Out of range 1%", "xpath");
     }
@@ -964,83 +1244,70 @@ export class FunctionPage {
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_InRange_001() {
         await this.page.reload();
-        await this.page.waitForTimeout(5000);
-        await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_InRange_001_Element, "AIOZ_USDT In range 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_InRange_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_InRange_005_Element, "AIOZ_USDT In range 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_InRange_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_InRange_03_Element, "AIOZ_USDT In range 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify expect
     async Verify_AIOZ_USDT_InRange_1() {
-        await this.page.waitForTimeout(5000);
         await this.verifyElementEnabled(positionconfig.AIOZ_USDT_InRange_1_Element, "AIOZ_USDT In range 1%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_STRK_InRange_001() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_InRange_001_Element, "AIOZ_STRK In range 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_STRK_InRange_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_InRange_005_Element, "AIOZ_STRK In range 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_STRK_InRange_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_InRange_03_Element, "AIOZ_STRK In range 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_STRK_InRange_1() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_STRK_InRange_1_Element, "AIOZ_STRK In range 1%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_001() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDC_InRange_001_Element, "AIOZ_USDC In range 0.01%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_005() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDC_InRange_005_Element, "AIOZ_USDC In range 0.05%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_03() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDC_InRange_03_Element, "AIOZ_USDC In range 0.3%", "xpath");
     }
 
     // Wait until the button appears, then verify
     async Verify_AIOZ_USDC_InRange_1() {
-        await this.page.waitForTimeout(5000);
         await this.page.reload();
         await this.verifyElementEnabled(positionconfig.AIOZ_USDC_InRange_1_Element, "AIOZ_USDC In range 1%", "xpath");
     }
@@ -1133,7 +1400,53 @@ export class FunctionPage {
     async Verify_Enter_An_Amount() {
         await this.verifyElementDisabled(swapconfig.Enter_An_Amount_Element, "Enter an amount", "xpath");
     }
-    
+
+    // Wait until the button appears, then verify expect
+    async Verify_Transaction_Pending(Pending) {
+        await this.verifyElementEnabled(Pending, "Pending", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Transaction_Pending_NotExist(Pending) {
+        await this.verifyElementNotExist(Pending, "Pending", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Incentive_NotStarted(Pools) {
+        await this.page.reload();
+        await this.verifyElementEnabled(Pools, "Not Started", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Incentive_OnGoing(Pools) {
+        await this.page.reload();
+        await this.verifyElementEnabled(Pools, "On Going", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Incentive_Ended(Pools) {
+        await this.page.reload();
+        await this.verifyElementEnabled(Pools, "Ended", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Incentive_NotStarted_NotExist(Pools) {
+        await this.page.reload();
+        await this.verifyElementNotExist(Pools, "Not Started", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Incentive_OnGoing_NotExist(Pools) {
+        await this.page.reload();
+        await this.verifyElementNotExist(Pools, "On Going", "xpath");
+    }
+
+    // Wait until the button appears, then verify expect
+    async Verify_Incentive_Ended_NotExist(Pools) {
+        await this.page.reload();
+        await this.verifyElementNotExist(Pools, "Ended", "xpath");
+    }
+
     // Wait until the button appears, then verify expect
     async Verify_Unclaimed_Fees() {
         await this.page.waitForTimeout(3000);
@@ -1492,6 +1805,23 @@ export class FunctionPage {
         try {
             await this.page.getByRole('button', { name: 'Select token' }).click();
             await this.page.getByText(swapconfig.Select_STRK_Token).click();
+            const understandButton = this.page.getByRole('button', { name: 'I understand' });
+            if (await understandButton.isVisible()) {
+                await understandButton.click();
+            }
+        } catch (error) {
+            // console.error(` Error in Select Token STRK B: ${error.message}`);
+            // throw new Error("Test Failed: " + error.message);  
+            throw error; 
+            // this.testStatus = false;
+        }
+    }
+
+    // If it appears, click it; otherwise, ignore it
+    async Select_Token_USDC_B() {
+        try {
+            await this.page.getByRole('button', { name: 'Select token' }).click();
+            await this.page.getByText(swapconfig.Select_USDC_Token).click();
             const understandButton = this.page.getByRole('button', { name: 'I understand' });
             if (await understandButton.isVisible()) {
                 await understandButton.click();
@@ -1947,6 +2277,36 @@ export class FunctionPage {
             // this.testStatus = false;
         }
     }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Get xpath and wait for elements to appear, show value current on web
+    async ValueReward() {
+        try {
+            const unclaimedreward = "//p[span[text()='unclaimed reward']]/following-sibling::p[contains(text(), 'WAIOZ')]";
+            const claimedreward = "//p[span[text()='claimed reward']]/following-sibling::p[contains(text(), 'WAIOZ')]";
+    
+            const UnclaimedRewardText = await this.page.locator(unclaimedreward).textContent().catch(() => "0");
+            const ClaimedRewardText = await this.page.locator(claimedreward).textContent().catch(() => "0");
+    
+            const UnclaimedReward = parseFloat(UnclaimedRewardText.replace(/[^0-9.]/g, "")) || 0;
+            const ClaimedReward = parseFloat(ClaimedRewardText.replace(/[^0-9.]/g, "")) || 0;
+    
+            this.Value = { 
+               UnclaimedReward,
+               ClaimedReward
+            };
+    
+            console.log("Value Data:", JSON.stringify(this.Value, null, 2));
+            return this.Value;
+    
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1996,7 +2356,7 @@ export class FunctionPage {
 
     // Get XPath, wait for element, retrieve current value, and convert using convertToPoints
     async Total_Token_After() {
-        await this.page.waitForTimeout(35000);
+        await this.page.waitForTimeout(5000);
         try {
             const balanceFromSelector = swapconfig.Total_BalanceSwap_From;
             const balanceToSelector = swapconfig.Total_BalanceSwap_To;

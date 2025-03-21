@@ -1,4 +1,5 @@
 import { swapconfig } from "./../../../data/Swap_Config.js";
+import { farmconfig } from "../../../data/Farm_Config.js";
 import { FunctionPage } from "../../../pages/Functions.js";
 import { ConnectWalletMetaMaskPage } from "../../../pages/6_Dapps/02_MetaMask/MetaMask.js";
 
@@ -25,6 +26,8 @@ export class ValidSwapPage {
             await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
@@ -49,6 +52,8 @@ export class ValidSwapPage {
             await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
@@ -75,6 +80,8 @@ export class ValidSwapPage {
             await wallet.confirmTransaction();    
             await this.functionPage.On_Network();  
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
@@ -99,6 +106,8 @@ export class ValidSwapPage {
             await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction(); 
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Max_Swap(0.01);
@@ -125,6 +134,8 @@ export class ValidSwapPage {
             await this.functionPage.Confirm_Swap_Button();
             await wallet.confirmTransaction();           
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
@@ -151,6 +162,8 @@ export class ValidSwapPage {
             await wallet.confirmTransaction(); 
             await this.functionPage.Add_WAIOZ_to_MetaMask();       
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Valid_Swap(0.01);
@@ -177,6 +190,8 @@ export class ValidSwapPage {
             await wallet.confirmTransaction(); 
             await this.functionPage.Add_WAIOZ_to_MetaMask();       
             await this.functionPage.Close_Confirmation_Submitted_Icon();
+            await this.functionPage.Verify_Transaction_Pending(farmconfig.Transaction_Pending_Element);
+            await this.functionPage.Verify_Transaction_Pending_NotExist(farmconfig.Transaction_Pending_Element);
             await this.functionPage.Total_Token_After();
             await this.page.reload();
             await this.functionPage.Compare_Token_Before_And_After_Max_Swap(0.01);

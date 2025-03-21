@@ -36,6 +36,8 @@ test.afterEach(async ({ page }) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 test("Create Incentive USDT/AIOZ 0.01%", async ({ wallet }) => { 
+  console.log("Create Incentive USDT/AIOZ 0.01%");
+  await functionPage.TimeoutTest(validFarmPage.Create_Incentive.bind(validFarmPage), wallet);
 });
 
 test("Create Incentive USDT/AIOZ 0.05%", async ({ wallet }) => { 
@@ -49,3 +51,13 @@ test("Create Incentive USDT/AIOZ 1%", async ({ wallet }) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+test("Create Incentive and check status active", async ({ wallet }) => { 
+  console.log("Create Incentive and check status active");
+  await functionPage.TimeoutTest(validFarmPage.CheckStatusIncentive.bind(validFarmPage), wallet);
+});
+
+test("Stake token", async ({ wallet }) => { 
+  console.log("Stake token");
+  await functionPage.TimeoutTest(validFarmPage.Stake_Token.bind(validFarmPage), wallet);
+});
